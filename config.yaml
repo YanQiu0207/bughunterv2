@@ -1,0 +1,12 @@
+framework_packages:
+  - "java."
+  - "javax."
+  - "sun."
+  - "com.sun."
+  - "org.springframework."
+  - "org.apache."
+  - "org.slf4j."
+
+max_steps: 10
+
+extra_source_roots: []

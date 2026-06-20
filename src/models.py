@@ -1,0 +1,78 @@
+"""Data models shared across the M1 diagnosis pipeline."""
+
+from dataclasses import dataclass, field
+from typing import Literal
+
+
+@dataclass
+class StackFrame:
+    """One frame from a Java exception stack trace."""
+
+    class_name: str
+    method: str
+    file: str
+    line: int
+
+
+@dataclass
+class Location:
+    """Source location within a Java file."""
+
+    file: str
+    line: int
+    method: str
+
+
+@dataclass
+class EvidenceItem:
+    """A piece of evidence collected during a backtrace step."""
+
+    type: str
+    file: str
+    line: int
+    snippet: str
+
+
+@dataclass
+class BacktraceStep:
+    """One iteration of the backtrace loop."""
+
+    step: int
+    suspect_variable: str
+    location: Location
+    decision: Literal["in_code", "out_of_code"]
+    finding: str
+    evidence: list[EvidenceItem] = field(default_factory=list)
+    tool_calls: list[dict] = field(default_factory=list)
+
+
+@dataclass
+class Conclusion:
+    """Final diagnosis conclusion with evidence chain."""
+
+    root_cause_hypothesis: str
+    evidence_refs: list[str]
+    counter_check: str
+    fix_direction: str
+    confidence: Literal["high", "medium", "low"]
+    confidence_reason: str
+
+
+@dataclass
+class DiagnosisInput:
+    """Input parameters captured at the start of a diagnosis run."""
+
+    stack_trace: str
+    source_dir: str
+
+
+@dataclass
+class DiagnosisReport:
+    """Complete diagnosis report, persisted to workspace/diagnosis/<id>.json."""
+
+    diagnosis_id: str
+    created_at: str
+    status: Literal["in_progress", "completed", "paused"]
+    input: DiagnosisInput
+    backtrace_steps: list[BacktraceStep] = field(default_factory=list)
+    conclusion: Conclusion | None = None

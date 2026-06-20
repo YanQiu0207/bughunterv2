@@ -1,0 +1,4 @@
+Exception in thread "main" java.lang.NullPointerException
+	at Demo.printName(Demo.java:10)
+	at Demo.handle(Demo.java:6)
+	at Demo.main(Demo.java:2)

@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bughunterv2"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=0.2,<0.3",
+    "langchain-anthropic>=0.3",
+    "langchain-core>=0.3",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+    "black",
+    "isort",
+    "mypy",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: marks tests that call real external APIs (deselect with -m 'not integration')"]
+asyncio_mode = "auto"
+
+[tool.black]
+line-length = 80
+target-version = ["py311"]
+
+[tool.isort]
+profile = "black"
+line_length = 80
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
