@@ -1,0 +1,6 @@
+name: m3-commit-fix
+status: Archived
+author: YanQiu0207
+created_date: 2026-06-21
+archived_date: 2026-06-21
+description: 新增 commit_fix.py 脚本，自动将 FixProposal 写回 SVN 工作副本并提交

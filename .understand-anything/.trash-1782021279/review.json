@@ -1,0 +1,40 @@
+{
+  "issues": [],
+  "warnings": [
+    "Node 'config:config.yaml' has no edges (orphan)",
+    "Node 'document:bughunterv2.egg-info/SOURCES.txt' has no edges (orphan)",
+    "Node 'document:bughunterv2.egg-info/dependency_links.txt' has no edges (orphan)",
+    "Node 'document:bughunterv2.egg-info/requires.txt' has no edges (orphan)",
+    "Node 'document:bughunterv2.egg-info/top_level.txt' has no edges (orphan)",
+    "Node 'file:.understand-anything/.understandignore' has no edges (orphan)",
+    "Node 'config:.understand-anything/config.json' has no edges (orphan)",
+    "Node 'file:bughunterv2.egg-info/PKG-INFO' has no edges (orphan)",
+    "Node 'file:src/__init__.py' has no edges (orphan)",
+    "Node 'file:src/agent/__init__.py' has no edges (orphan)",
+    "Node 'file:src/commit/__init__.py' has no edges (orphan)",
+    "Node 'file:src/tools/__init__.py' has no edges (orphan)",
+    "Node 'file:workspace/diagnosis/.gitkeep' has no edges (orphan)"
+  ],
+  "stats": {
+    "totalNodes": 95,
+    "totalEdges": 168,
+    "totalLayers": 6,
+    "tourSteps": 12,
+    "nodeTypes": {
+      "file": 27,
+      "function": 42,
+      "class": 13,
+      "document": 10,
+      "config": 3
+    },
+    "edgeTypes": {
+      "imports": 31,
+      "contains": 55,
+      "exports": 38,
+      "calls": 32,
+      "depends_on": 3,
+      "related": 5,
+      "documents": 4
+    }
+  }
+}

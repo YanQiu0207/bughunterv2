@@ -1,0 +1,117 @@
+[
+  {
+    "order": 1,
+    "title": "项目目标与工程规范",
+    "description": "CLAUDE.md 是理解本项目的起点，它用一页纸定义了「北极星」：对 Java+Maven+SVN 目标项目的线上 bug 做根因诊断与人在环修复。文件同时规定了协作铁律（渐进式搭建、有主见异议、锚定目标）和当前迭代阶段，是后续所有设计决策的元信息来源。读完这个文件，你就知道这个系统「为什么存在、在做什么、允许怎么做」。",
+    "nodeIds": [
+      "document:CLAUDE.md"
+    ],
+    "languageLesson": "Python 项目常见的 CLAUDE.md 是 Claude Code 的项目级指令文件，每个会话自动加载，相当于「结对编程者须知」。它不是代码，但决定了 agent 在此项目中的行为边界。"
+  },
+  {
+    "order": 2,
+    "title": "项目依赖与技术栈",
+    "description": "pyproject.toml 声明了系统的核心依赖：LangGraph 负责 agent 状态机编排，LangChain-OpenAI 提供 LLM 调用能力，PyYAML 用于读取运行时配置。三个依赖清晰地映射了系统的三层能力：推理编排 / LLM 接入 / 配置管理。Python 3.11 是最低版本要求，开发工具链包含 pytest、black、mypy，体现了对代码质量的基本约束。",
+    "nodeIds": [
+      "config:pyproject.toml"
+    ]
+  },
+  {
+    "order": 3,
+    "title": "数据契约：全局模型层",
+    "description": "models.py 是整个系统的「通用语」——所有工作流共享的数据结构都在这里定义。诊断侧有 StackFrame（堆栈帧）、EvidenceItem（证据条目）、BacktraceStep（回溯步骤）、DiagnosisReport（诊断报告）；修复侧有 FixEdit（单条行级修改）、FixProposal（修复提案）。两套模型形成了 M1→M2→M3 三阶段管道的数据接口契约：诊断报告是 M1 的输出，也是 M2 的输入；修复提案是 M2 的输出，也是 M3 的输入。",
+    "nodeIds": [
+      "file:src/models.py"
+    ],
+    "languageLesson": "Python dataclass 用 @dataclass 装饰器自动生成 __init__、__repr__ 等方法，比手写构造函数简洁。配合 field(default_factory=list) 可以安全地声明可变默认值，避免多实例共享同一列表的经典陷阱。"
+  },
+  {
+    "order": 4,
+    "title": "运行时配置中心",
+    "description": "config.py 定义 Config dataclass 和 load_config 函数，从 YAML 文件读取所有运行时参数：LLM 的 base_url 和 model、agent 最大步骤数、目标 Java 项目路径、Maven 构建命令和测试命令、以及框架包过滤前缀列表。它被所有三条工作流入口（diagnose.py、fix.py、commit_fix.py）和两个 Agent 类同时依赖（fan-in=6，是整个图中最高的），是名副其实的「配置单点」。",
+    "nodeIds": [
+      "file:src/config.py",
+      "config:config.yaml"
+    ],
+    "languageLesson": "工厂函数 load_config(path) 将文件 I/O 和对象构建分离，让调用方只持有 Config 对象而不关心 YAML 解析细节。支持环境变量覆盖 API key 是「配置分层」最佳实践：版本库里存非敏感默认值，敏感凭据通过环境注入。"
+  },
+  {
+    "order": 5,
+    "title": "M1 入口：诊断流程驱动器",
+    "description": "diagnose.py 是 M1 工作流的命令行入口，也是 BFS 遍历的起点（fan-out=5，图中最高）。它的职责链清晰：解析 CLI 参数 → load_config → parse_stack_trace → SourceIndex 建索引 → DiagnosisAgent.run → report_writer 输出。这个文件把「用户意图」转化为「agent 任务」，是理解完整诊断管道的最佳切入点。",
+    "nodeIds": [
+      "file:diagnose.py"
+    ],
+    "languageLesson": "Python 脚本通常以 if __name__ == '__main__': main() 作为入口保护，使脚本既可以直接运行，也可以被其他模块 import 而不立即执行。这个惯例让单元测试可以单独调用 main() 而不触发副作用。"
+  },
+  {
+    "order": 6,
+    "title": "堆栈解析：诊断的原材料处理",
+    "description": "stack_parser.py 是诊断管道的第一个数据处理节点。parse_stack_trace 用正则把原始 Java 异常文本解析为 StackFrame 列表；find_business_top_frame 则通过 config.framework_prefixes 过滤掉 Spring、Hibernate 等框架栈帧，定位到最顶层的业务代码帧——这个帧就是 DiagnosisAgent 回溯分析的起始点。",
+    "nodeIds": [
+      "file:src/stack_parser.py"
+    ],
+    "languageLesson": "Java 堆栈的每一行格式为 'at com.example.Foo.bar(Foo.java:42)'，正则 r'at\\s+([\\w.$]+)\\.([\\w$<>]+)\\(([^:)]+)(?::(\\d+))?\\)' 可提取类名、方法名、文件名和行号四个捕获组。过滤框架包是 Java 诊断中的常见预处理：业务异常通常被框架层层包裹，需要剥离才能找到真正的根因点。"
+  },
+  {
+    "order": 7,
+    "title": "Java 源码索引：类名到文件的映射",
+    "description": "source_index.py 的 SourceIndex 类扫描 Maven 项目目录，建立「简单类名 → 绝对路径」的映射表，并支持全限定类名（如 com.example.Foo）的最后段匹配。这个索引是 DiagnosisAgent 的「地图」——没有它，agent 无法将堆栈帧中的类名转换为可读取的文件路径。它被 diagnose.py、diagnosis_agent.py 和 read_source.py 三个节点共同依赖（fan-in=3）。",
+    "nodeIds": [
+      "file:src/source_index.py"
+    ]
+  },
+  {
+    "order": 8,
+    "title": "M1 核心：DiagnosisAgent 与诊断工具",
+    "description": "diagnosis_agent.py 封装了 LangGraph ReAct agent，编排三个工具完成「回溯根因诊断」：read_source 读取指定类的源码片段，find_callers 全文搜索方法的调用点，submit_diagnosis 在 agent 确认根因后原子写入诊断报告。prompts.py 则将「从业务顶帧出发、逐层上溯调用链、找到缺陷注入点」的推理算法编码为 LLM system prompt，驱动 LLM 按照 ReAct 模式（推理→工具调用→观察→再推理）循环执行。",
+    "nodeIds": [
+      "file:src/agent/diagnosis_agent.py",
+      "file:src/agent/prompts.py",
+      "file:src/tools/read_source.py",
+      "file:src/tools/find_callers.py"
+    ],
+    "languageLesson": "LangGraph 的 ReAct agent 本质上是一个有向图：节点是 LLM 推理步骤，边由工具调用结果决定跳转方向。与 LangChain 的 AgentExecutor 相比，LangGraph 允许自定义循环终止条件和中间状态持久化，更适合需要多轮工具调用的诊断任务。"
+  },
+  {
+    "order": 9,
+    "title": "M1 输出：诊断报告序列化",
+    "description": "report_writer.py 是 M1 工作流的终点，提供两个函数：print_summary 将 DiagnosisReport 格式化打印到控制台供人工预览，write_json 将报告序列化为 JSON 文件落盘。这份 JSON 报告是 M1 与 M2 之间的「接力棒」——fix.py 和 commit_fix.py 都会读取它作为修复任务的输入。",
+    "nodeIds": [
+      "file:src/report_writer.py"
+    ]
+  },
+  {
+    "order": 10,
+    "title": "M2 核心：FixAgent 与修复工具集",
+    "description": "fix_agent.py 实现 FixAgent 类，以 LangChain ReAct agent 编排三个修复工具：apply_fix 在隔离工作区内执行行级代码编辑（copy-on-write，不污染源码目录），run_build 调用 Maven 验证编译是否通过，run_tests 执行测试套件验证行为正确性。三个工具共享 _command_runner.py 提供的底层 shell 执行和输出截断能力。fix_prompts.py 用 system prompt 告知 LLM 如何按「修改→构建→测试→再修改」的反馈环迭代直到成功。",
+    "nodeIds": [
+      "file:src/agent/fix_agent.py",
+      "file:src/agent/fix_prompts.py",
+      "file:src/tools/apply_fix.py",
+      "file:src/tools/run_build.py",
+      "file:src/tools/run_tests.py",
+      "file:src/tools/_command_runner.py"
+    ],
+    "languageLesson": "工厂函数模式（make_xxx_tool）让工具携带外部状态（如工作区路径、Config 对象）而不需要全局变量。每次调用工厂函数时注入依赖，返回一个绑定了上下文的 LangChain Tool 对象，是 Python 闭包（closure）的典型应用。"
+  },
+  {
+    "order": 11,
+    "title": "M2 入口：独立修复流程",
+    "description": "fix.py 是 M2 工作流的独立入口：接收诊断报告 JSON 路径和配置文件路径，驱动 FixAgent 完成修复循环，打印最终 FixProposal 摘要。它与 commit_fix.py 的区别在于：fix.py 只生成 FixProposal，不做任何 SVN 提交，适合开发阶段的本地验证；commit_fix.py 才是生产流程的完整闭环。两者共享同一个 FixAgent 核心。",
+    "nodeIds": [
+      "file:fix.py"
+    ]
+  },
+  {
+    "order": 12,
+    "title": "M3 提交层：补丁应用与 SVN 提交",
+    "description": "commit_fix.py 是整个系统的最终环节，也是唯一会真正改写源码和提交 SVN 的入口，因此设置了人工 gate（dry-run 模式和多轮确认）。它依赖两个提交层模块：patcher.py 负责在 svn update 后进行冲突检测（通过快照哈希对比）、行级编辑原子写入和 unified diff 生成；svn.py 封装 svn update / commit / revert 三个 subprocess 调用。这套「快照→更新→冲突检测→应用→提交」的安全流程，保障了修复补丁在并发开发环境下的正确性。",
+    "nodeIds": [
+      "file:commit_fix.py",
+      "file:src/commit/patcher.py",
+      "file:src/commit/svn.py"
+    ],
+    "languageLesson": "「快照哈希 + 冲突检测」是安全补丁应用的核心模式：在修改前记录文件的 MD5/SHA256，svn update 后再次计算并对比，哈希变化意味着远端同期提交了修改，需要人工处理冲突而非盲目覆盖。这比依赖 SVN 的文本 merge 更早发现冲突。"
+  }
+]

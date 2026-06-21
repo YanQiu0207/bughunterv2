@@ -1,0 +1,13 @@
+{
+  "projectRoot": "E:/work/bughunterv2",
+  "batchFiles": [
+    {"path": "openspec/changes/m3-commit-fix/design.md", "language": "markdown", "sizeLines": 225, "fileCategory": "docs"},
+    {"path": "openspec/changes/m3-commit-fix/proposal.md", "language": "markdown", "sizeLines": 37, "fileCategory": "docs"},
+    {"path": "openspec/changes/m3-commit-fix/tasks.md", "language": "markdown", "sizeLines": 229, "fileCategory": "docs"}
+  ],
+  "batchImportData": {
+    "openspec/changes/m3-commit-fix/design.md": [],
+    "openspec/changes/m3-commit-fix/proposal.md": [],
+    "openspec/changes/m3-commit-fix/tasks.md": []
+  }
+}

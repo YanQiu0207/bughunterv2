@@ -1,0 +1,15 @@
+{
+  "projectRoot": "E:/work/bughunterv2",
+  "batchFiles": [
+    {"path": "bughunterv2.egg-info/SOURCES.txt", "language": "txt", "sizeLines": 22, "fileCategory": "docs"},
+    {"path": "bughunterv2.egg-info/dependency_links.txt", "language": "txt", "sizeLines": 1, "fileCategory": "docs"},
+    {"path": "bughunterv2.egg-info/requires.txt", "language": "txt", "sizeLines": 11, "fileCategory": "docs"},
+    {"path": "bughunterv2.egg-info/top_level.txt", "language": "txt", "sizeLines": 4, "fileCategory": "docs"}
+  ],
+  "batchImportData": {
+    "bughunterv2.egg-info/SOURCES.txt": [],
+    "bughunterv2.egg-info/dependency_links.txt": [],
+    "bughunterv2.egg-info/requires.txt": [],
+    "bughunterv2.egg-info/top_level.txt": []
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "diagnosis_id": "9b211d6e-1979-4926-a17d-ad31fc0ec489",
+  "created_at": "2026-06-21T14:05:32.756758+00:00",
+  "status": "completed",
+  "input": {
+    "stack_trace": "  java.lang.NullPointerException: Cannot invoke \"com.example.Order.getAmount()\" because \"order\" is null\n      at com.example.OrderService.total(OrderService.java:5)\n      at com.example.OrderService.handle(OrderService.java:10)\n",
+    "source_dir": ".manual-test/src"
+  },
+  "backtrace_steps": [],
+  "conclusion": {
+    "root_cause_hypothesis": "OrderService.handle() 中将局部变量 order 显式赋值为 null，并传入 total(order)，导致 OrderService.total() 在第 5 行调用 order.getAmount() 时发生 NullPointerException。",
+    "evidence_refs": [
+      "com/example/OrderService.java:5 — return order.getAmount();",
+      "com/example/OrderService.java:9 — Order order = null;",
+      "com/example/OrderService.java:10 — return total(order);"
+    ],
+    "counter_check": "已按栈从顶向下定位首个非框架业务帧 OrderService.total；第 5 行唯一被解引用的是 order，且调用方第 9-10 行直接证明传入值为 null，因此排除了 getAmount() 内部逻辑或其他变量导致该 NPE 的可能。",
+    "fix_direction": "避免向 total() 传入 null：在 handle() 中构造有效的 Order，或在 total() 入口增加 null 校验并定义合理的降级/异常处理策略。",
+    "confidence": "high",
+    "confidence_reason": "源码中存在直接的 null 赋值、传参和解引用链路，与异常信息和堆栈行号完全一致。"
+  }
+}

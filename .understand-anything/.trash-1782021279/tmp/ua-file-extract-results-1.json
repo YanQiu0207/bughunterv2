@@ -1,0 +1,1692 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 8,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "fix.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 143,
+      "nonEmptyLines": 119,
+      "functions": [
+        {
+          "name": "main",
+          "startLine": 13,
+          "endLine": 62,
+          "params": []
+        },
+        {
+          "name": "_load_report",
+          "startLine": 65,
+          "endLine": 106,
+          "params": [
+            "path"
+          ]
+        },
+        {
+          "name": "_print_summary",
+          "startLine": 109,
+          "endLine": 139,
+          "params": [
+            "proposal",
+            "workspace_root"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "main",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "_load_report",
+          "line": 65,
+          "isDefault": false
+        },
+        {
+          "name": "_print_summary",
+          "line": 109,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "main",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 14
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 18
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 24
+        },
+        {
+          "caller": "main",
+          "callee": "parser.parse_args",
+          "lineNumber": 30
+        },
+        {
+          "caller": "main",
+          "callee": "os.path.isfile",
+          "lineNumber": 32
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 33
+        },
+        {
+          "caller": "main",
+          "callee": "sys.exit",
+          "lineNumber": 34
+        },
+        {
+          "caller": "main",
+          "callee": "load_config",
+          "lineNumber": 36
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 48
+        },
+        {
+          "caller": "main",
+          "callee": "', '.join",
+          "lineNumber": 50
+        },
+        {
+          "caller": "main",
+          "callee": "sys.exit",
+          "lineNumber": 54
+        },
+        {
+          "caller": "main",
+          "callee": "_load_report",
+          "lineNumber": 56
+        },
+        {
+          "caller": "main",
+          "callee": "os.path.join",
+          "lineNumber": 57
+        },
+        {
+          "caller": "main",
+          "callee": "os.path.dirname",
+          "lineNumber": 57
+        },
+        {
+          "caller": "main",
+          "callee": "os.path.abspath",
+          "lineNumber": 57
+        },
+        {
+          "caller": "main",
+          "callee": "FixAgent",
+          "lineNumber": 59
+        },
+        {
+          "caller": "main",
+          "callee": "agent.run",
+          "lineNumber": 60
+        },
+        {
+          "caller": "main",
+          "callee": "_print_summary",
+          "lineNumber": 62
+        },
+        {
+          "caller": "_load_report",
+          "callee": "open",
+          "lineNumber": 78
+        },
+        {
+          "caller": "_load_report",
+          "callee": "json.load",
+          "lineNumber": 79
+        },
+        {
+          "caller": "_load_report",
+          "callee": "print",
+          "lineNumber": 81
+        },
+        {
+          "caller": "_load_report",
+          "callee": "sys.exit",
+          "lineNumber": 82
+        },
+        {
+          "caller": "_load_report",
+          "callee": "data.get",
+          "lineNumber": 85
+        },
+        {
+          "caller": "_load_report",
+          "callee": "Conclusion",
+          "lineNumber": 87
+        },
+        {
+          "caller": "_load_report",
+          "callee": "c.get",
+          "lineNumber": 88
+        },
+        {
+          "caller": "_load_report",
+          "callee": "c.get",
+          "lineNumber": 89
+        },
+        {
+          "caller": "_load_report",
+          "callee": "c.get",
+          "lineNumber": 90
+        },
+        {
+          "caller": "_load_report",
+          "callee": "c.get",
+          "lineNumber": 91
+        },
+        {
+          "caller": "_load_report",
+          "callee": "c.get",
+          "lineNumber": 92
+        },
+        {
+          "caller": "_load_report",
+          "callee": "c.get",
+          "lineNumber": 93
+        },
+        {
+          "caller": "_load_report",
+          "callee": "data.get",
+          "lineNumber": 96
+        },
+        {
+          "caller": "_load_report",
+          "callee": "DiagnosisReport",
+          "lineNumber": 97
+        },
+        {
+          "caller": "_load_report",
+          "callee": "data.get",
+          "lineNumber": 98
+        },
+        {
+          "caller": "_load_report",
+          "callee": "data.get",
+          "lineNumber": 99
+        },
+        {
+          "caller": "_load_report",
+          "callee": "data.get",
+          "lineNumber": 100
+        },
+        {
+          "caller": "_load_report",
+          "callee": "DiagnosisInput",
+          "lineNumber": 101
+        },
+        {
+          "caller": "_load_report",
+          "callee": "inp.get",
+          "lineNumber": 102
+        },
+        {
+          "caller": "_load_report",
+          "callee": "inp.get",
+          "lineNumber": 103
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 111
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 112
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 113
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 114
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "proposal.status.upper",
+          "lineNumber": 114
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "sorted",
+          "lineNumber": 118
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "len",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 121
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "os.path.join",
+          "lineNumber": 123
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "os.path.join",
+          "lineNumber": 124
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 125
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 126
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 129
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 135
+        },
+        {
+          "caller": "_print_summary",
+          "callee": "print",
+          "lineNumber": 139
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 3,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/agent/fix_agent.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 265,
+      "nonEmptyLines": 224,
+      "functions": [
+        {
+          "name": "make_submit_fix_proposal_tool",
+          "startLine": 25,
+          "endLine": 75,
+          "params": [
+            "result_holder"
+          ]
+        },
+        {
+          "name": "_build_user_message",
+          "startLine": 177,
+          "endLine": 202,
+          "params": [
+            "report",
+            "proposal_id",
+            "target_project_dir"
+          ]
+        },
+        {
+          "name": "_build_fix_proposal",
+          "startLine": 205,
+          "endLine": 244,
+          "params": [
+            "result_holder",
+            "proposal_id",
+            "diagnosis_id",
+            "created_at"
+          ]
+        },
+        {
+          "name": "_proposal_to_dict",
+          "startLine": 247,
+          "endLine": 265,
+          "params": [
+            "proposal"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "FixAgent",
+          "startLine": 78,
+          "endLine": 174,
+          "methods": [
+            "__init__",
+            "run",
+            "_checkpoint"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "make_submit_fix_proposal_tool",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "FixAgent",
+          "line": 78,
+          "isDefault": false
+        },
+        {
+          "name": "_build_user_message",
+          "line": 177,
+          "isDefault": false
+        },
+        {
+          "name": "_build_fix_proposal",
+          "line": 205,
+          "isDefault": false
+        },
+        {
+          "name": "_proposal_to_dict",
+          "line": 247,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "submit_fix_proposal",
+          "callee": "result_holder.update",
+          "lineNumber": 63
+        },
+        {
+          "caller": "run",
+          "callee": "str",
+          "lineNumber": 103
+        },
+        {
+          "caller": "run",
+          "callee": "uuid.uuid4",
+          "lineNumber": 103
+        },
+        {
+          "caller": "run",
+          "callee": "datetime.now(timezone.utc).isoformat",
+          "lineNumber": 104
+        },
+        {
+          "caller": "run",
+          "callee": "datetime.now",
+          "lineNumber": 104
+        },
+        {
+          "caller": "run",
+          "callee": "make_apply_fix_tool",
+          "lineNumber": 110
+        },
+        {
+          "caller": "run",
+          "callee": "make_run_build_tool",
+          "lineNumber": 111
+        },
+        {
+          "caller": "run",
+          "callee": "make_run_tests_tool",
+          "lineNumber": 112
+        },
+        {
+          "caller": "run",
+          "callee": "make_submit_fix_proposal_tool",
+          "lineNumber": 113
+        },
+        {
+          "caller": "run",
+          "callee": "ChatOpenAI",
+          "lineNumber": 116
+        },
+        {
+          "caller": "run",
+          "callee": "build_fix_system_prompt",
+          "lineNumber": 123
+        },
+        {
+          "caller": "run",
+          "callee": "create_react_agent",
+          "lineNumber": 125
+        },
+        {
+          "caller": "run",
+          "callee": "_build_user_message",
+          "lineNumber": 127
+        },
+        {
+          "caller": "run",
+          "callee": "agent.invoke",
+          "lineNumber": 131
+        },
+        {
+          "caller": "run",
+          "callee": "FixProposal",
+          "lineNumber": 137
+        },
+        {
+          "caller": "run",
+          "callee": "self._checkpoint",
+          "lineNumber": 145
+        },
+        {
+          "caller": "run",
+          "callee": "logger.exception",
+          "lineNumber": 148
+        },
+        {
+          "caller": "run",
+          "callee": "type",
+          "lineNumber": 150
+        },
+        {
+          "caller": "run",
+          "callee": "_build_fix_proposal",
+          "lineNumber": 154
+        },
+        {
+          "caller": "run",
+          "callee": "self._checkpoint",
+          "lineNumber": 155
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "os.path.join",
+          "lineNumber": 160
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "os.makedirs",
+          "lineNumber": 161
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "os.path.join",
+          "lineNumber": 162
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "json.dumps",
+          "lineNumber": 163
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "_proposal_to_dict",
+          "lineNumber": 163
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "tempfile.mkstemp",
+          "lineNumber": 164
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "os.fdopen",
+          "lineNumber": 166
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "fh.write",
+          "lineNumber": 167
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "os.replace",
+          "lineNumber": 168
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "os.unlink",
+          "lineNumber": 171
+        },
+        {
+          "caller": "_build_user_message",
+          "callee": "\"; \".join",
+          "lineNumber": 187
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "FixProposal",
+          "lineNumber": 213
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "result_holder.get",
+          "lineNumber": 222
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "FixEdit",
+          "lineNumber": 226
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "str",
+          "lineNumber": 227
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "e.get",
+          "lineNumber": 227
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "int",
+          "lineNumber": 228
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "e.get",
+          "lineNumber": 228
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "int",
+          "lineNumber": 229
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "e.get",
+          "lineNumber": 229
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "str",
+          "lineNumber": 230
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "e.get",
+          "lineNumber": 230
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "str",
+          "lineNumber": 231
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "e.get",
+          "lineNumber": 231
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "result_holder.get",
+          "lineNumber": 233
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "isinstance",
+          "lineNumber": 234
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "FixProposal",
+          "lineNumber": 237
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "str",
+          "lineNumber": 243
+        },
+        {
+          "caller": "_build_fix_proposal",
+          "callee": "result_holder.get",
+          "lineNumber": 243
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 5,
+        "functionCount": 4,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "src/agent/fix_prompts.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 61,
+      "nonEmptyLines": 45,
+      "functions": [
+        {
+          "name": "build_fix_system_prompt",
+          "startLine": 4,
+          "endLine": 61,
+          "params": [
+            "max_steps"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "build_fix_system_prompt",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/config.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 98,
+      "nonEmptyLines": 81,
+      "functions": [
+        {
+          "name": "load_config",
+          "startLine": 56,
+          "endLine": 98,
+          "params": [
+            "path"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "Config",
+          "startLine": 29,
+          "endLine": 53,
+          "methods": [
+            "__post_init__"
+          ],
+          "properties": [
+            "framework_packages",
+            "max_steps",
+            "max_retry",
+            "extra_source_roots",
+            "llm_base_url",
+            "llm_model",
+            "llm_api_key",
+            "target_project_dir",
+            "build_command",
+            "test_command"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "Config",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "load_config",
+          "line": 56,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "__post_init__",
+          "callee": "ValueError",
+          "lineNumber": 47
+        },
+        {
+          "caller": "__post_init__",
+          "callee": "ValueError",
+          "lineNumber": 51
+        },
+        {
+          "caller": "load_config",
+          "callee": "open",
+          "lineNumber": 68
+        },
+        {
+          "caller": "load_config",
+          "callee": "yaml.safe_load",
+          "lineNumber": 69
+        },
+        {
+          "caller": "load_config",
+          "callee": "isinstance",
+          "lineNumber": 73
+        },
+        {
+          "caller": "load_config",
+          "callee": "ValueError",
+          "lineNumber": 74
+        },
+        {
+          "caller": "load_config",
+          "callee": "type",
+          "lineNumber": 75
+        },
+        {
+          "caller": "load_config",
+          "callee": "raw.get",
+          "lineNumber": 78
+        },
+        {
+          "caller": "load_config",
+          "callee": "list",
+          "lineNumber": 78
+        },
+        {
+          "caller": "load_config",
+          "callee": "isinstance",
+          "lineNumber": 79
+        },
+        {
+          "caller": "load_config",
+          "callee": "ValueError",
+          "lineNumber": 80
+        },
+        {
+          "caller": "load_config",
+          "callee": "type",
+          "lineNumber": 82
+        },
+        {
+          "caller": "load_config",
+          "callee": "raw.get",
+          "lineNumber": 85
+        },
+        {
+          "caller": "load_config",
+          "callee": "os.environ.get",
+          "lineNumber": 85
+        },
+        {
+          "caller": "load_config",
+          "callee": "Config",
+          "lineNumber": 87
+        },
+        {
+          "caller": "load_config",
+          "callee": "int",
+          "lineNumber": 89
+        },
+        {
+          "caller": "load_config",
+          "callee": "raw.get",
+          "lineNumber": 89
+        },
+        {
+          "caller": "load_config",
+          "callee": "int",
+          "lineNumber": 90
+        },
+        {
+          "caller": "load_config",
+          "callee": "raw.get",
+          "lineNumber": 90
+        },
+        {
+          "caller": "load_config",
+          "callee": "list",
+          "lineNumber": 91
+        },
+        {
+          "caller": "load_config",
+          "callee": "raw.get",
+          "lineNumber": 91
+        },
+        {
+          "caller": "load_config",
+          "callee": "str",
+          "lineNumber": 92
+        },
+        {
+          "caller": "load_config",
+          "callee": "raw.get",
+          "lineNumber": 92
+        },
+        {
+          "caller": "load_config",
+          "callee": "str",
+          "lineNumber": 93
+        },
+        {
+          "caller": "load_config",
+          "callee": "raw.get",
+          "lineNumber": 93
+        },
+        {
+          "caller": "load_config",
+          "callee": "str",
+          "lineNumber": 95
+        },
+        {
+          "caller": "load_config",
+          "callee": "raw.get",
+          "lineNumber": 95
+        },
+        {
+          "caller": "load_config",
+          "callee": "str",
+          "lineNumber": 96
+        },
+        {
+          "caller": "load_config",
+          "callee": "raw.get",
+          "lineNumber": 96
+        },
+        {
+          "caller": "load_config",
+          "callee": "str",
+          "lineNumber": 97
+        },
+        {
+          "caller": "load_config",
+          "callee": "raw.get",
+          "lineNumber": 97
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "src/tools/_command_runner.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 81,
+      "nonEmptyLines": 69,
+      "functions": [
+        {
+          "name": "validate_fix_id",
+          "startLine": 13,
+          "endLine": 28,
+          "params": [
+            "fix_id",
+            "tool_tag"
+          ]
+        },
+        {
+          "name": "run_command_in_workspace",
+          "startLine": 31,
+          "endLine": 81,
+          "params": [
+            "tool_tag",
+            "command",
+            "workspace_path",
+            "timeout",
+            "success_label",
+            "failure_label"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "validate_fix_id",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "run_command_in_workspace",
+          "line": 31,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "validate_fix_id",
+          "callee": "_UUID_RE.match",
+          "lineNumber": 23
+        },
+        {
+          "caller": "run_command_in_workspace",
+          "callee": "subprocess.run",
+          "lineNumber": 53
+        },
+        {
+          "caller": "run_command_in_workspace",
+          "callee": "output.splitlines",
+          "lineNumber": 67
+        },
+        {
+          "caller": "run_command_in_workspace",
+          "callee": "len",
+          "lineNumber": 68
+        },
+        {
+          "caller": "run_command_in_workspace",
+          "callee": "\"\\n\".join",
+          "lineNumber": 69
+        },
+        {
+          "caller": "run_command_in_workspace",
+          "callee": "len",
+          "lineNumber": 71
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/tools/apply_fix.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 324,
+      "nonEmptyLines": 272,
+      "functions": [
+        {
+          "name": "_validate_rel_path",
+          "startLine": 25,
+          "endLine": 48,
+          "params": [
+            "base",
+            "rel"
+          ]
+        },
+        {
+          "name": "_load_modified_registry",
+          "startLine": 51,
+          "endLine": 64,
+          "params": [
+            "workspace_path"
+          ]
+        },
+        {
+          "name": "_save_modified_registry",
+          "startLine": 67,
+          "endLine": 83,
+          "params": [
+            "workspace_path",
+            "files"
+          ]
+        },
+        {
+          "name": "_atomic_write_lines",
+          "startLine": 86,
+          "endLine": 110,
+          "params": [
+            "ws_file",
+            "lines"
+          ]
+        },
+        {
+          "name": "make_apply_fix_tool",
+          "startLine": 113,
+          "endLine": 324,
+          "params": [
+            "workspace_root",
+            "target_project_dir"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "_validate_rel_path",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "_load_modified_registry",
+          "line": 51,
+          "isDefault": false
+        },
+        {
+          "name": "_save_modified_registry",
+          "line": 67,
+          "isDefault": false
+        },
+        {
+          "name": "_atomic_write_lines",
+          "line": 86,
+          "isDefault": false
+        },
+        {
+          "name": "make_apply_fix_tool",
+          "line": 113,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_validate_rel_path",
+          "callee": "ValueError",
+          "lineNumber": 39
+        },
+        {
+          "caller": "_validate_rel_path",
+          "callee": "os.path.isabs",
+          "lineNumber": 40
+        },
+        {
+          "caller": "_validate_rel_path",
+          "callee": "ValueError",
+          "lineNumber": 41
+        },
+        {
+          "caller": "_validate_rel_path",
+          "callee": "pathlib.Path(base).resolve",
+          "lineNumber": 42
+        },
+        {
+          "caller": "_validate_rel_path",
+          "callee": "pathlib.Path",
+          "lineNumber": 42
+        },
+        {
+          "caller": "_validate_rel_path",
+          "callee": "(base_path / rel).resolve",
+          "lineNumber": 43
+        },
+        {
+          "caller": "_validate_rel_path",
+          "callee": "target.relative_to",
+          "lineNumber": 45
+        },
+        {
+          "caller": "_validate_rel_path",
+          "callee": "ValueError",
+          "lineNumber": 47
+        },
+        {
+          "caller": "_validate_rel_path",
+          "callee": "str",
+          "lineNumber": 48
+        },
+        {
+          "caller": "_load_modified_registry",
+          "callee": "os.path.join",
+          "lineNumber": 53
+        },
+        {
+          "caller": "_load_modified_registry",
+          "callee": "os.path.exists",
+          "lineNumber": 54
+        },
+        {
+          "caller": "_load_modified_registry",
+          "callee": "set",
+          "lineNumber": 55
+        },
+        {
+          "caller": "_load_modified_registry",
+          "callee": "os.path.getsize",
+          "lineNumber": 56
+        },
+        {
+          "caller": "_load_modified_registry",
+          "callee": "logger.warning",
+          "lineNumber": 57
+        },
+        {
+          "caller": "_load_modified_registry",
+          "callee": "set",
+          "lineNumber": 62
+        },
+        {
+          "caller": "_load_modified_registry",
+          "callee": "open",
+          "lineNumber": 63
+        },
+        {
+          "caller": "_load_modified_registry",
+          "callee": "set",
+          "lineNumber": 64
+        },
+        {
+          "caller": "_load_modified_registry",
+          "callee": "json.load",
+          "lineNumber": 64
+        },
+        {
+          "caller": "_save_modified_registry",
+          "callee": "os.path.join",
+          "lineNumber": 72
+        },
+        {
+          "caller": "_save_modified_registry",
+          "callee": "tempfile.mkstemp",
+          "lineNumber": 73
+        },
+        {
+          "caller": "_save_modified_registry",
+          "callee": "os.fdopen",
+          "lineNumber": 75
+        },
+        {
+          "caller": "_save_modified_registry",
+          "callee": "json.dump",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_save_modified_registry",
+          "callee": "sorted",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_save_modified_registry",
+          "callee": "os.replace",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_save_modified_registry",
+          "callee": "os.unlink",
+          "lineNumber": 80
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "os.path.dirname",
+          "lineNumber": 99
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "tempfile.mkstemp",
+          "lineNumber": 100
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "os.fdopen",
+          "lineNumber": 102
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "fh.writelines",
+          "lineNumber": 103
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "os.replace",
+          "lineNumber": 104
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "os.unlink",
+          "lineNumber": 107
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "validate_fix_id",
+          "lineNumber": 154
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "len",
+          "lineNumber": 158
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "len",
+          "lineNumber": 160
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.path.join",
+          "lineNumber": 166
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "edit.get",
+          "lineNumber": 171
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "any",
+          "lineNumber": 175
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "part.startswith",
+          "lineNumber": 175
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "pathlib.Path",
+          "lineNumber": 175
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "_validate_rel_path",
+          "lineNumber": 182
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "_validate_rel_path",
+          "lineNumber": 183
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "edit.get",
+          "lineNumber": 187
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "len",
+          "lineNumber": 193
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "nc.encode",
+          "lineNumber": 193
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.path.exists",
+          "lineNumber": 208
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "shutil.copytree",
+          "lineNumber": 210
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "_load_modified_registry",
+          "lineNumber": 220
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "set",
+          "lineNumber": 221
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "_validate_rel_path",
+          "lineNumber": 224
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "previously_modified.add",
+          "lineNumber": 225
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "logger.warning",
+          "lineNumber": 227
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "list",
+          "lineNumber": 229
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.path.join",
+          "lineNumber": 230
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.path.join",
+          "lineNumber": 231
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.path.exists",
+          "lineNumber": 232
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.path.exists",
+          "lineNumber": 234
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.unlink",
+          "lineNumber": 236
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "logger.warning",
+          "lineNumber": 239
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "previously_modified.discard",
+          "lineNumber": 243
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.path.exists",
+          "lineNumber": 246
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.unlink",
+          "lineNumber": 247
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.link",
+          "lineNumber": 248
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "edit.get",
+          "lineNumber": 255
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "edits_by_file.setdefault(rel, []).append",
+          "lineNumber": 256
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "edits_by_file.setdefault",
+          "lineNumber": 256
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.path.join",
+          "lineNumber": 262
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.path.exists",
+          "lineNumber": 263
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "set",
+          "lineNumber": 269
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "edits_by_file.items",
+          "lineNumber": 270
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "os.path.join",
+          "lineNumber": 271
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "open",
+          "lineNumber": 273
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "fh.readlines",
+          "lineNumber": 274
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "len",
+          "lineNumber": 276
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "sorted",
+          "lineNumber": 280
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "int",
+          "lineNumber": 281
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "e.get",
+          "lineNumber": 281
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "range",
+          "lineNumber": 285
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "len",
+          "lineNumber": 285
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "int",
+          "lineNumber": 286
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "sorted_edits_asc[i].get",
+          "lineNumber": 286
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "int",
+          "lineNumber": 287
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "sorted_edits_asc[i + 1].get",
+          "lineNumber": 287
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "int",
+          "lineNumber": 297
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "edit.get",
+          "lineNumber": 297
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "int",
+          "lineNumber": 298
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "edit.get",
+          "lineNumber": 298
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "reversed",
+          "lineNumber": 306
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "int",
+          "lineNumber": 307
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "edit.get",
+          "lineNumber": 307
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "int",
+          "lineNumber": 308
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "edit.get",
+          "lineNumber": 308
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "edit.get",
+          "lineNumber": 309
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "new_content.splitlines",
+          "lineNumber": 310
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "_atomic_write_lines",
+          "lineNumber": 312
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "newly_modified.add",
+          "lineNumber": 313
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "_save_modified_registry",
+          "lineNumber": 316
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "\"\\n  \".join",
+          "lineNumber": 318
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "sorted",
+          "lineNumber": 318
+        },
+        {
+          "caller": "apply_fix",
+          "callee": "len",
+          "lineNumber": 320
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 5,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/tools/run_build.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 55,
+      "nonEmptyLines": 40,
+      "functions": [
+        {
+          "name": "make_run_build_tool",
+          "startLine": 14,
+          "endLine": 55,
+          "params": [
+            "workspace_root",
+            "build_command"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "make_run_build_tool",
+          "line": 14,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "run_build",
+          "callee": "validate_fix_id",
+          "lineNumber": 35
+        },
+        {
+          "caller": "run_build",
+          "callee": "os.path.join",
+          "lineNumber": 39
+        },
+        {
+          "caller": "run_build",
+          "callee": "os.path.isdir",
+          "lineNumber": 40
+        },
+        {
+          "caller": "run_build",
+          "callee": "run_command_in_workspace",
+          "lineNumber": 46
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/tools/run_tests.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 56,
+      "nonEmptyLines": 41,
+      "functions": [
+        {
+          "name": "make_run_tests_tool",
+          "startLine": 14,
+          "endLine": 56,
+          "params": [
+            "workspace_root",
+            "test_command"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "make_run_tests_tool",
+          "line": 14,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "run_tests",
+          "callee": "validate_fix_id",
+          "lineNumber": 36
+        },
+        {
+          "caller": "run_tests",
+          "callee": "os.path.join",
+          "lineNumber": 40
+        },
+        {
+          "caller": "run_tests",
+          "callee": "os.path.isdir",
+          "lineNumber": 41
+        },
+        {
+          "caller": "run_tests",
+          "callee": "run_command_in_workspace",
+          "lineNumber": 47
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}

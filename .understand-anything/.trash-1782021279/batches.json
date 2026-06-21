@@ -1,0 +1,730 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "louvain",
+  "totalFiles": 40,
+  "totalBatches": 8,
+  "exportsByPath": {
+    ".understand-anything/.understandignore": [],
+    "bughunterv2.egg-info/PKG-INFO": [],
+    "commit_fix.py": [
+      "_revert_and_abort",
+      "main",
+      "_run_with_workspace",
+      "_load_proposal",
+      "_load_diagnosis"
+    ],
+    "diagnose.py": [
+      "main"
+    ],
+    "fix.py": [
+      "main",
+      "_load_report",
+      "_print_summary"
+    ],
+    "src/__init__.py": [],
+    "src/agent/__init__.py": [],
+    "src/agent/diagnosis_agent.py": [
+      "make_submit_diagnosis_tool",
+      "DiagnosisAgent",
+      "_build_conclusion",
+      "_evidence_to_ref",
+      "_report_to_dict"
+    ],
+    "src/agent/fix_agent.py": [
+      "make_submit_fix_proposal_tool",
+      "FixAgent",
+      "_build_user_message",
+      "_build_fix_proposal",
+      "_proposal_to_dict"
+    ],
+    "src/agent/fix_prompts.py": [
+      "build_fix_system_prompt"
+    ],
+    "src/agent/prompts.py": [
+      "build_system_prompt"
+    ],
+    "src/commit/__init__.py": [],
+    "src/commit/patcher.py": [
+      "_safe_join",
+      "snapshot_hashes",
+      "detect_conflicts",
+      "apply_edits",
+      "generate_diff",
+      "_atomic_write_lines",
+      "_read_lines"
+    ],
+    "src/commit/svn.py": [
+      "svn_update",
+      "svn_commit",
+      "svn_revert"
+    ],
+    "src/config.py": [
+      "Config",
+      "load_config"
+    ],
+    "src/models.py": [
+      "StackFrame",
+      "Location",
+      "EvidenceItem",
+      "BacktraceStep",
+      "Conclusion",
+      "DiagnosisInput",
+      "DiagnosisReport",
+      "FixEdit",
+      "FixProposal"
+    ],
+    "src/report_writer.py": [
+      "print_summary",
+      "write_json"
+    ],
+    "src/source_index.py": [
+      "SourceIndex"
+    ],
+    "src/stack_parser.py": [
+      "parse_stack_trace",
+      "find_business_top_frame"
+    ],
+    "src/tools/__init__.py": [],
+    "src/tools/_command_runner.py": [
+      "validate_fix_id",
+      "run_command_in_workspace"
+    ],
+    "src/tools/apply_fix.py": [
+      "_validate_rel_path",
+      "_load_modified_registry",
+      "_save_modified_registry",
+      "_atomic_write_lines",
+      "make_apply_fix_tool"
+    ],
+    "src/tools/find_callers.py": [
+      "make_find_callers_tool"
+    ],
+    "src/tools/read_source.py": [
+      "make_read_source_tool"
+    ],
+    "src/tools/run_build.py": [
+      "make_run_build_tool"
+    ],
+    "src/tools/run_tests.py": [
+      "make_run_tests_tool"
+    ],
+    "workspace/diagnosis/.gitkeep": []
+  },
+  "batches": [
+    {
+      "batchIndex": 1,
+      "files": [
+        {
+          "path": "fix.py",
+          "language": "python",
+          "sizeLines": 143,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/agent/fix_agent.py",
+          "language": "python",
+          "sizeLines": 265,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/agent/fix_prompts.py",
+          "language": "python",
+          "sizeLines": 61,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/config.py",
+          "language": "python",
+          "sizeLines": 98,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/tools/_command_runner.py",
+          "language": "python",
+          "sizeLines": 81,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/tools/apply_fix.py",
+          "language": "python",
+          "sizeLines": 324,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/tools/run_build.py",
+          "language": "python",
+          "sizeLines": 55,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/tools/run_tests.py",
+          "language": "python",
+          "sizeLines": 56,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "fix.py": [
+          "src/agent/fix_agent.py",
+          "src/config.py",
+          "src/models.py"
+        ],
+        "src/agent/fix_agent.py": [
+          "src/agent/fix_prompts.py",
+          "src/config.py",
+          "src/models.py",
+          "src/tools/apply_fix.py",
+          "src/tools/run_build.py",
+          "src/tools/run_tests.py"
+        ],
+        "src/agent/fix_prompts.py": [],
+        "src/config.py": [],
+        "src/tools/_command_runner.py": [],
+        "src/tools/apply_fix.py": [
+          "src/tools/_command_runner.py"
+        ],
+        "src/tools/run_build.py": [
+          "src/tools/_command_runner.py"
+        ],
+        "src/tools/run_tests.py": [
+          "src/tools/_command_runner.py"
+        ]
+      },
+      "neighborMap": {
+        "fix.py": [
+          {
+            "path": "src/models.py",
+            "batchIndex": 3,
+            "symbols": [
+              "StackFrame",
+              "Location",
+              "EvidenceItem",
+              "BacktraceStep",
+              "Conclusion",
+              "DiagnosisInput",
+              "DiagnosisReport",
+              "FixEdit",
+              "FixProposal"
+            ]
+          }
+        ],
+        "src/agent/fix_agent.py": [
+          {
+            "path": "src/models.py",
+            "batchIndex": 3,
+            "symbols": [
+              "StackFrame",
+              "Location",
+              "EvidenceItem",
+              "BacktraceStep",
+              "Conclusion",
+              "DiagnosisInput",
+              "DiagnosisReport",
+              "FixEdit",
+              "FixProposal"
+            ]
+          },
+          {
+            "path": "commit_fix.py",
+            "batchIndex": 4,
+            "symbols": [
+              "_revert_and_abort",
+              "main",
+              "_run_with_workspace",
+              "_load_proposal",
+              "_load_diagnosis"
+            ]
+          }
+        ],
+        "src/config.py": [
+          {
+            "path": "commit_fix.py",
+            "batchIndex": 4,
+            "symbols": [
+              "_revert_and_abort",
+              "main",
+              "_run_with_workspace",
+              "_load_proposal",
+              "_load_diagnosis"
+            ]
+          },
+          {
+            "path": "diagnose.py",
+            "batchIndex": 3,
+            "symbols": [
+              "main"
+            ]
+          },
+          {
+            "path": "src/agent/diagnosis_agent.py",
+            "batchIndex": 2,
+            "symbols": [
+              "make_submit_diagnosis_tool",
+              "DiagnosisAgent",
+              "_build_conclusion",
+              "_evidence_to_ref",
+              "_report_to_dict"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 2,
+      "files": [
+        {
+          "path": "src/agent/diagnosis_agent.py",
+          "language": "python",
+          "sizeLines": 312,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/agent/prompts.py",
+          "language": "python",
+          "sizeLines": 75,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/source_index.py",
+          "language": "python",
+          "sizeLines": 57,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/tools/find_callers.py",
+          "language": "python",
+          "sizeLines": 67,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/tools/read_source.py",
+          "language": "python",
+          "sizeLines": 57,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "src/agent/diagnosis_agent.py": [
+          "src/agent/prompts.py",
+          "src/config.py",
+          "src/models.py",
+          "src/source_index.py",
+          "src/tools/find_callers.py",
+          "src/tools/read_source.py"
+        ],
+        "src/agent/prompts.py": [],
+        "src/source_index.py": [],
+        "src/tools/find_callers.py": [],
+        "src/tools/read_source.py": [
+          "src/source_index.py"
+        ]
+      },
+      "neighborMap": {
+        "src/agent/diagnosis_agent.py": [
+          {
+            "path": "src/config.py",
+            "batchIndex": 1,
+            "symbols": [
+              "Config",
+              "load_config"
+            ]
+          },
+          {
+            "path": "src/models.py",
+            "batchIndex": 3,
+            "symbols": [
+              "StackFrame",
+              "Location",
+              "EvidenceItem",
+              "BacktraceStep",
+              "Conclusion",
+              "DiagnosisInput",
+              "DiagnosisReport",
+              "FixEdit",
+              "FixProposal"
+            ]
+          },
+          {
+            "path": "diagnose.py",
+            "batchIndex": 3,
+            "symbols": [
+              "main"
+            ]
+          }
+        ],
+        "src/source_index.py": [
+          {
+            "path": "diagnose.py",
+            "batchIndex": 3,
+            "symbols": [
+              "main"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 3,
+      "files": [
+        {
+          "path": "diagnose.py",
+          "language": "python",
+          "sizeLines": 85,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/models.py",
+          "language": "python",
+          "sizeLines": 104,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/report_writer.py",
+          "language": "python",
+          "sizeLines": 62,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/stack_parser.py",
+          "language": "python",
+          "sizeLines": 60,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "diagnose.py": [
+          "src/agent/diagnosis_agent.py",
+          "src/config.py",
+          "src/report_writer.py",
+          "src/source_index.py",
+          "src/stack_parser.py"
+        ],
+        "src/models.py": [],
+        "src/report_writer.py": [
+          "src/models.py"
+        ],
+        "src/stack_parser.py": [
+          "src/models.py"
+        ]
+      },
+      "neighborMap": {
+        "diagnose.py": [
+          {
+            "path": "src/agent/diagnosis_agent.py",
+            "batchIndex": 2,
+            "symbols": [
+              "make_submit_diagnosis_tool",
+              "DiagnosisAgent",
+              "_build_conclusion",
+              "_evidence_to_ref",
+              "_report_to_dict"
+            ]
+          },
+          {
+            "path": "src/config.py",
+            "batchIndex": 1,
+            "symbols": [
+              "Config",
+              "load_config"
+            ]
+          },
+          {
+            "path": "src/source_index.py",
+            "batchIndex": 2,
+            "symbols": [
+              "SourceIndex"
+            ]
+          }
+        ],
+        "src/models.py": [
+          {
+            "path": "commit_fix.py",
+            "batchIndex": 4,
+            "symbols": [
+              "_revert_and_abort",
+              "main",
+              "_run_with_workspace",
+              "_load_proposal",
+              "_load_diagnosis"
+            ]
+          },
+          {
+            "path": "fix.py",
+            "batchIndex": 1,
+            "symbols": [
+              "main",
+              "_load_report",
+              "_print_summary"
+            ]
+          },
+          {
+            "path": "src/agent/diagnosis_agent.py",
+            "batchIndex": 2,
+            "symbols": [
+              "make_submit_diagnosis_tool",
+              "DiagnosisAgent",
+              "_build_conclusion",
+              "_evidence_to_ref",
+              "_report_to_dict"
+            ]
+          },
+          {
+            "path": "src/agent/fix_agent.py",
+            "batchIndex": 1,
+            "symbols": [
+              "make_submit_fix_proposal_tool",
+              "FixAgent",
+              "_build_user_message",
+              "_build_fix_proposal",
+              "_proposal_to_dict"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 4,
+      "files": [
+        {
+          "path": "commit_fix.py",
+          "language": "python",
+          "sizeLines": 259,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/commit/patcher.py",
+          "language": "python",
+          "sizeLines": 192,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/commit/svn.py",
+          "language": "python",
+          "sizeLines": 77,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "commit_fix.py": [
+          "src/agent/fix_agent.py",
+          "src/commit/patcher.py",
+          "src/commit/svn.py",
+          "src/config.py",
+          "src/models.py"
+        ],
+        "src/commit/patcher.py": [],
+        "src/commit/svn.py": []
+      },
+      "neighborMap": {
+        "commit_fix.py": [
+          {
+            "path": "src/agent/fix_agent.py",
+            "batchIndex": 1,
+            "symbols": [
+              "make_submit_fix_proposal_tool",
+              "FixAgent",
+              "_build_user_message",
+              "_build_fix_proposal",
+              "_proposal_to_dict"
+            ]
+          },
+          {
+            "path": "src/config.py",
+            "batchIndex": 1,
+            "symbols": [
+              "Config",
+              "load_config"
+            ]
+          },
+          {
+            "path": "src/models.py",
+            "batchIndex": 3,
+            "symbols": [
+              "StackFrame",
+              "Location",
+              "EvidenceItem",
+              "BacktraceStep",
+              "Conclusion",
+              "DiagnosisInput",
+              "DiagnosisReport",
+              "FixEdit",
+              "FixProposal"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 5,
+      "files": [
+        {
+          "path": "CLAUDE.md",
+          "language": "markdown",
+          "sizeLines": 26,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "config.yaml",
+          "language": "yaml",
+          "sizeLines": 21,
+          "fileCategory": "config"
+        },
+        {
+          "path": "pyproject.toml",
+          "language": "toml",
+          "sizeLines": 44,
+          "fileCategory": "config"
+        }
+      ],
+      "batchImportData": {
+        "CLAUDE.md": [],
+        "config.yaml": [],
+        "pyproject.toml": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 6,
+      "files": [
+        {
+          "path": "bughunterv2.egg-info/SOURCES.txt",
+          "language": "txt",
+          "sizeLines": 22,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "bughunterv2.egg-info/dependency_links.txt",
+          "language": "txt",
+          "sizeLines": 1,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "bughunterv2.egg-info/requires.txt",
+          "language": "txt",
+          "sizeLines": 11,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "bughunterv2.egg-info/top_level.txt",
+          "language": "txt",
+          "sizeLines": 4,
+          "fileCategory": "docs"
+        }
+      ],
+      "batchImportData": {
+        "bughunterv2.egg-info/SOURCES.txt": [],
+        "bughunterv2.egg-info/dependency_links.txt": [],
+        "bughunterv2.egg-info/requires.txt": [],
+        "bughunterv2.egg-info/top_level.txt": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 7,
+      "files": [
+        {
+          "path": "openspec/changes/m3-commit-fix/design.md",
+          "language": "markdown",
+          "sizeLines": 225,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "openspec/changes/m3-commit-fix/proposal.md",
+          "language": "markdown",
+          "sizeLines": 37,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "openspec/changes/m3-commit-fix/tasks.md",
+          "language": "markdown",
+          "sizeLines": 229,
+          "fileCategory": "docs"
+        }
+      ],
+      "batchImportData": {
+        "openspec/changes/m3-commit-fix/design.md": [],
+        "openspec/changes/m3-commit-fix/proposal.md": [],
+        "openspec/changes/m3-commit-fix/tasks.md": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 8,
+      "files": [
+        {
+          "path": ".understand-anything/.understandignore",
+          "language": "unknown",
+          "sizeLines": 32,
+          "fileCategory": "code"
+        },
+        {
+          "path": ".understand-anything/config.json",
+          "language": "json",
+          "sizeLines": 1,
+          "fileCategory": "config"
+        },
+        {
+          "path": "bughunterv2.egg-info/PKG-INFO",
+          "language": "unknown",
+          "sizeLines": 14,
+          "fileCategory": "code"
+        },
+        {
+          "path": "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+          "language": "markdown",
+          "sizeLines": 87,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+          "language": "markdown",
+          "sizeLines": 328,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "src/__init__.py",
+          "language": "python",
+          "sizeLines": 0,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/agent/__init__.py",
+          "language": "python",
+          "sizeLines": 0,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/commit/__init__.py",
+          "language": "python",
+          "sizeLines": 0,
+          "fileCategory": "code"
+        },
+        {
+          "path": "src/tools/__init__.py",
+          "language": "python",
+          "sizeLines": 0,
+          "fileCategory": "code"
+        },
+        {
+          "path": "workspace/diagnosis/.gitkeep",
+          "language": "unknown",
+          "sizeLines": 0,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        ".understand-anything/.understandignore": [],
+        ".understand-anything/config.json": [],
+        "bughunterv2.egg-info/PKG-INFO": [],
+        "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md": [],
+        "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md": [],
+        "src/__init__.py": [],
+        "src/agent/__init__.py": [],
+        "src/commit/__init__.py": [],
+        "src/tools/__init__.py": [],
+        "workspace/diagnosis/.gitkeep": []
+      },
+      "neighborMap": {}
+    }
+  ]
+}

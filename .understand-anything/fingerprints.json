@@ -1,0 +1,1771 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "b28e5b701cd27f19d8aac0a3a6d3125ea086edad",
+  "generatedAt": "2026-06-21T05:54:06.009Z",
+  "files": {
+    ".understand-anything/.understandignore": {
+      "filePath": ".understand-anything/.understandignore",
+      "contentHash": "ce6f3cbc42e121f651d26c07c93149cf7b67800314dccbbf8bc21ff9b364b18f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 33,
+      "hasStructuralAnalysis": false
+    },
+    ".understand-anything/config.json": {
+      "filePath": ".understand-anything/config.json",
+      "contentHash": "c4a81b476be169d02009b0f55951562958b700b6d831e2b5754648ac73552ec9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "bughunterv2.egg-info/dependency_links.txt": {
+      "filePath": "bughunterv2.egg-info/dependency_links.txt",
+      "contentHash": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "bughunterv2.egg-info/PKG-INFO": {
+      "filePath": "bughunterv2.egg-info/PKG-INFO",
+      "contentHash": "8c4dc724e52b8a120d8d822a90a35b18282b0b04945d81268fc64d15531aa3ca",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "bughunterv2.egg-info/requires.txt": {
+      "filePath": "bughunterv2.egg-info/requires.txt",
+      "contentHash": "af9fe6917f6df4a037d5b13a8fd05bc082b1abdcecb14f48d7b6a2e6b9221a50",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "bughunterv2.egg-info/SOURCES.txt": {
+      "filePath": "bughunterv2.egg-info/SOURCES.txt",
+      "contentHash": "70b312c7b991df0fda237f816f6f55821b5c07bacc8fc46381673593bf01216a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 23,
+      "hasStructuralAnalysis": false
+    },
+    "bughunterv2.egg-info/top_level.txt": {
+      "filePath": "bughunterv2.egg-info/top_level.txt",
+      "contentHash": "fd95c6710c9273e08155570117ce8cc46b70e7185ea19a6b365e12f13e746525",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 5,
+      "hasStructuralAnalysis": false
+    },
+    "CLAUDE.md": {
+      "filePath": "CLAUDE.md",
+      "contentHash": "c469bb82140f627f20b2488d0f33bf8d458b98e8106ac5117e099d8775849ac8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    "commit_fix.py": {
+      "filePath": "commit_fix.py",
+      "contentHash": "01102041d91f6ad36ff420fa0281301983cd97187d64e3ab9b27d6d5e1d4adfc",
+      "functions": [
+        {
+          "name": "_revert_and_abort",
+          "params": [
+            "source_dir",
+            "files",
+            "msg"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 34
+        },
+        {
+          "name": "_run_with_workspace",
+          "params": [
+            "workspace_root",
+            "proposal_id",
+            "config",
+            "max_retry",
+            "dry_run"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 85
+        },
+        {
+          "name": "_load_proposal",
+          "params": [
+            "workspace_root",
+            "proposal_id"
+          ],
+          "returnType": "FixProposal",
+          "exported": true,
+          "lineCount": 51
+        },
+        {
+          "name": "_load_diagnosis",
+          "params": [
+            "workspace_root",
+            "diagnosis_id"
+          ],
+          "returnType": "DiagnosisReport",
+          "exported": true,
+          "lineCount": 47
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "pathlib"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid"
+          ]
+        },
+        {
+          "source": "src.agent.fix_agent",
+          "specifiers": [
+            "FixAgent"
+          ]
+        },
+        {
+          "source": "src.commit.patcher",
+          "specifiers": [
+            "apply_edits",
+            "detect_conflicts",
+            "generate_diff",
+            "snapshot_hashes"
+          ]
+        },
+        {
+          "source": "src.commit.svn",
+          "specifiers": [
+            "svn_commit",
+            "svn_revert",
+            "svn_update"
+          ]
+        },
+        {
+          "source": "src.config",
+          "specifiers": [
+            "load_config"
+          ]
+        },
+        {
+          "source": "src.models",
+          "specifiers": [
+            "Conclusion",
+            "DiagnosisInput",
+            "DiagnosisReport",
+            "FixEdit",
+            "FixProposal"
+          ]
+        }
+      ],
+      "exports": [
+        "_revert_and_abort",
+        "main",
+        "_run_with_workspace",
+        "_load_proposal",
+        "_load_diagnosis"
+      ],
+      "totalLines": 260,
+      "hasStructuralAnalysis": true
+    },
+    "config.yaml": {
+      "filePath": "config.yaml",
+      "contentHash": "195113527f8fa7d7f0833faadebe7ff3b71e5c05b85b338d34ef4d4be991fc59",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    "diagnose.py": {
+      "filePath": "diagnose.py",
+      "contentHash": "548ea3275f68eab0b01b365d05afc8f5cee8a8f758c3a2d593b3d196d73d894a",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 68
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "src.agent.diagnosis_agent",
+          "specifiers": [
+            "DiagnosisAgent"
+          ]
+        },
+        {
+          "source": "src.config",
+          "specifiers": [
+            "load_config"
+          ]
+        },
+        {
+          "source": "src.report_writer",
+          "specifiers": [
+            "print_summary",
+            "write_json"
+          ]
+        },
+        {
+          "source": "src.source_index",
+          "specifiers": [
+            "SourceIndex"
+          ]
+        },
+        {
+          "source": "src.stack_parser",
+          "specifiers": [
+            "find_business_top_frame",
+            "parse_stack_trace"
+          ]
+        }
+      ],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 86,
+      "hasStructuralAnalysis": true
+    },
+    "fix.py": {
+      "filePath": "fix.py",
+      "contentHash": "9f66bcac157a958cdccc26fe9a5708cf38797a7239351afae7e79f618abeaa8a",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 50
+        },
+        {
+          "name": "_load_report",
+          "params": [
+            "path"
+          ],
+          "returnType": "DiagnosisReport",
+          "exported": true,
+          "lineCount": 42
+        },
+        {
+          "name": "_print_summary",
+          "params": [
+            "proposal",
+            "workspace_root"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 31
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "src.agent.fix_agent",
+          "specifiers": [
+            "FixAgent"
+          ]
+        },
+        {
+          "source": "src.config",
+          "specifiers": [
+            "load_config"
+          ]
+        },
+        {
+          "source": "src.models",
+          "specifiers": [
+            "Conclusion",
+            "DiagnosisInput",
+            "DiagnosisReport",
+            "FixProposal"
+          ]
+        }
+      ],
+      "exports": [
+        "main",
+        "_load_report",
+        "_print_summary"
+      ],
+      "totalLines": 144,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md": {
+      "filePath": "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "contentHash": "6b16787e8c401600886c0c117d0f8dbd9e576f93d10ef9eb29010d0333180042",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 88,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md": {
+      "filePath": "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+      "contentHash": "7f65b3500895c1177bb7f31c0c692c10ff7c4aeb11dd19172e39f202bf66ade8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 329,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/changes/m3-commit-fix/design.md": {
+      "filePath": "openspec/changes/m3-commit-fix/design.md",
+      "contentHash": "b09a70100b49ba36d0ef3fae18b7df1cd2a397253a3dbf6e5282440855350383",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 226,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/changes/m3-commit-fix/proposal.md": {
+      "filePath": "openspec/changes/m3-commit-fix/proposal.md",
+      "contentHash": "6c08ee8eb677d805f44083de59df0170ce4f4b55fcd1cefb27adcee3a7c04db2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 38,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/changes/m3-commit-fix/tasks.md": {
+      "filePath": "openspec/changes/m3-commit-fix/tasks.md",
+      "contentHash": "aa74a9a34bc9f167d986bce95d06eee7dc74d7a320ad7b84a511fc4c6fa22c53",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 230,
+      "hasStructuralAnalysis": true
+    },
+    "pyproject.toml": {
+      "filePath": "pyproject.toml",
+      "contentHash": "388a43c64eba6932b05fe4a11753c7f121b4a26cec8bbdd2fced3f66bda97189",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 45,
+      "hasStructuralAnalysis": true
+    },
+    "src/__init__.py": {
+      "filePath": "src/__init__.py",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "src/agent/__init__.py": {
+      "filePath": "src/agent/__init__.py",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "src/agent/diagnosis_agent.py": {
+      "filePath": "src/agent/diagnosis_agent.py",
+      "contentHash": "8a6eba23affbc0f883794a7d124e6f7409eff9ffae33bd7bd43ab404b9e16628",
+      "functions": [
+        {
+          "name": "make_submit_diagnosis_tool",
+          "params": [
+            "result_holder"
+          ],
+          "exported": true,
+          "lineCount": 59
+        },
+        {
+          "name": "_build_conclusion",
+          "params": [
+            "result_holder"
+          ],
+          "returnType": "Conclusion",
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "_evidence_to_ref",
+          "params": [
+            "e"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "_report_to_dict",
+          "params": [
+            "report"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 48
+        }
+      ],
+      "classes": [
+        {
+          "name": "DiagnosisAgent",
+          "methods": [
+            "__init__",
+            "run",
+            "_checkpoint"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 127
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "tempfile",
+          "specifiers": [
+            "tempfile"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timezone"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "langchain_openai",
+          "specifiers": [
+            "ChatOpenAI"
+          ]
+        },
+        {
+          "source": "langchain_core.tools",
+          "specifiers": [
+            "tool"
+          ]
+        },
+        {
+          "source": "langgraph.prebuilt",
+          "specifiers": [
+            "create_react_agent"
+          ]
+        },
+        {
+          "source": "src.agent.prompts",
+          "specifiers": [
+            "build_system_prompt"
+          ]
+        },
+        {
+          "source": "src.config",
+          "specifiers": [
+            "Config"
+          ]
+        },
+        {
+          "source": "src.models",
+          "specifiers": [
+            "Conclusion",
+            "DiagnosisInput",
+            "DiagnosisReport",
+            "StackFrame"
+          ]
+        },
+        {
+          "source": "src.source_index",
+          "specifiers": [
+            "SourceIndex"
+          ]
+        },
+        {
+          "source": "src.tools.find_callers",
+          "specifiers": [
+            "make_find_callers_tool"
+          ]
+        },
+        {
+          "source": "src.tools.read_source",
+          "specifiers": [
+            "make_read_source_tool"
+          ]
+        }
+      ],
+      "exports": [
+        "make_submit_diagnosis_tool",
+        "DiagnosisAgent",
+        "_build_conclusion",
+        "_evidence_to_ref",
+        "_report_to_dict"
+      ],
+      "totalLines": 313,
+      "hasStructuralAnalysis": true
+    },
+    "src/agent/fix_agent.py": {
+      "filePath": "src/agent/fix_agent.py",
+      "contentHash": "bbfdec15e98207d923170b9eca9d6cf010f61b5d0b37d16e6bff09e298af6954",
+      "functions": [
+        {
+          "name": "make_submit_fix_proposal_tool",
+          "params": [
+            "result_holder"
+          ],
+          "returnType": "Any",
+          "exported": true,
+          "lineCount": 51
+        },
+        {
+          "name": "_build_user_message",
+          "params": [
+            "report",
+            "proposal_id",
+            "target_project_dir"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "_build_fix_proposal",
+          "params": [
+            "result_holder",
+            "proposal_id",
+            "diagnosis_id",
+            "created_at"
+          ],
+          "returnType": "FixProposal",
+          "exported": true,
+          "lineCount": 40
+        },
+        {
+          "name": "_proposal_to_dict",
+          "params": [
+            "proposal"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "classes": [
+        {
+          "name": "FixAgent",
+          "methods": [
+            "__init__",
+            "run",
+            "_checkpoint"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 97
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "logging",
+          "specifiers": [
+            "logging"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "tempfile",
+          "specifiers": [
+            "tempfile"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timezone"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "langchain_openai",
+          "specifiers": [
+            "ChatOpenAI"
+          ]
+        },
+        {
+          "source": "langchain_core.tools",
+          "specifiers": [
+            "tool"
+          ]
+        },
+        {
+          "source": "langgraph.prebuilt",
+          "specifiers": [
+            "create_react_agent"
+          ]
+        },
+        {
+          "source": "src.agent.fix_prompts",
+          "specifiers": [
+            "build_fix_system_prompt"
+          ]
+        },
+        {
+          "source": "src.config",
+          "specifiers": [
+            "Config"
+          ]
+        },
+        {
+          "source": "src.models",
+          "specifiers": [
+            "DiagnosisReport",
+            "FixEdit",
+            "FixProposal"
+          ]
+        },
+        {
+          "source": "src.tools.apply_fix",
+          "specifiers": [
+            "make_apply_fix_tool"
+          ]
+        },
+        {
+          "source": "src.tools.run_build",
+          "specifiers": [
+            "make_run_build_tool"
+          ]
+        },
+        {
+          "source": "src.tools.run_tests",
+          "specifiers": [
+            "make_run_tests_tool"
+          ]
+        }
+      ],
+      "exports": [
+        "make_submit_fix_proposal_tool",
+        "FixAgent",
+        "_build_user_message",
+        "_build_fix_proposal",
+        "_proposal_to_dict"
+      ],
+      "totalLines": 266,
+      "hasStructuralAnalysis": true
+    },
+    "src/agent/fix_prompts.py": {
+      "filePath": "src/agent/fix_prompts.py",
+      "contentHash": "cf5a8a13adf99dba89e803a7c84d9a656e558d72b0071f4aacf04a17793509d1",
+      "functions": [
+        {
+          "name": "build_fix_system_prompt",
+          "params": [
+            "max_steps"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 58
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "build_fix_system_prompt"
+      ],
+      "totalLines": 62,
+      "hasStructuralAnalysis": true
+    },
+    "src/agent/prompts.py": {
+      "filePath": "src/agent/prompts.py",
+      "contentHash": "81a56520c5020701603f4181df94b76bb2081838dac2f92820b40992b1e4b876",
+      "functions": [
+        {
+          "name": "build_system_prompt",
+          "params": [
+            "max_steps",
+            "framework_packages"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 72
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "build_system_prompt"
+      ],
+      "totalLines": 76,
+      "hasStructuralAnalysis": true
+    },
+    "src/commit/__init__.py": {
+      "filePath": "src/commit/__init__.py",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "src/commit/patcher.py": {
+      "filePath": "src/commit/patcher.py",
+      "contentHash": "09b1a32de17fc406df0bc226713545d4843e7ea152e38bd2ac0ecaee63671a14",
+      "functions": [
+        {
+          "name": "_safe_join",
+          "params": [
+            "base",
+            "rel"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "snapshot_hashes",
+          "params": [
+            "source_dir",
+            "files"
+          ],
+          "returnType": "dict[str, str]",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "detect_conflicts",
+          "params": [
+            "old_hashes",
+            "source_dir"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "apply_edits",
+          "params": [
+            "source_dir",
+            "edits"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 59
+        },
+        {
+          "name": "generate_diff",
+          "params": [
+            "source_dir",
+            "workspace_dir",
+            "files"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 31
+        },
+        {
+          "name": "_atomic_write_lines",
+          "params": [
+            "path",
+            "lines"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "_read_lines",
+          "params": [
+            "path"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "difflib",
+          "specifiers": [
+            "difflib"
+          ]
+        },
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "pathlib"
+          ]
+        },
+        {
+          "source": "tempfile",
+          "specifiers": [
+            "tempfile"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "TYPE_CHECKING"
+          ]
+        }
+      ],
+      "exports": [
+        "_safe_join",
+        "snapshot_hashes",
+        "detect_conflicts",
+        "apply_edits",
+        "generate_diff",
+        "_atomic_write_lines",
+        "_read_lines"
+      ],
+      "totalLines": 193,
+      "hasStructuralAnalysis": true
+    },
+    "src/commit/svn.py": {
+      "filePath": "src/commit/svn.py",
+      "contentHash": "435c2ac4183f86e45854e82964f353b6702746059ae53aea9daaf61203cb378d",
+      "functions": [
+        {
+          "name": "svn_update",
+          "params": [
+            "path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "svn_commit",
+          "params": [
+            "path",
+            "message"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "svn_revert",
+          "params": [
+            "path",
+            "files"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 22
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        }
+      ],
+      "exports": [
+        "svn_update",
+        "svn_commit",
+        "svn_revert"
+      ],
+      "totalLines": 78,
+      "hasStructuralAnalysis": true
+    },
+    "src/config.py": {
+      "filePath": "src/config.py",
+      "contentHash": "d66741054fcfb7afe6f894f24909afe1236cd140179484e81a408b1de7cd1997",
+      "functions": [
+        {
+          "name": "load_config",
+          "params": [
+            "path"
+          ],
+          "returnType": "Config",
+          "exported": true,
+          "lineCount": 43
+        }
+      ],
+      "classes": [
+        {
+          "name": "Config",
+          "methods": [
+            "__post_init__"
+          ],
+          "properties": [
+            "framework_packages",
+            "max_steps",
+            "max_retry",
+            "extra_source_roots",
+            "llm_base_url",
+            "llm_model",
+            "llm_api_key",
+            "target_project_dir",
+            "build_command",
+            "test_command"
+          ],
+          "exported": true,
+          "lineCount": 25
+        }
+      ],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "yaml",
+          "specifiers": [
+            "yaml"
+          ]
+        }
+      ],
+      "exports": [
+        "Config",
+        "load_config"
+      ],
+      "totalLines": 99,
+      "hasStructuralAnalysis": true
+    },
+    "src/models.py": {
+      "filePath": "src/models.py",
+      "contentHash": "55f727714fa9f6d976935571eeb056dfc39dd2d18d2155a0112898e9dfe26d41",
+      "functions": [],
+      "classes": [
+        {
+          "name": "StackFrame",
+          "methods": [],
+          "properties": [
+            "class_name",
+            "method",
+            "file",
+            "line"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "Location",
+          "methods": [],
+          "properties": [
+            "file",
+            "line",
+            "method"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "EvidenceItem",
+          "methods": [],
+          "properties": [
+            "type",
+            "file",
+            "line",
+            "snippet"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "BacktraceStep",
+          "methods": [],
+          "properties": [
+            "step",
+            "suspect_variable",
+            "location",
+            "decision",
+            "finding",
+            "evidence",
+            "tool_calls"
+          ],
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "Conclusion",
+          "methods": [],
+          "properties": [
+            "root_cause_hypothesis",
+            "evidence_refs",
+            "counter_check",
+            "fix_direction",
+            "confidence",
+            "confidence_reason"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "DiagnosisInput",
+          "methods": [],
+          "properties": [
+            "stack_trace",
+            "source_dir"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "DiagnosisReport",
+          "methods": [],
+          "properties": [
+            "diagnosis_id",
+            "created_at",
+            "status",
+            "input",
+            "backtrace_steps",
+            "conclusion"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "FixEdit",
+          "methods": [],
+          "properties": [
+            "file",
+            "start_line",
+            "end_line",
+            "new_content",
+            "reason"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "FixProposal",
+          "methods": [],
+          "properties": [
+            "proposal_id",
+            "diagnosis_id",
+            "created_at",
+            "status",
+            "edits",
+            "summary"
+          ],
+          "exported": true,
+          "lineCount": 12
+        }
+      ],
+      "imports": [
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Literal"
+          ]
+        }
+      ],
+      "exports": [
+        "StackFrame",
+        "Location",
+        "EvidenceItem",
+        "BacktraceStep",
+        "Conclusion",
+        "DiagnosisInput",
+        "DiagnosisReport",
+        "FixEdit",
+        "FixProposal"
+      ],
+      "totalLines": 105,
+      "hasStructuralAnalysis": true
+    },
+    "src/report_writer.py": {
+      "filePath": "src/report_writer.py",
+      "contentHash": "39ef44b2ab01b80b3a7ef51fd1158f39f678ab2bc691e5c484a6a50c93703e3d",
+      "functions": [
+        {
+          "name": "print_summary",
+          "params": [
+            "report"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 36
+        },
+        {
+          "name": "write_json",
+          "params": [
+            "report",
+            "path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclasses"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "src.models",
+          "specifiers": [
+            "DiagnosisReport"
+          ]
+        }
+      ],
+      "exports": [
+        "print_summary",
+        "write_json"
+      ],
+      "totalLines": 63,
+      "hasStructuralAnalysis": true
+    },
+    "src/source_index.py": {
+      "filePath": "src/source_index.py",
+      "contentHash": "93f4ee82b4a808722864050552058bc37cb89d04443d158a5f1e330d0c0c1b2b",
+      "functions": [],
+      "classes": [
+        {
+          "name": "SourceIndex",
+          "methods": [
+            "__init__",
+            "build",
+            "resolve"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 52
+        }
+      ],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        }
+      ],
+      "exports": [
+        "SourceIndex"
+      ],
+      "totalLines": 58,
+      "hasStructuralAnalysis": true
+    },
+    "src/stack_parser.py": {
+      "filePath": "src/stack_parser.py",
+      "contentHash": "e097329e532dd30cda7f658cad135189994c465404ade7bf3f606932965e3199",
+      "functions": [
+        {
+          "name": "parse_stack_trace",
+          "params": [
+            "text"
+          ],
+          "returnType": "list[StackFrame]",
+          "exported": true,
+          "lineCount": 22
+        },
+        {
+          "name": "find_business_top_frame",
+          "params": [
+            "frames",
+            "framework_packages"
+          ],
+          "returnType": "StackFrame | None",
+          "exported": true,
+          "lineCount": 17
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "src.models",
+          "specifiers": [
+            "StackFrame"
+          ]
+        }
+      ],
+      "exports": [
+        "parse_stack_trace",
+        "find_business_top_frame"
+      ],
+      "totalLines": 61,
+      "hasStructuralAnalysis": true
+    },
+    "src/tools/__init__.py": {
+      "filePath": "src/tools/__init__.py",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "src/tools/_command_runner.py": {
+      "filePath": "src/tools/_command_runner.py",
+      "contentHash": "3aaea00ee78e147401badb1b22b886d2ba40825a7c71a234f317e0163439c52b",
+      "functions": [
+        {
+          "name": "validate_fix_id",
+          "params": [
+            "fix_id",
+            "tool_tag"
+          ],
+          "returnType": "str | None",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "run_command_in_workspace",
+          "params": [
+            "tool_tag",
+            "command",
+            "workspace_path",
+            "timeout",
+            "success_label",
+            "failure_label"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 51
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        }
+      ],
+      "exports": [
+        "validate_fix_id",
+        "run_command_in_workspace"
+      ],
+      "totalLines": 82,
+      "hasStructuralAnalysis": true
+    },
+    "src/tools/apply_fix.py": {
+      "filePath": "src/tools/apply_fix.py",
+      "contentHash": "54fd26b871af8d59c28960d8e6cb8cf348d0619215b2117d298d6e0eedb93c81",
+      "functions": [
+        {
+          "name": "_validate_rel_path",
+          "params": [
+            "base",
+            "rel"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "_load_modified_registry",
+          "params": [
+            "workspace_path"
+          ],
+          "returnType": "set[str]",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "_save_modified_registry",
+          "params": [
+            "workspace_path",
+            "files"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "_atomic_write_lines",
+          "params": [
+            "ws_file",
+            "lines"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 25
+        },
+        {
+          "name": "make_apply_fix_tool",
+          "params": [
+            "workspace_root",
+            "target_project_dir"
+          ],
+          "returnType": "Any",
+          "exported": true,
+          "lineCount": 212
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "logging",
+          "specifiers": [
+            "logging"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "pathlib"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "tempfile",
+          "specifiers": [
+            "tempfile"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "langchain_core.tools",
+          "specifiers": [
+            "tool"
+          ]
+        },
+        {
+          "source": "src.tools._command_runner",
+          "specifiers": [
+            "validate_fix_id"
+          ]
+        }
+      ],
+      "exports": [
+        "_validate_rel_path",
+        "_load_modified_registry",
+        "_save_modified_registry",
+        "_atomic_write_lines",
+        "make_apply_fix_tool"
+      ],
+      "totalLines": 325,
+      "hasStructuralAnalysis": true
+    },
+    "src/tools/find_callers.py": {
+      "filePath": "src/tools/find_callers.py",
+      "contentHash": "a078044b50b8e4beb453582b1e4c9e56d9ec1df4a82696a9c9db2292eafeb364",
+      "functions": [
+        {
+          "name": "make_find_callers_tool",
+          "params": [
+            "src_dir"
+          ],
+          "exported": true,
+          "lineCount": 58
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "langchain_core.tools",
+          "specifiers": [
+            "tool"
+          ]
+        }
+      ],
+      "exports": [
+        "make_find_callers_tool"
+      ],
+      "totalLines": 68,
+      "hasStructuralAnalysis": true
+    },
+    "src/tools/read_source.py": {
+      "filePath": "src/tools/read_source.py",
+      "contentHash": "1ab57c316caf1c899a9fc3831cf281380afc858c04f348aff8b16c8a69fc5dfd",
+      "functions": [
+        {
+          "name": "make_read_source_tool",
+          "params": [
+            "index"
+          ],
+          "exported": true,
+          "lineCount": 48
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "langchain_core.tools",
+          "specifiers": [
+            "tool"
+          ]
+        },
+        {
+          "source": "src.source_index",
+          "specifiers": [
+            "SourceIndex"
+          ]
+        }
+      ],
+      "exports": [
+        "make_read_source_tool"
+      ],
+      "totalLines": 58,
+      "hasStructuralAnalysis": true
+    },
+    "src/tools/run_build.py": {
+      "filePath": "src/tools/run_build.py",
+      "contentHash": "3675a765542fab40e03270d0000f74b893c3caf6204d7085cee8313c02bb85da",
+      "functions": [
+        {
+          "name": "make_run_build_tool",
+          "params": [
+            "workspace_root",
+            "build_command"
+          ],
+          "returnType": "Any",
+          "exported": true,
+          "lineCount": 42
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "langchain_core.tools",
+          "specifiers": [
+            "tool"
+          ]
+        },
+        {
+          "source": "src.tools._command_runner",
+          "specifiers": [
+            "run_command_in_workspace",
+            "validate_fix_id"
+          ]
+        }
+      ],
+      "exports": [
+        "make_run_build_tool"
+      ],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    },
+    "src/tools/run_tests.py": {
+      "filePath": "src/tools/run_tests.py",
+      "contentHash": "bf0c99a6471c4c67fc5199c23fe8a2943bb8ca99db5058839f1168a48b95eebe",
+      "functions": [
+        {
+          "name": "make_run_tests_tool",
+          "params": [
+            "workspace_root",
+            "test_command"
+          ],
+          "returnType": "Any",
+          "exported": true,
+          "lineCount": 43
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "langchain_core.tools",
+          "specifiers": [
+            "tool"
+          ]
+        },
+        {
+          "source": "src.tools._command_runner",
+          "specifiers": [
+            "run_command_in_workspace",
+            "validate_fix_id"
+          ]
+        }
+      ],
+      "exports": [
+        "make_run_tests_tool"
+      ],
+      "totalLines": 57,
+      "hasStructuralAnalysis": true
+    },
+    "workspace/diagnosis/.gitkeep": {
+      "filePath": "workspace/diagnosis/.gitkeep",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    }
+  }
+}

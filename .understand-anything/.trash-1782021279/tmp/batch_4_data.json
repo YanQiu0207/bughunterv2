@@ -1,0 +1,72 @@
+{
+  "batchIndex": 4,
+  "files": [
+    {
+      "path": "commit_fix.py",
+      "language": "python",
+      "sizeLines": 259,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/commit/patcher.py",
+      "language": "python",
+      "sizeLines": 192,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/commit/svn.py",
+      "language": "python",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "commit_fix.py": [
+      "src/agent/fix_agent.py",
+      "src/commit/patcher.py",
+      "src/commit/svn.py",
+      "src/config.py",
+      "src/models.py"
+    ],
+    "src/commit/patcher.py": [],
+    "src/commit/svn.py": []
+  },
+  "neighborMap": {
+    "commit_fix.py": [
+      {
+        "path": "src/agent/fix_agent.py",
+        "batchIndex": 1,
+        "symbols": [
+          "make_submit_fix_proposal_tool",
+          "FixAgent",
+          "_build_user_message",
+          "_build_fix_proposal",
+          "_proposal_to_dict"
+        ]
+      },
+      {
+        "path": "src/config.py",
+        "batchIndex": 1,
+        "symbols": [
+          "Config",
+          "load_config"
+        ]
+      },
+      {
+        "path": "src/models.py",
+        "batchIndex": 3,
+        "symbols": [
+          "StackFrame",
+          "Location",
+          "EvidenceItem",
+          "BacktraceStep",
+          "Conclusion",
+          "DiagnosisInput",
+          "DiagnosisReport",
+          "FixEdit",
+          "FixProposal"
+        ]
+      }
+    ]
+  }
+}

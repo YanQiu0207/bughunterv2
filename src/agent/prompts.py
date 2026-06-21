@@ -4,12 +4,16 @@
 def build_system_prompt(
     max_steps: int = 10,
     framework_packages: list[str] | None = None,
+    output_language: str = "zh-CN",
+    extra_instructions: str = "",
 ) -> str:
     """Build the system prompt that encodes the backtrace algorithm.
 
     Args:
         max_steps: Maximum allowed backtrace steps before forced termination.
         framework_packages: Package prefixes to treat as framework code.
+        output_language: Natural language to use in diagnosis fields.
+        extra_instructions: Optional user-configured prompt additions.
 
     Returns:
         System prompt string to pass to create_react_agent.
@@ -25,6 +29,15 @@ def build_system_prompt(
             "org.slf4j.",
         ]
     pkg_list = ", ".join(framework_packages)
+    custom_section = ""
+    if extra_instructions.strip():
+        custom_section = f"""
+
+## User-Configured Extra Instructions
+
+{extra_instructions.strip()}
+"""
+
     return f"""You are a Java bug diagnosis agent. Your task is to determine the root cause of an exception by tracing back through the source code.
 
 ## Algorithm
@@ -62,6 +75,7 @@ Follow these steps strictly:
 - Read ONLY the lines you need (± 20 lines around the target). Do not read entire files.
 - Keep your reasoning focused. Each tool call should serve a specific hypothesis.
 - You MUST end every diagnosis by calling `submit_diagnosis`. Never stop without calling it.
+- Write all natural-language diagnosis fields in {output_language}. Keep code identifiers, exception names, class names, method names, variable names, and literal values unchanged.
 
 ## Output Format
 
@@ -72,4 +86,4 @@ You must call `submit_diagnosis` with:
 - `fix_direction`: High-level direction for the fix (not the fix itself)
 - `confidence`: "high" (direct evidence, complete counter-check), "medium" (indirect evidence or incomplete counter-check), "low" (out-of-code or step limit reached)
 - `confidence_reason`: One sentence explaining the confidence level
-"""
+{custom_section}"""

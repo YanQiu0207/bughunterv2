@@ -1,0 +1,104 @@
+{
+  "nodes": [
+    {
+      "id": "file:.understand-anything/.understandignore",
+      "type": "file",
+      "name": ".understandignore",
+      "filePath": ".understand-anything/.understandignore",
+      "summary": "understand-anything 插件的排除模式配置文件，语法与 .gitignore 相同，当前已激活排除 docs/ 和 tests/ 目录，其余测试文件模式以注释形式提供供选用。",
+      "tags": ["配置", "构建工具", "代码分析", "排除规则"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.understand-anything/config.json",
+      "type": "config",
+      "name": "config.json",
+      "filePath": ".understand-anything/config.json",
+      "summary": "understand-anything 插件的运行时配置文件，当前仅包含 outputLanguage 一项设置，控制分析报告的输出语言。",
+      "tags": ["配置", "代码分析", "插件设置"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:bughunterv2.egg-info/PKG-INFO",
+      "type": "file",
+      "name": "PKG-INFO",
+      "filePath": "bughunterv2.egg-info/PKG-INFO",
+      "summary": "Python 包的元数据描述文件，由 setuptools 自动生成，记录 bughunterv2 包的名称、版本、作者和依赖信息。",
+      "tags": ["元数据", "打包", "自动生成"],
+      "complexity": "simple",
+      "languageNotes": "Python egg-info 目录由 pip install -e 或 python setup.py develop 自动生成，不应手动编辑。"
+    },
+    {
+      "id": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "type": "document",
+      "name": "proposal.md",
+      "filePath": "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "summary": "M2 里程碑「修复 Agent 与编译反馈环」的需求提案（已归档），定义了 FixAgent 从读取 DiagnosisReport 到生成行级修复方案、应用隔离工作区、编译验证的完整闭环设计，包含隔离策略、人工 Gate 和验收标准。",
+      "tags": ["文档", "需求设计", "里程碑", "归档"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+      "type": "document",
+      "name": "tasks.md",
+      "filePath": "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+      "summary": "M2 里程碑的详细实施任务清单（已归档），包含 9 个任务（数据模型、Config 扩展、apply_fix、run_build、run_tests、FixAgent Prompt、FixAgent、CLI 入口、单元测试）的逐项验收条件、文件变更清单与依赖关系图。",
+      "tags": ["文档", "任务清单", "里程碑", "归档", "实施计划"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "src/__init__.py",
+      "summary": "src 包的空初始化文件，将 src 目录标记为 Python 包，无任何导出或逻辑。",
+      "tags": ["入口点", "Python 包", "空文件"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/agent/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "src/agent/__init__.py",
+      "summary": "agent 子包的空初始化文件，将 src/agent 目录标记为 Python 包，无任何导出或逻辑。",
+      "tags": ["入口点", "Python 包", "空文件"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/commit/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "src/commit/__init__.py",
+      "summary": "commit 子包的空初始化文件，将 src/commit 目录标记为 Python 包，无任何导出或逻辑。",
+      "tags": ["入口点", "Python 包", "空文件"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/tools/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "src/tools/__init__.py",
+      "summary": "tools 子包的空初始化文件，将 src/tools 目录标记为 Python 包，无任何导出或逻辑。",
+      "tags": ["入口点", "Python 包", "空文件"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:workspace/diagnosis/.gitkeep",
+      "type": "file",
+      "name": ".gitkeep",
+      "filePath": "workspace/diagnosis/.gitkeep",
+      "summary": "占位文件，用于将 workspace/diagnosis 空目录纳入 Git 版本控制，该目录用于存放诊断任务的输出产物。",
+      "tags": ["占位文件", "工作区", "Git"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "target": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

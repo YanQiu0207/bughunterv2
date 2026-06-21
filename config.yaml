@@ -10,3 +10,16 @@ framework_packages:
 max_steps: 10
 
 extra_source_roots: []
+
+# LLM 配置（api_key 从环境变量 LLM_API_KEY 读取，不在此填写）
+llm_base_url: "http://130.94.65.170:8080/v1"
+llm_model: "gpt-5.5"
+
+# 诊断输出配置
+diagnosis_output_language: "zh-CN"
+diagnosis_prompt_append: ""
+
+# M2：修复 Agent 配置（需填写以下字段才能使用 fix.py）
+target_project_dir: ""   # 目标 Java 项目根目录，如 "/home/dev/myproject"
+build_command: ""        # 编译命令，如 "javac -cp lib/*:. -d classes src/**/*.java"
+test_command: ""         # 单测命令，如 "java -cp classes:lib/* org.junit.runner.JUnitCore com.example.AllTests"

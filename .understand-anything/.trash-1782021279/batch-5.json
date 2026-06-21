@@ -1,0 +1,42 @@
+{
+  "nodes": [
+    {
+      "id": "document:CLAUDE.md",
+      "type": "document",
+      "name": "CLAUDE.md",
+      "filePath": "CLAUDE.md",
+      "summary": "Claude Code 项目级指令文件，定义了 bughunterv2 的北极星目标（Java+Maven+SVN 项目的 bug 根因诊断与人在环修复）、协作铁律、工作纪律及当前迭代阶段，每个 Claude 会话自动加载。",
+      "tags": ["文档", "配置", "协作规范", "项目说明"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:config.yaml",
+      "type": "config",
+      "name": "config.yaml",
+      "filePath": "config.yaml",
+      "summary": "项目运行时配置文件，包含 Java 框架包前缀过滤列表、LLM 接入参数（base_url、model）、agent 最大步骤数，以及 M2 修复阶段所需的目标 Java 项目目录和构建 / 测试命令。",
+      "tags": ["配置", "llm", "agent", "运行时配置"],
+      "complexity": "simple",
+      "languageNotes": "api_key 从环境变量 LLM_API_KEY 读取，不在此配置文件中存储，体现了安全凭证隔离实践。"
+    },
+    {
+      "id": "config:pyproject.toml",
+      "type": "config",
+      "name": "pyproject.toml",
+      "filePath": "pyproject.toml",
+      "summary": "Python 项目元数据与工具链配置，声明了核心依赖（LangGraph、LangChain-OpenAI、PyYAML），以及 pytest、black、isort、mypy 等开发工具的配置，目标 Python 版本为 3.11。",
+      "tags": ["配置", "构建系统", "依赖管理", "工具链", "python"],
+      "complexity": "simple",
+      "languageNotes": "使用 PEP 517/518 标准的 pyproject.toml 统一管理构建后端（setuptools）、项目元数据和工具配置，是现代 Python 项目的推荐做法。"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:pyproject.toml",
+      "target": "document:CLAUDE.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

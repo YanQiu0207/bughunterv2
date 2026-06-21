@@ -1,0 +1,15 @@
+{
+  "fixedSectionOk": true,
+  "nodesRecovered": 0,
+  "edgesRestored": 0,
+  "crossBatchEdgesAdded": 0,
+  "typesRemapped": 0,
+  "complexityRemapped": 0,
+  "notes": [
+    "The merge script reported zero mechanical fixes: Input and Output are both 95 nodes and 168 edges, indicating all LLM batch outputs used correct ID prefixes and valid type/complexity values from the start.",
+    "No nodes were missing IDs, no unknown types, no unknown complexity values, and no dangling edges were dropped — the 'Could not fix' section was empty.",
+    "All 31 import relationships in the import map were verified against the assembled graph. Every entry has a corresponding 'imports' edge with direction=forward and weight=0.7.",
+    "Node type distribution looks reasonable: file, function, class, document, config nodes all use correct prefixes. No systemic LLM output anomalies detected.",
+    "The graph correctly covers all project source files including the newer M3 modules (commit_fix.py, src/commit/patcher.py, src/commit/svn.py) and their internal functions."
+  ]
+}

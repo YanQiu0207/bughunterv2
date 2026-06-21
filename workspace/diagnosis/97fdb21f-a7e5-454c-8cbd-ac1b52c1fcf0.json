@@ -1,0 +1,22 @@
+{
+  "diagnosis_id": "97fdb21f-a7e5-454c-8cbd-ac1b52c1fcf0",
+  "created_at": "2026-06-21T13:50:37.505524+00:00",
+  "status": "completed",
+  "input": {
+    "stack_trace": "  java.lang.NullPointerException: Cannot invoke \"com.example.Order.getAmount()\" because \"order\" is null\n      at com.example.OrderService.total(OrderService.java:5)\n      at com.example.OrderService.handle(OrderService.java:10)\n",
+    "source_dir": ".manual-test/src"
+  },
+  "backtrace_steps": [],
+  "conclusion": {
+    "root_cause_hypothesis": "OrderService.handle() 在调用 total(order) 前将 order 显式赋值为 null，导致 total() 中执行 order.getAmount() 时触发 NullPointerException。",
+    "evidence_refs": [
+      "com.example.OrderService:5 — return order.getAmount(); —— 异常消息指出 \"order\" is null，且此行对 order 进行解引用。",
+      "com.example.OrderService:9 — Order order = null; —— 调用 total(order) 前将参数 order 直接赋值为 null。",
+      "com.example.OrderService:10 — return total(order); —— null 值作为参数传入 total(Order order)。"
+    ],
+    "counter_check": "已从业务顶层帧 OrderService.total 第 5 行定位到被解引用变量 order，并向上一帧 OrderService.handle 追踪到 order 的唯一赋值为显式 null；Order.getAmount() 本身未被执行到，因此不是 getAmount() 内部逻辑导致。",
+    "fix_direction": "在调用 total() 前确保 order 被构造或从有效来源获取，或在 total()/handle() 中增加 null 校验并定义空订单的处理策略。",
+    "confidence": "high",
+    "confidence_reason": "源码中存在直接的 null 赋值和随后传参解引用链路，与异常消息和栈帧完全一致。"
+  }
+}

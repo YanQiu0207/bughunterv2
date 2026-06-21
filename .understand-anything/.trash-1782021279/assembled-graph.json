@@ -1,0 +1,2892 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "bughunterv2",
+    "languages": [
+      "python",
+      "markdown",
+      "yaml",
+      "toml",
+      "json",
+      "txt"
+    ],
+    "frameworks": [
+      "LangGraph",
+      "LangChain"
+    ],
+    "description": "Python agentic system for automated bug diagnosis and fix in Java+Maven+SVN projects",
+    "analyzedAt": "2026-06-21T05:52:46.012161Z",
+    "gitCommitHash": "b28e5b701cd27f19d8aac0a3a6d3125ea086edad"
+  },
+  "nodes": [
+    {
+      "id": "file:fix.py",
+      "type": "file",
+      "name": "fix.py",
+      "filePath": "fix.py",
+      "summary": "项目的命令行入口点，接收诊断报告路径和配置文件参数，驱动 FixAgent 执行代码修复并打印最终 FixProposal 摘要。",
+      "tags": [
+        "入口点",
+        "cli",
+        "agent",
+        "修复流程"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:fix.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "fix.py",
+      "lineRange": [
+        13,
+        62
+      ],
+      "summary": "解析命令行参数，加载配置与诊断报告，实例化 FixAgent 并运行修复流程，最终打印结果摘要。",
+      "tags": [
+        "入口点",
+        "cli",
+        "流程控制"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:fix.py:_load_report",
+      "type": "function",
+      "name": "_load_report",
+      "filePath": "fix.py",
+      "lineRange": [
+        65,
+        106
+      ],
+      "summary": "从 JSON 文件加载诊断报告，将原始字典反序列化为 DiagnosisReport 和 DiagnosisInput 数据模型对象。",
+      "tags": [
+        "数据加载",
+        "反序列化",
+        "诊断报告"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:fix.py:_print_summary",
+      "type": "function",
+      "name": "_print_summary",
+      "filePath": "fix.py",
+      "lineRange": [
+        109,
+        139
+      ],
+      "summary": "格式化打印 FixProposal 的执行摘要，包括状态、修改文件列表及输出文件路径。",
+      "tags": [
+        "输出格式化",
+        "用户界面",
+        "修复摘要"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/agent/fix_agent.py",
+      "type": "file",
+      "name": "fix_agent.py",
+      "filePath": "src/agent/fix_agent.py",
+      "summary": "实现核心 FixAgent 类，通过 LangChain ReAct agent 编排 apply_fix、run_build、run_tests 等工具，自动完成代码修复→构建→测试的迭代循环，并将结果持久化为 FixProposal。",
+      "tags": [
+        "agent",
+        "修复流程",
+        "LangChain",
+        "工具编排"
+      ],
+      "complexity": "complex",
+      "languageNotes": "使用 LangChain 的 create_react_agent 构建 ReAct 模式 agent，工具通过工厂函数注入，结果通过 result_holder 字典传递。"
+    },
+    {
+      "id": "class:src/agent/fix_agent.py:FixAgent",
+      "type": "class",
+      "name": "FixAgent",
+      "filePath": "src/agent/fix_agent.py",
+      "lineRange": [
+        78,
+        174
+      ],
+      "summary": "核心修复 agent 类，封装 LLM 配置、工具集构建和 ReAct agent 执行逻辑，提供 run 方法完成端到端修复并通过 _checkpoint 原子持久化中间结果。",
+      "tags": [
+        "agent",
+        "LangChain",
+        "修复流程",
+        "持久化"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/agent/fix_agent.py:make_submit_fix_proposal_tool",
+      "type": "function",
+      "name": "make_submit_fix_proposal_tool",
+      "filePath": "src/agent/fix_agent.py",
+      "lineRange": [
+        25,
+        75
+      ],
+      "summary": "工厂函数，创建供 LLM agent 调用的 submit_fix_proposal 工具，agent 调用该工具时将修复结果存入 result_holder 字典。",
+      "tags": [
+        "工具工厂",
+        "agent",
+        "LangChain"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/agent/fix_agent.py:_build_user_message",
+      "type": "function",
+      "name": "_build_user_message",
+      "filePath": "src/agent/fix_agent.py",
+      "lineRange": [
+        177,
+        202
+      ],
+      "summary": "根据诊断报告和目标项目目录构建发送给 LLM 的用户消息，将诊断结论格式化为结构化提示文本。",
+      "tags": [
+        "提示工程",
+        "LLM",
+        "消息构建"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/agent/fix_agent.py:_build_fix_proposal",
+      "type": "function",
+      "name": "_build_fix_proposal",
+      "filePath": "src/agent/fix_agent.py",
+      "lineRange": [
+        205,
+        244
+      ],
+      "summary": "从 result_holder 中提取 agent 执行结果，构建包含编辑列表、状态和错误信息的 FixProposal 数据对象。",
+      "tags": [
+        "数据构建",
+        "FixProposal",
+        "结果处理"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/agent/fix_agent.py:_proposal_to_dict",
+      "type": "function",
+      "name": "_proposal_to_dict",
+      "filePath": "src/agent/fix_agent.py",
+      "lineRange": [
+        247,
+        265
+      ],
+      "summary": "将 FixProposal 数据对象序列化为可 JSON 持久化的字典结构。",
+      "tags": [
+        "序列化",
+        "持久化",
+        "数据转换"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/agent/fix_prompts.py",
+      "type": "file",
+      "name": "fix_prompts.py",
+      "filePath": "src/agent/fix_prompts.py",
+      "summary": "定义 FixAgent 使用的系统提示词，指导 LLM 按照 ReAct 模式执行代码修复任务的行为规范与约束。",
+      "tags": [
+        "提示工程",
+        "LLM",
+        "agent",
+        "系统提示"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/agent/fix_prompts.py:build_fix_system_prompt",
+      "type": "function",
+      "name": "build_fix_system_prompt",
+      "filePath": "src/agent/fix_prompts.py",
+      "lineRange": [
+        4,
+        61
+      ],
+      "summary": "根据 max_steps 参数生成 FixAgent 的系统提示词字符串，描述 agent 可用工具、操作规范和终止条件。",
+      "tags": [
+        "提示工程",
+        "LLM",
+        "系统提示"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/config.py",
+      "type": "file",
+      "name": "config.py",
+      "filePath": "src/config.py",
+      "summary": "定义项目配置数据类 Config 及其加载函数 load_config，从 YAML 文件读取 LLM 参数、目标项目路径、构建/测试命令等配置项，支持环境变量覆盖 API key。",
+      "tags": [
+        "配置",
+        "数据模型",
+        "YAML加载"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/config.py:Config",
+      "type": "class",
+      "name": "Config",
+      "filePath": "src/config.py",
+      "lineRange": [
+        29,
+        53
+      ],
+      "summary": "项目配置 dataclass，包含 LLM 连接参数、目标项目目录、构建/测试命令、最大步数等字段，在 __post_init__ 中执行必填项校验。",
+      "tags": [
+        "配置",
+        "数据模型",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/config.py:load_config",
+      "type": "function",
+      "name": "load_config",
+      "filePath": "src/config.py",
+      "lineRange": [
+        56,
+        98
+      ],
+      "summary": "从指定 YAML 文件路径加载并解析配置，支持环境变量覆盖 llm_api_key，返回经过验证的 Config 实例。",
+      "tags": [
+        "配置加载",
+        "YAML",
+        "工厂函数"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/tools/_command_runner.py",
+      "type": "file",
+      "name": "_command_runner.py",
+      "filePath": "src/tools/_command_runner.py",
+      "summary": "提供底层命令执行工具函数，包括 fix_id 格式校验和在指定工作区目录中安全执行 shell 命令并截断长输出的通用能力。",
+      "tags": [
+        "工具函数",
+        "命令执行",
+        "validation",
+        "底层工具"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/tools/_command_runner.py:validate_fix_id",
+      "type": "function",
+      "name": "validate_fix_id",
+      "filePath": "src/tools/_command_runner.py",
+      "lineRange": [
+        13,
+        28
+      ],
+      "summary": "校验 fix_id 是否为合法 UUID 格式，不合法时返回错误字符串供 LLM agent 感知。",
+      "tags": [
+        "validation",
+        "UUID",
+        "安全校验"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/_command_runner.py:run_command_in_workspace",
+      "type": "function",
+      "name": "run_command_in_workspace",
+      "filePath": "src/tools/_command_runner.py",
+      "lineRange": [
+        31,
+        81
+      ],
+      "summary": "在指定工作区路径执行 shell 命令，捕获 stdout/stderr，截断超长输出，并返回结构化的成功/失败字符串结果给 LLM agent。",
+      "tags": [
+        "命令执行",
+        "工具函数",
+        "安全限制",
+        "输出截断"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/tools/apply_fix.py",
+      "type": "file",
+      "name": "apply_fix.py",
+      "filePath": "src/tools/apply_fix.py",
+      "summary": "实现代码修复应用工具，通过工厂函数 make_apply_fix_tool 生成 LangChain 工具，支持行级代码编辑、路径安全校验、工作区隔离（copy-on-write）和已修改文件注册表的原子持久化。",
+      "tags": [
+        "工具工厂",
+        "代码修复",
+        "文件操作",
+        "安全校验"
+      ],
+      "complexity": "complex",
+      "languageNotes": "使用 copy-on-write 策略隔离工作区：首次修改某文件时从原始目标项目复制整个目录树到工作区，后续修改在工作区内进行，避免污染原始代码。"
+    },
+    {
+      "id": "function:src/tools/apply_fix.py:make_apply_fix_tool",
+      "type": "function",
+      "name": "make_apply_fix_tool",
+      "filePath": "src/tools/apply_fix.py",
+      "lineRange": [
+        113,
+        324
+      ],
+      "summary": "工厂函数，创建供 LLM agent 调用的 apply_fix LangChain 工具，内部实现工作区初始化、路径安全校验、行级编辑应用（倒序处理避免行号偏移）及修改注册表更新。",
+      "tags": [
+        "工具工厂",
+        "LangChain",
+        "代码编辑",
+        "工作区管理"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/tools/apply_fix.py:_validate_rel_path",
+      "type": "function",
+      "name": "_validate_rel_path",
+      "filePath": "src/tools/apply_fix.py",
+      "lineRange": [
+        25,
+        48
+      ],
+      "summary": "校验相对路径不包含路径穿越序列（..），确保文件操作限制在指定 base 目录内，防止目录遍历攻击。",
+      "tags": [
+        "安全校验",
+        "路径验证",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/apply_fix.py:_load_modified_registry",
+      "type": "function",
+      "name": "_load_modified_registry",
+      "filePath": "src/tools/apply_fix.py",
+      "lineRange": [
+        51,
+        64
+      ],
+      "summary": "从工作区加载已修改文件注册表 JSON，返回文件路径集合，用于追踪哪些文件已在工作区中被修改过。",
+      "tags": [
+        "文件注册表",
+        "持久化",
+        "工作区管理"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/apply_fix.py:_save_modified_registry",
+      "type": "function",
+      "name": "_save_modified_registry",
+      "filePath": "src/tools/apply_fix.py",
+      "lineRange": [
+        67,
+        83
+      ],
+      "summary": "原子写入已修改文件注册表到工作区，使用 tempfile+os.replace 保证写入的原子性，避免注册表损坏。",
+      "tags": [
+        "文件注册表",
+        "原子写入",
+        "持久化"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/apply_fix.py:_atomic_write_lines",
+      "type": "function",
+      "name": "_atomic_write_lines",
+      "filePath": "src/tools/apply_fix.py",
+      "lineRange": [
+        86,
+        110
+      ],
+      "summary": "原子写入文件行内容，使用 tempfile+os.replace 方式确保写入完整性，失败时自动清理临时文件。",
+      "tags": [
+        "原子写入",
+        "文件操作",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/tools/run_build.py",
+      "type": "file",
+      "name": "run_build.py",
+      "filePath": "src/tools/run_build.py",
+      "summary": "提供 make_run_build_tool 工厂函数，创建在工作区内执行 Maven 构建命令的 LangChain 工具，结果返回给 LLM agent。",
+      "tags": [
+        "工具工厂",
+        "构建工具",
+        "LangChain",
+        "Maven"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/run_build.py:make_run_build_tool",
+      "type": "function",
+      "name": "make_run_build_tool",
+      "filePath": "src/tools/run_build.py",
+      "lineRange": [
+        14,
+        55
+      ],
+      "summary": "工厂函数，创建供 LLM agent 调用的构建工具，在校验 fix_id 和工作区目录后执行配置的构建命令并返回结果。",
+      "tags": [
+        "工具工厂",
+        "LangChain",
+        "构建执行"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/tools/run_tests.py",
+      "type": "file",
+      "name": "run_tests.py",
+      "filePath": "src/tools/run_tests.py",
+      "summary": "提供 make_run_tests_tool 工厂函数，创建在工作区内执行测试命令的 LangChain 工具，将测试结果返回给 LLM agent 作为修复验证依据。",
+      "tags": [
+        "工具工厂",
+        "测试工具",
+        "LangChain",
+        "验证"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/run_tests.py:make_run_tests_tool",
+      "type": "function",
+      "name": "make_run_tests_tool",
+      "filePath": "src/tools/run_tests.py",
+      "lineRange": [
+        14,
+        56
+      ],
+      "summary": "工厂函数，创建供 LLM agent 调用的测试执行工具，在校验 fix_id 和工作区目录后执行配置的测试命令并返回结果。",
+      "tags": [
+        "工具工厂",
+        "LangChain",
+        "测试执行"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/agent/diagnosis_agent.py",
+      "type": "file",
+      "name": "diagnosis_agent.py",
+      "filePath": "src/agent/diagnosis_agent.py",
+      "summary": "核心诊断 agent 实现：封装 LangGraph ReAct agent，编排 read_source / find_callers / submit_diagnosis 三个工具，对 Java 异常堆栈进行回溯根因诊断，并将结果原子写入 workspace/diagnosis/ 目录。",
+      "tags": [
+        "service",
+        "agent",
+        "entry-point",
+        "event-handler"
+      ],
+      "complexity": "complex",
+      "languageNotes": "使用工厂函数（make_*_tool）在运行时动态绑定工具上下文，通过 result_holder 字典捕获 LangGraph agent 的结构化输出，采用临时文件重命名实现 checkpoint 原子写入。"
+    },
+    {
+      "id": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "type": "class",
+      "name": "DiagnosisAgent",
+      "filePath": "src/agent/diagnosis_agent.py",
+      "lineRange": [
+        93,
+        219
+      ],
+      "summary": "封装整个诊断流程的主控类：持有配置、SourceIndex 和源码目录，通过 run() 方法组装工具、构建 LLM、调用 LangGraph ReAct agent 并返回 DiagnosisReport。",
+      "tags": [
+        "service",
+        "agent",
+        "singleton"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/agent/diagnosis_agent.py:make_submit_diagnosis_tool",
+      "type": "function",
+      "name": "make_submit_diagnosis_tool",
+      "filePath": "src/agent/diagnosis_agent.py",
+      "lineRange": [
+        32,
+        90
+      ],
+      "summary": "工厂函数：返回一个 LangChain @tool 闭包 submit_diagnosis，将 agent 提交的根因诊断字段写入外部 result_holder 字典，重复调用时只保留第一次有效提交。",
+      "tags": [
+        "factory",
+        "tool-definition",
+        "event-handler"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/agent/diagnosis_agent.py:_build_conclusion",
+      "type": "function",
+      "name": "_build_conclusion",
+      "filePath": "src/agent/diagnosis_agent.py",
+      "lineRange": [
+        222,
+        248
+      ],
+      "summary": "从 result_holder 字典构建 Conclusion 数据对象，处理空提交和非法置信度值的边界情况。",
+      "tags": [
+        "utility",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/agent/diagnosis_agent.py:_report_to_dict",
+      "type": "function",
+      "name": "_report_to_dict",
+      "filePath": "src/agent/diagnosis_agent.py",
+      "lineRange": [
+        265,
+        312
+      ],
+      "summary": "将 DiagnosisReport 数据模型序列化为 JSON 兼容的 dict，用于 checkpoint 写盘和最终输出。",
+      "tags": [
+        "utility",
+        "serialization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/agent/prompts.py",
+      "type": "file",
+      "name": "prompts.py",
+      "filePath": "src/agent/prompts.py",
+      "summary": "为 DiagnosisAgent 构建系统提示的模块，将回溯诊断算法、框架包过滤规则和终止条件编码到 LLM system prompt 字符串中。",
+      "tags": [
+        "utility",
+        "service"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/agent/prompts.py:build_system_prompt",
+      "type": "function",
+      "name": "build_system_prompt",
+      "filePath": "src/agent/prompts.py",
+      "lineRange": [
+        4,
+        75
+      ],
+      "summary": "根据最大步数和框架包前缀列表动态生成诊断 agent 的 system prompt，包含完整的回溯算法描述和输出格式要求。",
+      "tags": [
+        "utility",
+        "factory"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/source_index.py",
+      "type": "file",
+      "name": "source_index.py",
+      "filePath": "src/source_index.py",
+      "summary": "提供 Java 源文件索引功能：扫描 Maven 项目目录，建立简单类名到绝对路径的映射，支持全限定类名的最后段匹配解析。",
+      "tags": [
+        "utility",
+        "service",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/source_index.py:SourceIndex",
+      "type": "class",
+      "name": "SourceIndex",
+      "filePath": "src/source_index.py",
+      "lineRange": [
+        6,
+        57
+      ],
+      "summary": "Java 类名到文件路径的索引类，支持多源根目录扫描、简单类名和全限定类名两种解析模式。",
+      "tags": [
+        "utility",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/tools/find_callers.py",
+      "type": "file",
+      "name": "find_callers.py",
+      "filePath": "src/tools/find_callers.py",
+      "summary": "提供 find_callers LangChain 工具的工厂模块：在 Java 源码目录中全文搜索指定方法名的调用点，返回带行号的匹配结果列表，结果上限 20 条。",
+      "tags": [
+        "utility",
+        "tool-definition",
+        "api-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/find_callers.py:make_find_callers_tool",
+      "type": "function",
+      "name": "make_find_callers_tool",
+      "filePath": "src/tools/find_callers.py",
+      "lineRange": [
+        10,
+        67
+      ],
+      "summary": "工厂函数：返回绑定到指定 src_dir 的 LangChain @tool 闭包，递归扫描所有 .java 文件查找方法调用点，最多返回 20 条结果。",
+      "tags": [
+        "factory",
+        "tool-definition",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/tools/read_source.py",
+      "type": "file",
+      "name": "read_source.py",
+      "filePath": "src/tools/read_source.py",
+      "summary": "提供 read_source LangChain 工具的工厂模块：通过 SourceIndex 解析类名路径，读取指定行范围的 Java 源码片段并带行号返回。",
+      "tags": [
+        "utility",
+        "tool-definition",
+        "api-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/read_source.py:make_read_source_tool",
+      "type": "function",
+      "name": "make_read_source_tool",
+      "filePath": "src/tools/read_source.py",
+      "lineRange": [
+        10,
+        57
+      ],
+      "summary": "工厂函数：返回绑定到 SourceIndex 实例的 LangChain @tool 闭包，按行范围读取 Java 源码并自动截断到文件实际边界。",
+      "tags": [
+        "factory",
+        "tool-definition",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:diagnose.py",
+      "type": "file",
+      "name": "diagnose.py",
+      "filePath": "diagnose.py",
+      "summary": "系统主入口脚本，负责解析命令行参数、加载配置、读取堆栈文件、构建 Java 源码索引、驱动 DiagnosisAgent 完成根因诊断，并将结果写入 JSON 报告文件。",
+      "tags": [
+        "入口点",
+        "agent",
+        "诊断",
+        "命令行"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:diagnose.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "diagnose.py",
+      "lineRange": [
+        14,
+        81
+      ],
+      "summary": "程序主流程函数：依次校验参数、加载配置、解析 Java 堆栈文本、建立源码索引、调用 DiagnosisAgent 执行诊断，最后打印摘要并将 DiagnosisReport 序列化到磁盘。",
+      "tags": [
+        "入口点",
+        "agent",
+        "诊断",
+        "流程编排"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/models.py",
+      "type": "file",
+      "name": "models.py",
+      "filePath": "src/models.py",
+      "summary": "定义项目全局核心数据模型（dataclass），涵盖堆栈帧、证据条目、回溯步骤、诊断报告、修复提案等，是诊断与修复流程的数据契约层。",
+      "tags": [
+        "数据模型",
+        "schema-definition",
+        "type-definition",
+        "诊断"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "全部使用 Python dataclass 实现，字段类型注解完整，Optional 字段用于灵活适配诊断流程的中间状态。"
+    },
+    {
+      "id": "class:src/models.py:StackFrame",
+      "type": "class",
+      "name": "StackFrame",
+      "filePath": "src/models.py",
+      "lineRange": [
+        8,
+        14
+      ],
+      "summary": "表示 Java 堆栈跟踪中的单个栈帧，包含类名、方法名、文件路径和行号。",
+      "tags": [
+        "数据模型",
+        "堆栈解析"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:Location",
+      "type": "class",
+      "name": "Location",
+      "filePath": "src/models.py",
+      "lineRange": [
+        18,
+        23
+      ],
+      "summary": "表示源码中的精确位置，包含文件路径、行号和方法名，供证据条目和回溯步骤引用。",
+      "tags": [
+        "数据模型",
+        "位置信息"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:EvidenceItem",
+      "type": "class",
+      "name": "EvidenceItem",
+      "filePath": "src/models.py",
+      "lineRange": [
+        27,
+        33
+      ],
+      "summary": "代表诊断过程中发现的一条证据，记录证据类型、所在位置和代码片段，供 LLM 分析引用。",
+      "tags": [
+        "数据模型",
+        "证据",
+        "诊断"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:BacktraceStep",
+      "type": "class",
+      "name": "BacktraceStep",
+      "filePath": "src/models.py",
+      "lineRange": [
+        37,
+        46
+      ],
+      "summary": "记录 agent 逐步回溯分析时的单个步骤，包含可疑变量、位置、推理决策、发现和收集到的证据列表。",
+      "tags": [
+        "数据模型",
+        "诊断",
+        "回溯"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:Conclusion",
+      "type": "class",
+      "name": "Conclusion",
+      "filePath": "src/models.py",
+      "lineRange": [
+        50,
+        58
+      ],
+      "summary": "存储 agent 的最终诊断结论，包含根因假设、证据引用、反例检验、修复方向和置信度评估。",
+      "tags": [
+        "数据模型",
+        "诊断",
+        "结论"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:DiagnosisInput",
+      "type": "class",
+      "name": "DiagnosisInput",
+      "filePath": "src/models.py",
+      "lineRange": [
+        62,
+        66
+      ],
+      "summary": "封装诊断任务的输入参数，包含原始堆栈文本和 Java 源码目录路径。",
+      "tags": [
+        "数据模型",
+        "诊断",
+        "输入"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:DiagnosisReport",
+      "type": "class",
+      "name": "DiagnosisReport",
+      "filePath": "src/models.py",
+      "lineRange": [
+        70,
+        78
+      ],
+      "summary": "完整的诊断报告结构，聚合诊断 ID、时间戳、状态、输入参数、回溯步骤列表和最终结论，是系统对外输出的核心产物。",
+      "tags": [
+        "数据模型",
+        "诊断",
+        "报告"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:FixEdit",
+      "type": "class",
+      "name": "FixEdit",
+      "filePath": "src/models.py",
+      "lineRange": [
+        82,
+        89
+      ],
+      "summary": "描述一处代码修复操作，记录目标文件、起止行号、替换内容及修复原因，供修复 agent 执行或人工审查。",
+      "tags": [
+        "数据模型",
+        "修复",
+        "代码编辑"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:FixProposal",
+      "type": "class",
+      "name": "FixProposal",
+      "filePath": "src/models.py",
+      "lineRange": [
+        93,
+        104
+      ],
+      "summary": "完整的修复提案结构，关联诊断 ID、包含多个 FixEdit 操作和摘要说明，是人在环审批的核心数据单元。",
+      "tags": [
+        "数据模型",
+        "修复",
+        "提案"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/report_writer.py",
+      "type": "file",
+      "name": "report_writer.py",
+      "filePath": "src/report_writer.py",
+      "summary": "提供诊断报告的输出工具：`print_summary` 将 DiagnosisReport 格式化打印到控制台，`write_json` 将报告序列化为 JSON 文件写入磁盘。",
+      "tags": [
+        "工具函数",
+        "报告",
+        "序列化",
+        "输出"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/report_writer.py:print_summary",
+      "type": "function",
+      "name": "print_summary",
+      "filePath": "src/report_writer.py",
+      "lineRange": [
+        11,
+        46
+      ],
+      "summary": "将 DiagnosisReport 的诊断结论、置信度、回溯步骤等关键信息格式化输出到终端，供用户快速查阅结果。",
+      "tags": [
+        "工具函数",
+        "报告",
+        "控制台输出"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/report_writer.py:write_json",
+      "type": "function",
+      "name": "write_json",
+      "filePath": "src/report_writer.py",
+      "lineRange": [
+        49,
+        62
+      ],
+      "summary": "将 DiagnosisReport dataclass 转换为字典并序列化为 JSON，写入指定路径，自动创建父目录。",
+      "tags": [
+        "工具函数",
+        "序列化",
+        "文件写入"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/stack_parser.py",
+      "type": "file",
+      "name": "stack_parser.py",
+      "filePath": "src/stack_parser.py",
+      "summary": "提供 Java 异常堆栈文本的解析工具：`parse_stack_trace` 使用正则将文本解析为 StackFrame 列表，`find_business_top_frame` 过滤框架包后定位到最顶层的业务栈帧。",
+      "tags": [
+        "工具函数",
+        "堆栈解析",
+        "正则",
+        "诊断"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/stack_parser.py:parse_stack_trace",
+      "type": "function",
+      "name": "parse_stack_trace",
+      "filePath": "src/stack_parser.py",
+      "lineRange": [
+        20,
+        41
+      ],
+      "summary": "用正则表达式逐行解析 Java 堆栈文本，提取每个栈帧的类名、方法、文件和行号，返回 StackFrame 列表；无法匹配时返回 None。",
+      "tags": [
+        "工具函数",
+        "堆栈解析",
+        "正则"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/stack_parser.py:find_business_top_frame",
+      "type": "function",
+      "name": "find_business_top_frame",
+      "filePath": "src/stack_parser.py",
+      "lineRange": [
+        44,
+        60
+      ],
+      "summary": "从 StackFrame 列表中过滤掉 Spring、Tomcat 等框架包的帧，返回最接近抛出点的业务层栈帧，用于定位根因起点。",
+      "tags": [
+        "工具函数",
+        "堆栈解析",
+        "过滤"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:commit_fix.py",
+      "type": "file",
+      "name": "commit_fix.py",
+      "filePath": "commit_fix.py",
+      "summary": "修复流程的命令行入口脚本，负责加载修复提案与诊断报告、驱动 FixAgent 生成代码修改、校验冲突并通过 SVN 提交最终补丁，同时支持 dry-run 和多轮重试。",
+      "tags": [
+        "入口点",
+        "agent",
+        "修复流程",
+        "svn",
+        "cli"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:commit_fix.py:_revert_and_abort",
+      "type": "function",
+      "name": "_revert_and_abort",
+      "filePath": "commit_fix.py",
+      "lineRange": [
+        23,
+        30
+      ],
+      "summary": "出错回滚辅助函数：调用 svn_revert 撤销已修改的文件，打印错误信息后强制退出进程。",
+      "tags": [
+        "工具函数",
+        "错误处理",
+        "svn"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:commit_fix.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "commit_fix.py",
+      "lineRange": [
+        33,
+        66
+      ],
+      "summary": "CLI 入口：解析 --proposal-id、--diagnosis-id、--workspace、--max-retry、--dry-run 等参数，加载配置后调用 _run_with_workspace 启动完整修复流程。",
+      "tags": [
+        "入口点",
+        "cli",
+        "参数解析"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:commit_fix.py:_run_with_workspace",
+      "type": "function",
+      "name": "_run_with_workspace",
+      "filePath": "commit_fix.py",
+      "lineRange": [
+        69,
+        153
+      ],
+      "summary": "修复流程核心调度器：按重试次数循环执行「加载提案与诊断 → SVN 更新 → 冲突检测 → FixAgent 生成修改 → 应用补丁 → 差异确认 → SVN 提交」完整链路，任何环节失败均回滚。",
+      "tags": [
+        "修复流程",
+        "agent",
+        "svn",
+        "重试逻辑"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:commit_fix.py:_load_proposal",
+      "type": "function",
+      "name": "_load_proposal",
+      "filePath": "commit_fix.py",
+      "lineRange": [
+        156,
+        206
+      ],
+      "summary": "从工作区目录读取 JSON 格式的修复提案文件，校验路径安全性与字段合法性后，构造并返回 FixProposal 对象（含 FixEdit 列表）。",
+      "tags": [
+        "数据加载",
+        "反序列化",
+        "验证"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:commit_fix.py:_load_diagnosis",
+      "type": "function",
+      "name": "_load_diagnosis",
+      "filePath": "commit_fix.py",
+      "lineRange": [
+        209,
+        255
+      ],
+      "summary": "从工作区目录读取 JSON 格式的诊断报告文件，构造 DiagnosisReport（含 Conclusion 与 DiagnosisInput）并返回，供修复 agent 使用。",
+      "tags": [
+        "数据加载",
+        "反序列化",
+        "诊断"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/commit/patcher.py",
+      "type": "file",
+      "name": "patcher.py",
+      "filePath": "src/commit/patcher.py",
+      "summary": "提供文件补丁核心工具集：路径安全校验、修改前快照哈希、SVN 更新后冲突检测、行级编辑原子写入、以及生成 unified diff 以供人工审查。",
+      "tags": [
+        "工具函数",
+        "补丁",
+        "冲突检测",
+        "diff",
+        "原子写入"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/commit/patcher.py:_safe_join",
+      "type": "function",
+      "name": "_safe_join",
+      "filePath": "src/commit/patcher.py",
+      "lineRange": [
+        14,
+        30
+      ],
+      "summary": "安全路径拼接：拒绝绝对路径和路径穿越（path traversal），确保目标文件始终位于指定 base 目录内。",
+      "tags": [
+        "安全",
+        "路径校验",
+        "工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/commit/patcher.py:snapshot_hashes",
+      "type": "function",
+      "name": "snapshot_hashes",
+      "filePath": "src/commit/patcher.py",
+      "lineRange": [
+        33,
+        51
+      ],
+      "summary": "对指定文件列表计算 SHA-256 摘要快照，供后续冲突检测比对，返回文件相对路径到哈希值的映射字典。",
+      "tags": [
+        "工具函数",
+        "哈希",
+        "冲突检测"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/commit/patcher.py:detect_conflicts",
+      "type": "function",
+      "name": "detect_conflicts",
+      "filePath": "src/commit/patcher.py",
+      "lineRange": [
+        54,
+        74
+      ],
+      "summary": "对比快照哈希与当前文件内容，检测 SVN update 后哪些文件已被外部修改（产生冲突），返回冲突文件路径列表。",
+      "tags": [
+        "冲突检测",
+        "工具函数",
+        "svn"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/commit/patcher.py:apply_edits",
+      "type": "function",
+      "name": "apply_edits",
+      "filePath": "src/commit/patcher.py",
+      "lineRange": [
+        77,
+        135
+      ],
+      "summary": "将 FixEdit 编辑列表按文件分组、按行号倒序应用到源文件，使用原子写入保证文件一致性；支持行替换与删除两种操作模式。",
+      "tags": [
+        "补丁应用",
+        "行级编辑",
+        "原子写入"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/commit/patcher.py:generate_diff",
+      "type": "function",
+      "name": "generate_diff",
+      "filePath": "src/commit/patcher.py",
+      "lineRange": [
+        138,
+        168
+      ],
+      "summary": "对修改前后的文件内容生成 unified diff 字符串，依次处理提案涉及的所有文件并拼接成完整差异报告供用户确认。",
+      "tags": [
+        "diff",
+        "代码审查",
+        "工具函数"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/commit/svn.py",
+      "type": "file",
+      "name": "svn.py",
+      "filePath": "src/commit/svn.py",
+      "summary": "封装三个 SVN 命令行操作：svn update（更新到最新版本）、svn commit（提交并返回版本号）、svn revert（按文件列表撤销修改），均通过 subprocess 调用并在失败时抛出 RuntimeError。",
+      "tags": [
+        "svn",
+        "工具函数",
+        "版本控制",
+        "subprocess"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/commit/svn.py:svn_update",
+      "type": "function",
+      "name": "svn_update",
+      "filePath": "src/commit/svn.py",
+      "lineRange": [
+        7,
+        25
+      ],
+      "summary": "在指定路径执行 svn update，失败时抛出包含 stderr 信息的 RuntimeError。",
+      "tags": [
+        "svn",
+        "工具函数",
+        "版本控制"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/commit/svn.py:svn_commit",
+      "type": "function",
+      "name": "svn_commit",
+      "filePath": "src/commit/svn.py",
+      "lineRange": [
+        28,
+        53
+      ],
+      "summary": "在指定路径执行 svn commit，提交成功后从输出中正则提取版本号并返回，失败时抛出 RuntimeError。",
+      "tags": [
+        "svn",
+        "工具函数",
+        "版本控制"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/commit/svn.py:svn_revert",
+      "type": "function",
+      "name": "svn_revert",
+      "filePath": "src/commit/svn.py",
+      "lineRange": [
+        56,
+        77
+      ],
+      "summary": "对给定文件列表执行 svn revert，回滚工作副本中的本地修改，失败时抛出 RuntimeError。",
+      "tags": [
+        "svn",
+        "工具函数",
+        "回滚"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:CLAUDE.md",
+      "type": "document",
+      "name": "CLAUDE.md",
+      "filePath": "CLAUDE.md",
+      "summary": "Claude Code 项目级指令文件，定义了 bughunterv2 的北极星目标（Java+Maven+SVN 项目的 bug 根因诊断与人在环修复）、协作铁律、工作纪律及当前迭代阶段，每个 Claude 会话自动加载。",
+      "tags": [
+        "文档",
+        "配置",
+        "协作规范",
+        "项目说明"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:config.yaml",
+      "type": "config",
+      "name": "config.yaml",
+      "filePath": "config.yaml",
+      "summary": "项目运行时配置文件，包含 Java 框架包前缀过滤列表、LLM 接入参数（base_url、model）、agent 最大步骤数，以及 M2 修复阶段所需的目标 Java 项目目录和构建 / 测试命令。",
+      "tags": [
+        "配置",
+        "llm",
+        "agent",
+        "运行时配置"
+      ],
+      "complexity": "simple",
+      "languageNotes": "api_key 从环境变量 LLM_API_KEY 读取，不在此配置文件中存储，体现了安全凭证隔离实践。"
+    },
+    {
+      "id": "config:pyproject.toml",
+      "type": "config",
+      "name": "pyproject.toml",
+      "filePath": "pyproject.toml",
+      "summary": "Python 项目元数据与工具链配置，声明了核心依赖（LangGraph、LangChain-OpenAI、PyYAML），以及 pytest、black、isort、mypy 等开发工具的配置，目标 Python 版本为 3.11。",
+      "tags": [
+        "配置",
+        "构建系统",
+        "依赖管理",
+        "工具链",
+        "python"
+      ],
+      "complexity": "simple",
+      "languageNotes": "使用 PEP 517/518 标准的 pyproject.toml 统一管理构建后端（setuptools）、项目元数据和工具配置，是现代 Python 项目的推荐做法。"
+    },
+    {
+      "id": "document:bughunterv2.egg-info/SOURCES.txt",
+      "type": "document",
+      "name": "SOURCES.txt",
+      "filePath": "bughunterv2.egg-info/SOURCES.txt",
+      "summary": "Python 包安装元数据文件，列出 bughunterv2 项目所有源文件清单，包含 src、tests 目录及 egg-info 自身文件，由 setuptools 自动生成。",
+      "tags": [
+        "构建系统",
+        "元数据",
+        "配置"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:bughunterv2.egg-info/dependency_links.txt",
+      "type": "document",
+      "name": "dependency_links.txt",
+      "filePath": "bughunterv2.egg-info/dependency_links.txt",
+      "summary": "Python 包元数据文件，声明额外的依赖链接（dependency links），当前内容为空，表示所有依赖均来自 PyPI 标准源。",
+      "tags": [
+        "构建系统",
+        "元数据",
+        "配置"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:bughunterv2.egg-info/requires.txt",
+      "type": "document",
+      "name": "requires.txt",
+      "filePath": "bughunterv2.egg-info/requires.txt",
+      "summary": "Python 包依赖声明文件，记录 bughunterv2 的运行时依赖（langgraph、langchain-openai、langchain-core、pyyaml）及开发依赖（pytest、black、isort、mypy），由 setuptools 从 pyproject.toml 生成。",
+      "tags": [
+        "构建系统",
+        "元数据",
+        "依赖管理"
+      ],
+      "complexity": "simple",
+      "languageNotes": "依赖分为主依赖组和 [dev] 扩展组，对应 pyproject.toml 的 optional-dependencies。"
+    },
+    {
+      "id": "document:bughunterv2.egg-info/top_level.txt",
+      "type": "document",
+      "name": "top_level.txt",
+      "filePath": "bughunterv2.egg-info/top_level.txt",
+      "summary": "Python 包元数据文件，列出包安装后的顶层模块目录（docs、src、tests、workspace），用于 pip 卸载时定位并清理已安装内容。",
+      "tags": [
+        "构建系统",
+        "元数据",
+        "配置"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:openspec/changes/m3-commit-fix/proposal.md",
+      "type": "document",
+      "name": "proposal.md",
+      "filePath": "openspec/changes/m3-commit-fix/proposal.md",
+      "summary": "M3 变更提案，描述「自动写回 + 版本提交」功能的问题背景、目标、核心方案（commit_fix.py 主流程）、关键约束与验收标准。",
+      "tags": [
+        "documentation",
+        "requirements",
+        "specification",
+        "change-proposal"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:openspec/changes/m3-commit-fix/design.md",
+      "type": "document",
+      "name": "design.md",
+      "filePath": "openspec/changes/m3-commit-fix/design.md",
+      "summary": "M3 详细技术设计文档，涵盖模块划分（commit_fix.py / svn.py / patcher.py）、接口设计、错误处理、主循环伪代码、完整测试计划（24 个用例）以及可观测性与运维说明。",
+      "tags": [
+        "documentation",
+        "design",
+        "architecture",
+        "test-plan"
+      ],
+      "complexity": "complex",
+      "languageNotes": "采用纯 Python（difflib + hashlib）实现 patch 操作，不依赖外部 diff/patch 命令；冲突检测策略为文件 hash 比对（保守但安全）。"
+    },
+    {
+      "id": "document:openspec/changes/m3-commit-fix/tasks.md",
+      "type": "document",
+      "name": "tasks.md",
+      "filePath": "openspec/changes/m3-commit-fix/tasks.md",
+      "summary": "M3 实施任务清单，将 proposal/design 分解为 7 个有序任务（Config 字段、svn.py、patcher.py、commit_fix.py、三套测试），含依赖关系图、变更影响分析、风险假设和文档覆盖映射。",
+      "tags": [
+        "documentation",
+        "task-list",
+        "implementation-plan",
+        "testing"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:.understand-anything/.understandignore",
+      "type": "file",
+      "name": ".understandignore",
+      "filePath": ".understand-anything/.understandignore",
+      "summary": "understand-anything 插件的排除模式配置文件，语法与 .gitignore 相同，当前已激活排除 docs/ 和 tests/ 目录，其余测试文件模式以注释形式提供供选用。",
+      "tags": [
+        "配置",
+        "构建工具",
+        "代码分析",
+        "排除规则"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.understand-anything/config.json",
+      "type": "config",
+      "name": "config.json",
+      "filePath": ".understand-anything/config.json",
+      "summary": "understand-anything 插件的运行时配置文件，当前仅包含 outputLanguage 一项设置，控制分析报告的输出语言。",
+      "tags": [
+        "配置",
+        "代码分析",
+        "插件设置"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:bughunterv2.egg-info/PKG-INFO",
+      "type": "file",
+      "name": "PKG-INFO",
+      "filePath": "bughunterv2.egg-info/PKG-INFO",
+      "summary": "Python 包的元数据描述文件，由 setuptools 自动生成，记录 bughunterv2 包的名称、版本、作者和依赖信息。",
+      "tags": [
+        "元数据",
+        "打包",
+        "自动生成"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Python egg-info 目录由 pip install -e 或 python setup.py develop 自动生成，不应手动编辑。"
+    },
+    {
+      "id": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "type": "document",
+      "name": "proposal.md",
+      "filePath": "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "summary": "M2 里程碑「修复 Agent 与编译反馈环」的需求提案（已归档），定义了 FixAgent 从读取 DiagnosisReport 到生成行级修复方案、应用隔离工作区、编译验证的完整闭环设计，包含隔离策略、人工 Gate 和验收标准。",
+      "tags": [
+        "文档",
+        "需求设计",
+        "里程碑",
+        "归档"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+      "type": "document",
+      "name": "tasks.md",
+      "filePath": "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+      "summary": "M2 里程碑的详细实施任务清单（已归档），包含 9 个任务（数据模型、Config 扩展、apply_fix、run_build、run_tests、FixAgent Prompt、FixAgent、CLI 入口、单元测试）的逐项验收条件、文件变更清单与依赖关系图。",
+      "tags": [
+        "文档",
+        "任务清单",
+        "里程碑",
+        "归档",
+        "实施计划"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "src/__init__.py",
+      "summary": "src 包的空初始化文件，将 src 目录标记为 Python 包，无任何导出或逻辑。",
+      "tags": [
+        "入口点",
+        "Python 包",
+        "空文件"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/agent/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "src/agent/__init__.py",
+      "summary": "agent 子包的空初始化文件，将 src/agent 目录标记为 Python 包，无任何导出或逻辑。",
+      "tags": [
+        "入口点",
+        "Python 包",
+        "空文件"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/commit/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "src/commit/__init__.py",
+      "summary": "commit 子包的空初始化文件，将 src/commit 目录标记为 Python 包，无任何导出或逻辑。",
+      "tags": [
+        "入口点",
+        "Python 包",
+        "空文件"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/tools/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "src/tools/__init__.py",
+      "summary": "tools 子包的空初始化文件，将 src/tools 目录标记为 Python 包，无任何导出或逻辑。",
+      "tags": [
+        "入口点",
+        "Python 包",
+        "空文件"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:workspace/diagnosis/.gitkeep",
+      "type": "file",
+      "name": ".gitkeep",
+      "filePath": "workspace/diagnosis/.gitkeep",
+      "summary": "占位文件，用于将 workspace/diagnosis 空目录纳入 Git 版本控制，该目录用于存放诊断任务的输出产物。",
+      "tags": [
+        "占位文件",
+        "工作区",
+        "Git"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:fix.py",
+      "target": "file:src/agent/fix_agent.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fix.py",
+      "target": "file:src/config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fix.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/agent/fix_prompts.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/tools/apply_fix.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/tools/run_build.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/tools/run_tests.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "file:src/tools/_command_runner.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/tools/run_build.py",
+      "target": "file:src/tools/_command_runner.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/tools/run_tests.py",
+      "target": "file:src/tools/_command_runner.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fix.py",
+      "target": "function:fix.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:fix.py",
+      "target": "function:fix.py:_load_report",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:fix.py",
+      "target": "function:fix.py:_print_summary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "class:src/agent/fix_agent.py:FixAgent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "function:src/agent/fix_agent.py:make_submit_fix_proposal_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "function:src/agent/fix_agent.py:_build_user_message",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "function:src/agent/fix_agent.py:_build_fix_proposal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "function:src/agent/fix_agent.py:_proposal_to_dict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_prompts.py",
+      "target": "function:src/agent/fix_prompts.py:build_fix_system_prompt",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/config.py",
+      "target": "class:src/config.py:Config",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/config.py",
+      "target": "function:src/config.py:load_config",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/_command_runner.py",
+      "target": "function:src/tools/_command_runner.py:validate_fix_id",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/_command_runner.py",
+      "target": "function:src/tools/_command_runner.py:run_command_in_workspace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:make_apply_fix_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:_validate_rel_path",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:_load_modified_registry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:_save_modified_registry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:_atomic_write_lines",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/run_build.py",
+      "target": "function:src/tools/run_build.py:make_run_build_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/run_tests.py",
+      "target": "function:src/tools/run_tests.py:make_run_tests_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:fix.py",
+      "target": "function:fix.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "class:src/agent/fix_agent.py:FixAgent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "function:src/agent/fix_agent.py:make_submit_fix_proposal_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/agent/fix_prompts.py",
+      "target": "function:src/agent/fix_prompts.py:build_fix_system_prompt",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/config.py",
+      "target": "class:src/config.py:Config",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/config.py",
+      "target": "function:src/config.py:load_config",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/_command_runner.py",
+      "target": "function:src/tools/_command_runner.py:validate_fix_id",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/_command_runner.py",
+      "target": "function:src/tools/_command_runner.py:run_command_in_workspace",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:make_apply_fix_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/run_build.py",
+      "target": "function:src/tools/run_build.py:make_run_build_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/run_tests.py",
+      "target": "function:src/tools/run_tests.py:make_run_tests_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fix.py:main",
+      "target": "class:src/agent/fix_agent.py:FixAgent",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fix.py:main",
+      "target": "function:src/config.py:load_config",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/fix_agent.py:FixAgent",
+      "target": "function:src/agent/fix_prompts.py:build_fix_system_prompt",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/fix_agent.py:FixAgent",
+      "target": "function:src/tools/apply_fix.py:make_apply_fix_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/fix_agent.py:FixAgent",
+      "target": "function:src/tools/run_build.py:make_run_build_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/fix_agent.py:FixAgent",
+      "target": "function:src/tools/run_tests.py:make_run_tests_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/agent/prompts.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/source_index.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/tools/find_callers.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/tools/read_source.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/tools/read_source.py",
+      "target": "file:src/source_index.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "function:src/agent/diagnosis_agent.py:make_submit_diagnosis_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "function:src/agent/diagnosis_agent.py:make_submit_diagnosis_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "function:src/agent/diagnosis_agent.py:_build_conclusion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "function:src/agent/diagnosis_agent.py:_report_to_dict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/prompts.py",
+      "target": "function:src/agent/prompts.py:build_system_prompt",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/prompts.py",
+      "target": "function:src/agent/prompts.py:build_system_prompt",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/source_index.py",
+      "target": "class:src/source_index.py:SourceIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/source_index.py",
+      "target": "class:src/source_index.py:SourceIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/find_callers.py",
+      "target": "function:src/tools/find_callers.py:make_find_callers_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/find_callers.py",
+      "target": "function:src/tools/find_callers.py:make_find_callers_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/read_source.py",
+      "target": "function:src/tools/read_source.py:make_read_source_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/read_source.py",
+      "target": "function:src/tools/read_source.py:make_read_source_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "function:src/agent/prompts.py:build_system_prompt",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "function:src/tools/read_source.py:make_read_source_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "function:src/tools/find_callers.py:make_find_callers_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "function:src/agent/diagnosis_agent.py:make_submit_diagnosis_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "class:src/source_index.py:SourceIndex",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "class:src/models.py:DiagnosisReport",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "class:src/config.py:Config",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "function:src/tools/read_source.py:make_read_source_tool",
+      "target": "class:src/source_index.py:SourceIndex",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "function:diagnose.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "function:diagnose.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "file:src/agent/diagnosis_agent.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "file:src/config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "file:src/report_writer.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "file:src/source_index.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "file:src/stack_parser.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "class:src/source_index.py:SourceIndex",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "function:src/stack_parser.py:parse_stack_trace",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "function:src/stack_parser.py:find_business_top_frame",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "function:src/report_writer.py:print_summary",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "function:src/report_writer.py:write_json",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "function:src/config.py:load_config",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:StackFrame",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:StackFrame",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:Location",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:Location",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:EvidenceItem",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:EvidenceItem",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:BacktraceStep",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:BacktraceStep",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:Conclusion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:Conclusion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:DiagnosisInput",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:DiagnosisInput",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:DiagnosisReport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:DiagnosisReport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:FixEdit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:FixEdit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:FixProposal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:FixProposal",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/report_writer.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/report_writer.py",
+      "target": "function:src/report_writer.py:print_summary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/report_writer.py",
+      "target": "function:src/report_writer.py:print_summary",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/report_writer.py",
+      "target": "function:src/report_writer.py:write_json",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/report_writer.py",
+      "target": "function:src/report_writer.py:write_json",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/stack_parser.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stack_parser.py",
+      "target": "function:src/stack_parser.py:parse_stack_trace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/stack_parser.py",
+      "target": "function:src/stack_parser.py:parse_stack_trace",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/stack_parser.py",
+      "target": "function:src/stack_parser.py:find_business_top_frame",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/stack_parser.py",
+      "target": "function:src/stack_parser.py:find_business_top_frame",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "file:src/agent/fix_agent.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "file:src/commit/patcher.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "file:src/commit/svn.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "file:src/config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "function:commit_fix.py:_revert_and_abort",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "function:commit_fix.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "function:commit_fix.py:_run_with_workspace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "function:commit_fix.py:_load_proposal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "function:commit_fix.py:_load_diagnosis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "function:commit_fix.py:_revert_and_abort",
+      "target": "function:src/commit/svn.py:svn_revert",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:main",
+      "target": "function:src/config.py:load_config",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/patcher.py:snapshot_hashes",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/svn.py:svn_update",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/patcher.py:detect_conflicts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/patcher.py:apply_edits",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/patcher.py:generate_diff",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/svn.py:svn_commit",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:commit_fix.py:_revert_and_abort",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_load_proposal",
+      "target": "class:src/models.py:FixEdit",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_load_proposal",
+      "target": "class:src/models.py:FixProposal",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_load_diagnosis",
+      "target": "class:src/models.py:Conclusion",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_load_diagnosis",
+      "target": "class:src/models.py:DiagnosisReport",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_load_diagnosis",
+      "target": "class:src/models.py:DiagnosisInput",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:_safe_join",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:snapshot_hashes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:detect_conflicts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:apply_edits",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:generate_diff",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_update",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_commit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_revert",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_update",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_commit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_revert",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:snapshot_hashes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:detect_conflicts",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:apply_edits",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:generate_diff",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "config:pyproject.toml",
+      "target": "document:CLAUDE.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/design.md",
+      "target": "document:openspec/changes/m3-commit-fix/proposal.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+      "target": "document:openspec/changes/m3-commit-fix/proposal.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+      "target": "document:openspec/changes/m3-commit-fix/design.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/design.md",
+      "target": "file:src/config.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/design.md",
+      "target": "file:commit_fix.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+      "target": "file:src/config.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+      "target": "file:commit_fix.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "target": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:entry",
+      "name": "入口层",
+      "description": "面向用户的命令行入口脚本（diagnose.py、fix.py、commit_fix.py），负责读取配置和输入、驱动完整的诊断或修复流程，以及 Python 包初始化文件。",
+      "nodeIds": [
+        "file:diagnose.py",
+        "file:fix.py",
+        "file:commit_fix.py",
+        "file:src/__init__.py"
+      ]
+    },
+    {
+      "id": "layer:agent",
+      "name": "Agent 层",
+      "description": "基于 LangGraph/LangChain 实现的 DiagnosisAgent 和 FixAgent，包含对应的系统提示词模板，负责编排 LLM ReAct 推理循环与工具调用策略。",
+      "nodeIds": [
+        "file:src/agent/diagnosis_agent.py",
+        "file:src/agent/fix_agent.py",
+        "file:src/agent/prompts.py",
+        "file:src/agent/fix_prompts.py",
+        "file:src/agent/__init__.py"
+      ]
+    },
+    {
+      "id": "layer:tools",
+      "name": "工具层",
+      "description": "供 Agent 调用的 LangChain 工具封装，涵盖 Java 源码读取、调用方查找、代码修复应用、Maven 构建和测试执行，以及底层 shell 命令执行器。",
+      "nodeIds": [
+        "file:src/tools/read_source.py",
+        "file:src/tools/find_callers.py",
+        "file:src/tools/apply_fix.py",
+        "file:src/tools/run_build.py",
+        "file:src/tools/run_tests.py",
+        "file:src/tools/_command_runner.py",
+        "file:src/tools/__init__.py"
+      ]
+    },
+    {
+      "id": "layer:commit",
+      "name": "提交层",
+      "description": "SVN 版本提交子系统，封装 svn update/commit/revert 命令以及冲突检测、行级补丁应用和 diff 生成等文件变更管理能力。",
+      "nodeIds": [
+        "file:src/commit/svn.py",
+        "file:src/commit/patcher.py",
+        "file:src/commit/__init__.py"
+      ]
+    },
+    {
+      "id": "layer:core",
+      "name": "核心基础层",
+      "description": "被所有业务层共享的基础模块：全局数据契约模型（models.py）、运行时配置加载（config.py）、Java 源码索引（source_index.py）、堆栈解析（stack_parser.py）和诊断报告序列化（report_writer.py）。",
+      "nodeIds": [
+        "file:src/models.py",
+        "file:src/config.py",
+        "file:src/source_index.py",
+        "file:src/stack_parser.py",
+        "file:src/report_writer.py"
+      ]
+    },
+    {
+      "id": "layer:project-support",
+      "name": "项目支撑层",
+      "description": "项目级文档、运行时配置文件、Python 包元数据、OpenSpec 变更规格文档、工具配置及工作区占位文件，不参与运行时逻辑但支撑项目工程管理。",
+      "nodeIds": [
+        "document:CLAUDE.md",
+        "config:config.yaml",
+        "config:pyproject.toml",
+        "document:bughunterv2.egg-info/SOURCES.txt",
+        "document:bughunterv2.egg-info/dependency_links.txt",
+        "document:bughunterv2.egg-info/requires.txt",
+        "document:bughunterv2.egg-info/top_level.txt",
+        "file:bughunterv2.egg-info/PKG-INFO",
+        "document:openspec/changes/m3-commit-fix/proposal.md",
+        "document:openspec/changes/m3-commit-fix/design.md",
+        "document:openspec/changes/m3-commit-fix/tasks.md",
+        "document:openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+        "document:openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+        "file:.understand-anything/.understandignore",
+        "config:.understand-anything/config.json",
+        "file:workspace/diagnosis/.gitkeep"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "项目目标与工程规范",
+      "description": "CLAUDE.md 是理解本项目的起点，它用一页纸定义了「北极星」：对 Java+Maven+SVN 目标项目的线上 bug 做根因诊断与人在环修复。文件同时规定了协作铁律（渐进式搭建、有主见异议、锚定目标）和当前迭代阶段，是后续所有设计决策的元信息来源。读完这个文件，你就知道这个系统「为什么存在、在做什么、允许怎么做」。",
+      "nodeIds": [
+        "document:CLAUDE.md"
+      ],
+      "languageLesson": "Python 项目常见的 CLAUDE.md 是 Claude Code 的项目级指令文件，每个会话自动加载，相当于「结对编程者须知」。它不是代码，但决定了 agent 在此项目中的行为边界。"
+    },
+    {
+      "order": 2,
+      "title": "项目依赖与技术栈",
+      "description": "pyproject.toml 声明了系统的核心依赖：LangGraph 负责 agent 状态机编排，LangChain-OpenAI 提供 LLM 调用能力，PyYAML 用于读取运行时配置。三个依赖清晰地映射了系统的三层能力：推理编排 / LLM 接入 / 配置管理。Python 3.11 是最低版本要求，开发工具链包含 pytest、black、mypy，体现了对代码质量的基本约束。",
+      "nodeIds": [
+        "config:pyproject.toml"
+      ]
+    },
+    {
+      "order": 3,
+      "title": "数据契约：全局模型层",
+      "description": "models.py 是整个系统的「通用语」——所有工作流共享的数据结构都在这里定义。诊断侧有 StackFrame（堆栈帧）、EvidenceItem（证据条目）、BacktraceStep（回溯步骤）、DiagnosisReport（诊断报告）；修复侧有 FixEdit（单条行级修改）、FixProposal（修复提案）。两套模型形成了 M1→M2→M3 三阶段管道的数据接口契约：诊断报告是 M1 的输出，也是 M2 的输入；修复提案是 M2 的输出，也是 M3 的输入。",
+      "nodeIds": [
+        "file:src/models.py"
+      ],
+      "languageLesson": "Python dataclass 用 @dataclass 装饰器自动生成 __init__、__repr__ 等方法，比手写构造函数简洁。配合 field(default_factory=list) 可以安全地声明可变默认值，避免多实例共享同一列表的经典陷阱。"
+    },
+    {
+      "order": 4,
+      "title": "运行时配置中心",
+      "description": "config.py 定义 Config dataclass 和 load_config 函数，从 YAML 文件读取所有运行时参数：LLM 的 base_url 和 model、agent 最大步骤数、目标 Java 项目路径、Maven 构建命令和测试命令、以及框架包过滤前缀列表。它被所有三条工作流入口（diagnose.py、fix.py、commit_fix.py）和两个 Agent 类同时依赖（fan-in=6，是整个图中最高的），是名副其实的「配置单点」。",
+      "nodeIds": [
+        "file:src/config.py",
+        "config:config.yaml"
+      ],
+      "languageLesson": "工厂函数 load_config(path) 将文件 I/O 和对象构建分离，让调用方只持有 Config 对象而不关心 YAML 解析细节。支持环境变量覆盖 API key 是「配置分层」最佳实践：版本库里存非敏感默认值，敏感凭据通过环境注入。"
+    },
+    {
+      "order": 5,
+      "title": "M1 入口：诊断流程驱动器",
+      "description": "diagnose.py 是 M1 工作流的命令行入口，也是 BFS 遍历的起点（fan-out=5，图中最高）。它的职责链清晰：解析 CLI 参数 → load_config → parse_stack_trace → SourceIndex 建索引 → DiagnosisAgent.run → report_writer 输出。这个文件把「用户意图」转化为「agent 任务」，是理解完整诊断管道的最佳切入点。",
+      "nodeIds": [
+        "file:diagnose.py"
+      ],
+      "languageLesson": "Python 脚本通常以 if __name__ == '__main__': main() 作为入口保护，使脚本既可以直接运行，也可以被其他模块 import 而不立即执行。这个惯例让单元测试可以单独调用 main() 而不触发副作用。"
+    },
+    {
+      "order": 6,
+      "title": "堆栈解析：诊断的原材料处理",
+      "description": "stack_parser.py 是诊断管道的第一个数据处理节点。parse_stack_trace 用正则把原始 Java 异常文本解析为 StackFrame 列表；find_business_top_frame 则通过 config.framework_prefixes 过滤掉 Spring、Hibernate 等框架栈帧，定位到最顶层的业务代码帧——这个帧就是 DiagnosisAgent 回溯分析的起始点。",
+      "nodeIds": [
+        "file:src/stack_parser.py"
+      ],
+      "languageLesson": "Java 堆栈的每一行格式为 'at com.example.Foo.bar(Foo.java:42)'，正则 r'at\\s+([\\w.$]+)\\.([\\w$<>]+)\\(([^:)]+)(?::(\\d+))?\\)' 可提取类名、方法名、文件名和行号四个捕获组。过滤框架包是 Java 诊断中的常见预处理：业务异常通常被框架层层包裹，需要剥离才能找到真正的根因点。"
+    },
+    {
+      "order": 7,
+      "title": "Java 源码索引：类名到文件的映射",
+      "description": "source_index.py 的 SourceIndex 类扫描 Maven 项目目录，建立「简单类名 → 绝对路径」的映射表，并支持全限定类名（如 com.example.Foo）的最后段匹配。这个索引是 DiagnosisAgent 的「地图」——没有它，agent 无法将堆栈帧中的类名转换为可读取的文件路径。它被 diagnose.py、diagnosis_agent.py 和 read_source.py 三个节点共同依赖（fan-in=3）。",
+      "nodeIds": [
+        "file:src/source_index.py"
+      ]
+    },
+    {
+      "order": 8,
+      "title": "M1 核心：DiagnosisAgent 与诊断工具",
+      "description": "diagnosis_agent.py 封装了 LangGraph ReAct agent，编排三个工具完成「回溯根因诊断」：read_source 读取指定类的源码片段，find_callers 全文搜索方法的调用点，submit_diagnosis 在 agent 确认根因后原子写入诊断报告。prompts.py 则将「从业务顶帧出发、逐层上溯调用链、找到缺陷注入点」的推理算法编码为 LLM system prompt，驱动 LLM 按照 ReAct 模式（推理→工具调用→观察→再推理）循环执行。",
+      "nodeIds": [
+        "file:src/agent/diagnosis_agent.py",
+        "file:src/agent/prompts.py",
+        "file:src/tools/read_source.py",
+        "file:src/tools/find_callers.py"
+      ],
+      "languageLesson": "LangGraph 的 ReAct agent 本质上是一个有向图：节点是 LLM 推理步骤，边由工具调用结果决定跳转方向。与 LangChain 的 AgentExecutor 相比，LangGraph 允许自定义循环终止条件和中间状态持久化，更适合需要多轮工具调用的诊断任务。"
+    },
+    {
+      "order": 9,
+      "title": "M1 输出：诊断报告序列化",
+      "description": "report_writer.py 是 M1 工作流的终点，提供两个函数：print_summary 将 DiagnosisReport 格式化打印到控制台供人工预览，write_json 将报告序列化为 JSON 文件落盘。这份 JSON 报告是 M1 与 M2 之间的「接力棒」——fix.py 和 commit_fix.py 都会读取它作为修复任务的输入。",
+      "nodeIds": [
+        "file:src/report_writer.py"
+      ]
+    },
+    {
+      "order": 10,
+      "title": "M2 核心：FixAgent 与修复工具集",
+      "description": "fix_agent.py 实现 FixAgent 类，以 LangChain ReAct agent 编排三个修复工具：apply_fix 在隔离工作区内执行行级代码编辑（copy-on-write，不污染源码目录），run_build 调用 Maven 验证编译是否通过，run_tests 执行测试套件验证行为正确性。三个工具共享 _command_runner.py 提供的底层 shell 执行和输出截断能力。fix_prompts.py 用 system prompt 告知 LLM 如何按「修改→构建→测试→再修改」的反馈环迭代直到成功。",
+      "nodeIds": [
+        "file:src/agent/fix_agent.py",
+        "file:src/agent/fix_prompts.py",
+        "file:src/tools/apply_fix.py",
+        "file:src/tools/run_build.py",
+        "file:src/tools/run_tests.py",
+        "file:src/tools/_command_runner.py"
+      ],
+      "languageLesson": "工厂函数模式（make_xxx_tool）让工具携带外部状态（如工作区路径、Config 对象）而不需要全局变量。每次调用工厂函数时注入依赖，返回一个绑定了上下文的 LangChain Tool 对象，是 Python 闭包（closure）的典型应用。"
+    },
+    {
+      "order": 11,
+      "title": "M2 入口：独立修复流程",
+      "description": "fix.py 是 M2 工作流的独立入口：接收诊断报告 JSON 路径和配置文件路径，驱动 FixAgent 完成修复循环，打印最终 FixProposal 摘要。它与 commit_fix.py 的区别在于：fix.py 只生成 FixProposal，不做任何 SVN 提交，适合开发阶段的本地验证；commit_fix.py 才是生产流程的完整闭环。两者共享同一个 FixAgent 核心。",
+      "nodeIds": [
+        "file:fix.py"
+      ]
+    },
+    {
+      "order": 12,
+      "title": "M3 提交层：补丁应用与 SVN 提交",
+      "description": "commit_fix.py 是整个系统的最终环节，也是唯一会真正改写源码和提交 SVN 的入口，因此设置了人工 gate（dry-run 模式和多轮确认）。它依赖两个提交层模块：patcher.py 负责在 svn update 后进行冲突检测（通过快照哈希对比）、行级编辑原子写入和 unified diff 生成；svn.py 封装 svn update / commit / revert 三个 subprocess 调用。这套「快照→更新→冲突检测→应用→提交」的安全流程，保障了修复补丁在并发开发环境下的正确性。",
+      "nodeIds": [
+        "file:commit_fix.py",
+        "file:src/commit/patcher.py",
+        "file:src/commit/svn.py"
+      ],
+      "languageLesson": "「快照哈希 + 冲突检测」是安全补丁应用的核心模式：在修改前记录文件的 MD5/SHA256，svn update 后再次计算并对比，哈希变化意味着远端同期提交了修改，需要人工处理冲突而非盲目覆盖。这比依赖 SVN 的文本 merge 更早发现冲突。"
+    }
+  ]
+}

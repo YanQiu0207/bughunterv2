@@ -1,4 +1,4 @@
-# bughunterv2 项目文档
+~# bughunterv2 项目文档
 
 > 一个依托 agent、长期渐进式开发的项目：用工具增强的 agent 做线上 bug 的根因诊断与人在环修复。
 

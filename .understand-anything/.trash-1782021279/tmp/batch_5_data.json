@@ -1,0 +1,29 @@
+{
+  "batchIndex": 5,
+  "files": [
+    {
+      "path": "CLAUDE.md",
+      "language": "markdown",
+      "sizeLines": 26,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "config.yaml",
+      "language": "yaml",
+      "sizeLines": 21,
+      "fileCategory": "config"
+    },
+    {
+      "path": "pyproject.toml",
+      "language": "toml",
+      "sizeLines": 44,
+      "fileCategory": "config"
+    }
+  ],
+  "batchImportData": {
+    "CLAUDE.md": [],
+    "config.yaml": [],
+    "pyproject.toml": []
+  },
+  "neighborMap": {}
+}

@@ -1,0 +1,477 @@
+{
+  "nodes": [
+    {
+      "id": "file:diagnose.py",
+      "type": "file",
+      "name": "diagnose.py",
+      "filePath": "diagnose.py",
+      "summary": "系统主入口脚本，负责解析命令行参数、加载配置、读取堆栈文件、构建 Java 源码索引、驱动 DiagnosisAgent 完成根因诊断，并将结果写入 JSON 报告文件。",
+      "tags": ["入口点", "agent", "诊断", "命令行"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:diagnose.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "diagnose.py",
+      "lineRange": [14, 81],
+      "summary": "程序主流程函数：依次校验参数、加载配置、解析 Java 堆栈文本、建立源码索引、调用 DiagnosisAgent 执行诊断，最后打印摘要并将 DiagnosisReport 序列化到磁盘。",
+      "tags": ["入口点", "agent", "诊断", "流程编排"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/models.py",
+      "type": "file",
+      "name": "models.py",
+      "filePath": "src/models.py",
+      "summary": "定义项目全局核心数据模型（dataclass），涵盖堆栈帧、证据条目、回溯步骤、诊断报告、修复提案等，是诊断与修复流程的数据契约层。",
+      "tags": ["数据模型", "schema-definition", "type-definition", "诊断"],
+      "complexity": "moderate",
+      "languageNotes": "全部使用 Python dataclass 实现，字段类型注解完整，Optional 字段用于灵活适配诊断流程的中间状态。"
+    },
+    {
+      "id": "class:src/models.py:StackFrame",
+      "type": "class",
+      "name": "StackFrame",
+      "filePath": "src/models.py",
+      "lineRange": [8, 14],
+      "summary": "表示 Java 堆栈跟踪中的单个栈帧，包含类名、方法名、文件路径和行号。",
+      "tags": ["数据模型", "堆栈解析"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:Location",
+      "type": "class",
+      "name": "Location",
+      "filePath": "src/models.py",
+      "lineRange": [18, 23],
+      "summary": "表示源码中的精确位置，包含文件路径、行号和方法名，供证据条目和回溯步骤引用。",
+      "tags": ["数据模型", "位置信息"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:EvidenceItem",
+      "type": "class",
+      "name": "EvidenceItem",
+      "filePath": "src/models.py",
+      "lineRange": [27, 33],
+      "summary": "代表诊断过程中发现的一条证据，记录证据类型、所在位置和代码片段，供 LLM 分析引用。",
+      "tags": ["数据模型", "证据", "诊断"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:BacktraceStep",
+      "type": "class",
+      "name": "BacktraceStep",
+      "filePath": "src/models.py",
+      "lineRange": [37, 46],
+      "summary": "记录 agent 逐步回溯分析时的单个步骤，包含可疑变量、位置、推理决策、发现和收集到的证据列表。",
+      "tags": ["数据模型", "诊断", "回溯"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:Conclusion",
+      "type": "class",
+      "name": "Conclusion",
+      "filePath": "src/models.py",
+      "lineRange": [50, 58],
+      "summary": "存储 agent 的最终诊断结论，包含根因假设、证据引用、反例检验、修复方向和置信度评估。",
+      "tags": ["数据模型", "诊断", "结论"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:DiagnosisInput",
+      "type": "class",
+      "name": "DiagnosisInput",
+      "filePath": "src/models.py",
+      "lineRange": [62, 66],
+      "summary": "封装诊断任务的输入参数，包含原始堆栈文本和 Java 源码目录路径。",
+      "tags": ["数据模型", "诊断", "输入"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:DiagnosisReport",
+      "type": "class",
+      "name": "DiagnosisReport",
+      "filePath": "src/models.py",
+      "lineRange": [70, 78],
+      "summary": "完整的诊断报告结构，聚合诊断 ID、时间戳、状态、输入参数、回溯步骤列表和最终结论，是系统对外输出的核心产物。",
+      "tags": ["数据模型", "诊断", "报告"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:FixEdit",
+      "type": "class",
+      "name": "FixEdit",
+      "filePath": "src/models.py",
+      "lineRange": [82, 89],
+      "summary": "描述一处代码修复操作，记录目标文件、起止行号、替换内容及修复原因，供修复 agent 执行或人工审查。",
+      "tags": ["数据模型", "修复", "代码编辑"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/models.py:FixProposal",
+      "type": "class",
+      "name": "FixProposal",
+      "filePath": "src/models.py",
+      "lineRange": [93, 104],
+      "summary": "完整的修复提案结构，关联诊断 ID、包含多个 FixEdit 操作和摘要说明，是人在环审批的核心数据单元。",
+      "tags": ["数据模型", "修复", "提案"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/report_writer.py",
+      "type": "file",
+      "name": "report_writer.py",
+      "filePath": "src/report_writer.py",
+      "summary": "提供诊断报告的输出工具：`print_summary` 将 DiagnosisReport 格式化打印到控制台，`write_json` 将报告序列化为 JSON 文件写入磁盘。",
+      "tags": ["工具函数", "报告", "序列化", "输出"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/report_writer.py:print_summary",
+      "type": "function",
+      "name": "print_summary",
+      "filePath": "src/report_writer.py",
+      "lineRange": [11, 46],
+      "summary": "将 DiagnosisReport 的诊断结论、置信度、回溯步骤等关键信息格式化输出到终端，供用户快速查阅结果。",
+      "tags": ["工具函数", "报告", "控制台输出"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/report_writer.py:write_json",
+      "type": "function",
+      "name": "write_json",
+      "filePath": "src/report_writer.py",
+      "lineRange": [49, 62],
+      "summary": "将 DiagnosisReport dataclass 转换为字典并序列化为 JSON，写入指定路径，自动创建父目录。",
+      "tags": ["工具函数", "序列化", "文件写入"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/stack_parser.py",
+      "type": "file",
+      "name": "stack_parser.py",
+      "filePath": "src/stack_parser.py",
+      "summary": "提供 Java 异常堆栈文本的解析工具：`parse_stack_trace` 使用正则将文本解析为 StackFrame 列表，`find_business_top_frame` 过滤框架包后定位到最顶层的业务栈帧。",
+      "tags": ["工具函数", "堆栈解析", "正则", "诊断"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/stack_parser.py:parse_stack_trace",
+      "type": "function",
+      "name": "parse_stack_trace",
+      "filePath": "src/stack_parser.py",
+      "lineRange": [20, 41],
+      "summary": "用正则表达式逐行解析 Java 堆栈文本，提取每个栈帧的类名、方法、文件和行号，返回 StackFrame 列表；无法匹配时返回 None。",
+      "tags": ["工具函数", "堆栈解析", "正则"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/stack_parser.py:find_business_top_frame",
+      "type": "function",
+      "name": "find_business_top_frame",
+      "filePath": "src/stack_parser.py",
+      "lineRange": [44, 60],
+      "summary": "从 StackFrame 列表中过滤掉 Spring、Tomcat 等框架包的帧，返回最接近抛出点的业务层栈帧，用于定位根因起点。",
+      "tags": ["工具函数", "堆栈解析", "过滤"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:diagnose.py",
+      "target": "function:diagnose.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "function:diagnose.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "file:src/agent/diagnosis_agent.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "file:src/config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "file:src/report_writer.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "file:src/source_index.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:diagnose.py",
+      "target": "file:src/stack_parser.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "class:src/source_index.py:SourceIndex",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "function:src/stack_parser.py:parse_stack_trace",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "function:src/stack_parser.py:find_business_top_frame",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "function:src/report_writer.py:print_summary",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "function:src/report_writer.py:write_json",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:diagnose.py:main",
+      "target": "function:src/config.py:load_config",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:StackFrame",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:StackFrame",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:Location",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:Location",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:EvidenceItem",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:EvidenceItem",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:BacktraceStep",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:BacktraceStep",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:Conclusion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:Conclusion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:DiagnosisInput",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:DiagnosisInput",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:DiagnosisReport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:DiagnosisReport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:FixEdit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:FixEdit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:FixProposal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/models.py",
+      "target": "class:src/models.py:FixProposal",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/report_writer.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/report_writer.py",
+      "target": "function:src/report_writer.py:print_summary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/report_writer.py",
+      "target": "function:src/report_writer.py:print_summary",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/report_writer.py",
+      "target": "function:src/report_writer.py:write_json",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/report_writer.py",
+      "target": "function:src/report_writer.py:write_json",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/stack_parser.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stack_parser.py",
+      "target": "function:src/stack_parser.py:parse_stack_trace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/stack_parser.py",
+      "target": "function:src/stack_parser.py:parse_stack_trace",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/stack_parser.py",
+      "target": "function:src/stack_parser.py:find_business_top_frame",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/stack_parser.py",
+      "target": "function:src/stack_parser.py:find_business_top_frame",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

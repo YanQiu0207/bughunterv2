@@ -1,0 +1,13 @@
+{
+  "projectRoot": "E:/work/bughunterv2",
+  "batchFiles": [
+    {"path": "commit_fix.py", "language": "python", "sizeLines": 259, "fileCategory": "code"},
+    {"path": "src/commit/patcher.py", "language": "python", "sizeLines": 192, "fileCategory": "code"},
+    {"path": "src/commit/svn.py", "language": "python", "sizeLines": 77, "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "commit_fix.py": ["src/agent/fix_agent.py", "src/commit/patcher.py", "src/commit/svn.py", "src/config.py", "src/models.py"],
+    "src/commit/patcher.py": [],
+    "src/commit/svn.py": []
+  }
+}

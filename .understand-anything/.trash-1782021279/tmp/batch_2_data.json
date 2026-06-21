@@ -1,0 +1,94 @@
+{
+  "batchIndex": 2,
+  "files": [
+    {
+      "path": "src/agent/diagnosis_agent.py",
+      "language": "python",
+      "sizeLines": 312,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/agent/prompts.py",
+      "language": "python",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/source_index.py",
+      "language": "python",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/tools/find_callers.py",
+      "language": "python",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/tools/read_source.py",
+      "language": "python",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/agent/diagnosis_agent.py": [
+      "src/agent/prompts.py",
+      "src/config.py",
+      "src/models.py",
+      "src/source_index.py",
+      "src/tools/find_callers.py",
+      "src/tools/read_source.py"
+    ],
+    "src/agent/prompts.py": [],
+    "src/source_index.py": [],
+    "src/tools/find_callers.py": [],
+    "src/tools/read_source.py": [
+      "src/source_index.py"
+    ]
+  },
+  "neighborMap": {
+    "src/agent/diagnosis_agent.py": [
+      {
+        "path": "src/config.py",
+        "batchIndex": 1,
+        "symbols": [
+          "Config",
+          "load_config"
+        ]
+      },
+      {
+        "path": "src/models.py",
+        "batchIndex": 3,
+        "symbols": [
+          "StackFrame",
+          "Location",
+          "EvidenceItem",
+          "BacktraceStep",
+          "Conclusion",
+          "DiagnosisInput",
+          "DiagnosisReport",
+          "FixEdit",
+          "FixProposal"
+        ]
+      },
+      {
+        "path": "diagnose.py",
+        "batchIndex": 3,
+        "symbols": [
+          "main"
+        ]
+      }
+    ],
+    "src/source_index.py": [
+      {
+        "path": "diagnose.py",
+        "batchIndex": 3,
+        "symbols": [
+          "main"
+        ]
+      }
+    ]
+  }
+}

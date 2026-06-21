@@ -1,0 +1,160 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 3,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "CLAUDE.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 26,
+      "nonEmptyLines": 17,
+      "sections": [
+        {
+          "heading": "bughunterv2 — 项目规则",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "北极星（项目目标）",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "协作铁律（详见 `docs/standards/collaboration.md`）",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "工作纪律",
+          "level": 2,
+          "line": 16
+        },
+        {
+          "heading": "当前阶段",
+          "level": 2,
+          "line": 24
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "config.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 21,
+      "nonEmptyLines": 17,
+      "sections": [
+        {
+          "heading": "framework_packages",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "max_steps",
+          "level": 1,
+          "line": 10
+        },
+        {
+          "heading": "extra_source_roots",
+          "level": 1,
+          "line": 12
+        },
+        {
+          "heading": "llm_base_url",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "llm_model",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "target_project_dir",
+          "level": 1,
+          "line": 19
+        },
+        {
+          "heading": "build_command",
+          "level": 1,
+          "line": 20
+        },
+        {
+          "heading": "test_command",
+          "level": 1,
+          "line": 21
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": "pyproject.toml",
+      "language": "toml",
+      "fileCategory": "config",
+      "totalLines": 44,
+      "nonEmptyLines": 37,
+      "sections": [
+        {
+          "heading": "build-system",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "project",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "project.optional-dependencies",
+          "level": 2,
+          "line": 16
+        },
+        {
+          "heading": "tool.setuptools.packages.find",
+          "level": 4,
+          "line": 25
+        },
+        {
+          "heading": "tool.pytest.ini_options",
+          "level": 3,
+          "line": 28
+        },
+        {
+          "heading": "tool.black",
+          "level": 2,
+          "line": 33
+        },
+        {
+          "heading": "tool.isort",
+          "level": 2,
+          "line": 37
+        },
+        {
+          "heading": "tool.mypy",
+          "level": 2,
+          "line": 41
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    }
+  ]
+}

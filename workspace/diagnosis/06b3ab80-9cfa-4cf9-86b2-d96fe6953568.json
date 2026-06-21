@@ -1,0 +1,22 @@
+{
+  "diagnosis_id": "06b3ab80-9cfa-4cf9-86b2-d96fe6953568",
+  "created_at": "2026-06-21T13:19:38.776402+00:00",
+  "status": "completed",
+  "input": {
+    "stack_trace": "  java.lang.NullPointerException: Cannot invoke \"com.example.Order.getAmount()\" because \"order\" is null\n      at com.example.OrderService.total(OrderService.java:5)\n      at com.example.OrderService.handle(OrderService.java:10)\n",
+    "source_dir": ".manual-test/src"
+  },
+  "backtrace_steps": [],
+  "conclusion": {
+    "root_cause_hypothesis": "OrderService.handle() passes a null Order reference into OrderService.total(), causing total() to dereference order when calling getAmount().",
+    "evidence_refs": [
+      "com/example/OrderService.java:5 — return order.getAmount();",
+      "com/example/OrderService.java:9 — Order order = null;",
+      "com/example/OrderService.java:10 — return total(order);"
+    ],
+    "counter_check": "The exception message names 'order' as null at the dereference; the only caller frame shown is handle(), where order is explicitly set to null immediately before being passed, ruling out DAO/external data or getAmount() internals as the cause.",
+    "fix_direction": "Ensure handle() supplies a non-null Order to total(), or add null handling/validation in total() before dereferencing the parameter.",
+    "confidence": "high",
+    "confidence_reason": "The complete null flow is visible in the provided source and stack frames: explicit null assignment, direct pass, and immediate dereference."
+  }
+}

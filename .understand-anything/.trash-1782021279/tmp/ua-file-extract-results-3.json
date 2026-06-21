@@ -1,0 +1,606 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "diagnose.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 85,
+      "nonEmptyLines": 69,
+      "functions": [
+        {
+          "name": "main",
+          "startLine": 14,
+          "endLine": 81,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "main",
+          "line": 14,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "main",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 15
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 19
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 25
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 31
+        },
+        {
+          "caller": "main",
+          "callee": "parser.parse_args",
+          "lineNumber": 37
+        },
+        {
+          "caller": "main",
+          "callee": "os.path.isfile",
+          "lineNumber": 40
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 41
+        },
+        {
+          "caller": "main",
+          "callee": "sys.exit",
+          "lineNumber": 42
+        },
+        {
+          "caller": "main",
+          "callee": "os.path.isdir",
+          "lineNumber": 44
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 45
+        },
+        {
+          "caller": "main",
+          "callee": "sys.exit",
+          "lineNumber": 46
+        },
+        {
+          "caller": "main",
+          "callee": "load_config",
+          "lineNumber": 49
+        },
+        {
+          "caller": "main",
+          "callee": "open",
+          "lineNumber": 52
+        },
+        {
+          "caller": "main",
+          "callee": "f.read",
+          "lineNumber": 53
+        },
+        {
+          "caller": "main",
+          "callee": "parse_stack_trace",
+          "lineNumber": 55
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 57
+        },
+        {
+          "caller": "main",
+          "callee": "sys.exit",
+          "lineNumber": 58
+        },
+        {
+          "caller": "main",
+          "callee": "find_business_top_frame",
+          "lineNumber": 60
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 61
+        },
+        {
+          "caller": "main",
+          "callee": "sys.exit",
+          "lineNumber": 66
+        },
+        {
+          "caller": "main",
+          "callee": "SourceIndex",
+          "lineNumber": 69
+        },
+        {
+          "caller": "main",
+          "callee": "index.build",
+          "lineNumber": 70
+        },
+        {
+          "caller": "main",
+          "callee": "DiagnosisAgent",
+          "lineNumber": 73
+        },
+        {
+          "caller": "main",
+          "callee": "agent.run",
+          "lineNumber": 74
+        },
+        {
+          "caller": "main",
+          "callee": "print_summary",
+          "lineNumber": 77
+        },
+        {
+          "caller": "main",
+          "callee": "os.path.join",
+          "lineNumber": 79
+        },
+        {
+          "caller": "main",
+          "callee": "write_json",
+          "lineNumber": 80
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 81
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/models.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 104,
+      "nonEmptyLines": 75,
+      "classes": [
+        {
+          "name": "StackFrame",
+          "startLine": 8,
+          "endLine": 14,
+          "methods": [],
+          "properties": [
+            "class_name",
+            "method",
+            "file",
+            "line"
+          ]
+        },
+        {
+          "name": "Location",
+          "startLine": 18,
+          "endLine": 23,
+          "methods": [],
+          "properties": [
+            "file",
+            "line",
+            "method"
+          ]
+        },
+        {
+          "name": "EvidenceItem",
+          "startLine": 27,
+          "endLine": 33,
+          "methods": [],
+          "properties": [
+            "type",
+            "file",
+            "line",
+            "snippet"
+          ]
+        },
+        {
+          "name": "BacktraceStep",
+          "startLine": 37,
+          "endLine": 46,
+          "methods": [],
+          "properties": [
+            "step",
+            "suspect_variable",
+            "location",
+            "decision",
+            "finding",
+            "evidence",
+            "tool_calls"
+          ]
+        },
+        {
+          "name": "Conclusion",
+          "startLine": 50,
+          "endLine": 58,
+          "methods": [],
+          "properties": [
+            "root_cause_hypothesis",
+            "evidence_refs",
+            "counter_check",
+            "fix_direction",
+            "confidence",
+            "confidence_reason"
+          ]
+        },
+        {
+          "name": "DiagnosisInput",
+          "startLine": 62,
+          "endLine": 66,
+          "methods": [],
+          "properties": [
+            "stack_trace",
+            "source_dir"
+          ]
+        },
+        {
+          "name": "DiagnosisReport",
+          "startLine": 70,
+          "endLine": 78,
+          "methods": [],
+          "properties": [
+            "diagnosis_id",
+            "created_at",
+            "status",
+            "input",
+            "backtrace_steps",
+            "conclusion"
+          ]
+        },
+        {
+          "name": "FixEdit",
+          "startLine": 82,
+          "endLine": 89,
+          "methods": [],
+          "properties": [
+            "file",
+            "start_line",
+            "end_line",
+            "new_content",
+            "reason"
+          ]
+        },
+        {
+          "name": "FixProposal",
+          "startLine": 93,
+          "endLine": 104,
+          "methods": [],
+          "properties": [
+            "proposal_id",
+            "diagnosis_id",
+            "created_at",
+            "status",
+            "edits",
+            "summary"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "StackFrame",
+          "line": 7,
+          "isDefault": false
+        },
+        {
+          "name": "Location",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "EvidenceItem",
+          "line": 26,
+          "isDefault": false
+        },
+        {
+          "name": "BacktraceStep",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "Conclusion",
+          "line": 49,
+          "isDefault": false
+        },
+        {
+          "name": "DiagnosisInput",
+          "line": 61,
+          "isDefault": false
+        },
+        {
+          "name": "DiagnosisReport",
+          "line": 69,
+          "isDefault": false
+        },
+        {
+          "name": "FixEdit",
+          "line": 81,
+          "isDefault": false
+        },
+        {
+          "name": "FixProposal",
+          "line": 92,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 9,
+        "functionCount": 0,
+        "classCount": 9
+      }
+    },
+    {
+      "path": "src/report_writer.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 62,
+      "nonEmptyLines": 47,
+      "functions": [
+        {
+          "name": "print_summary",
+          "startLine": 11,
+          "endLine": 46,
+          "params": [
+            "report"
+          ]
+        },
+        {
+          "name": "write_json",
+          "startLine": 49,
+          "endLine": 62,
+          "params": [
+            "report",
+            "path"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "print_summary",
+          "line": 11,
+          "isDefault": false
+        },
+        {
+          "name": "write_json",
+          "line": 49,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 17
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 18
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 19
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 22
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 23
+        },
+        {
+          "caller": "print_summary",
+          "callee": "{\n        \"high\": \"HIGH\",\n        \"medium\": \"MEDIUM\",\n        \"low\": \"LOW\",\n    }.get",
+          "lineNumber": 27
+        },
+        {
+          "caller": "print_summary",
+          "callee": "c.confidence.upper",
+          "lineNumber": 31
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 33
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 34
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 35
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 36
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 39
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 41
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 44
+        },
+        {
+          "caller": "print_summary",
+          "callee": "print",
+          "lineNumber": 46
+        },
+        {
+          "caller": "write_json",
+          "callee": "Path",
+          "lineNumber": 58
+        },
+        {
+          "caller": "write_json",
+          "callee": "dest.parent.mkdir",
+          "lineNumber": 59
+        },
+        {
+          "caller": "write_json",
+          "callee": "dataclasses.asdict",
+          "lineNumber": 60
+        },
+        {
+          "caller": "write_json",
+          "callee": "dest.open",
+          "lineNumber": 61
+        },
+        {
+          "caller": "write_json",
+          "callee": "json.dump",
+          "lineNumber": 62
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/stack_parser.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 60,
+      "nonEmptyLines": 49,
+      "functions": [
+        {
+          "name": "parse_stack_trace",
+          "startLine": 20,
+          "endLine": 41,
+          "params": [
+            "text"
+          ]
+        },
+        {
+          "name": "find_business_top_frame",
+          "startLine": 44,
+          "endLine": 60,
+          "params": [
+            "frames",
+            "framework_packages"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "parse_stack_trace",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "find_business_top_frame",
+          "line": 44,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "parse_stack_trace",
+          "callee": "text.splitlines",
+          "lineNumber": 30
+        },
+        {
+          "caller": "parse_stack_trace",
+          "callee": "_FRAME_RE.match",
+          "lineNumber": 31
+        },
+        {
+          "caller": "parse_stack_trace",
+          "callee": "frames.append",
+          "lineNumber": 33
+        },
+        {
+          "caller": "parse_stack_trace",
+          "callee": "StackFrame",
+          "lineNumber": 34
+        },
+        {
+          "caller": "parse_stack_trace",
+          "callee": "m.group",
+          "lineNumber": 35
+        },
+        {
+          "caller": "parse_stack_trace",
+          "callee": "m.group",
+          "lineNumber": 36
+        },
+        {
+          "caller": "parse_stack_trace",
+          "callee": "m.group",
+          "lineNumber": 37
+        },
+        {
+          "caller": "parse_stack_trace",
+          "callee": "int",
+          "lineNumber": 38
+        },
+        {
+          "caller": "parse_stack_trace",
+          "callee": "m.group",
+          "lineNumber": 38
+        },
+        {
+          "caller": "parse_stack_trace",
+          "callee": "m.group",
+          "lineNumber": 38
+        },
+        {
+          "caller": "find_business_top_frame",
+          "callee": "any",
+          "lineNumber": 58
+        },
+        {
+          "caller": "find_business_top_frame",
+          "callee": "frame.class_name.startswith",
+          "lineNumber": 58
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    }
+  ]
+}

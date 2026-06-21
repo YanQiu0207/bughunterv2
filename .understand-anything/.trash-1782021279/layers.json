@@ -1,0 +1,84 @@
+[
+  {
+    "id": "layer:entry",
+    "name": "入口层",
+    "description": "面向用户的命令行入口脚本（diagnose.py、fix.py、commit_fix.py），负责读取配置和输入、驱动完整的诊断或修复流程，以及 Python 包初始化文件。",
+    "nodeIds": [
+      "file:diagnose.py",
+      "file:fix.py",
+      "file:commit_fix.py",
+      "file:src/__init__.py"
+    ]
+  },
+  {
+    "id": "layer:agent",
+    "name": "Agent 层",
+    "description": "基于 LangGraph/LangChain 实现的 DiagnosisAgent 和 FixAgent，包含对应的系统提示词模板，负责编排 LLM ReAct 推理循环与工具调用策略。",
+    "nodeIds": [
+      "file:src/agent/diagnosis_agent.py",
+      "file:src/agent/fix_agent.py",
+      "file:src/agent/prompts.py",
+      "file:src/agent/fix_prompts.py",
+      "file:src/agent/__init__.py"
+    ]
+  },
+  {
+    "id": "layer:tools",
+    "name": "工具层",
+    "description": "供 Agent 调用的 LangChain 工具封装，涵盖 Java 源码读取、调用方查找、代码修复应用、Maven 构建和测试执行，以及底层 shell 命令执行器。",
+    "nodeIds": [
+      "file:src/tools/read_source.py",
+      "file:src/tools/find_callers.py",
+      "file:src/tools/apply_fix.py",
+      "file:src/tools/run_build.py",
+      "file:src/tools/run_tests.py",
+      "file:src/tools/_command_runner.py",
+      "file:src/tools/__init__.py"
+    ]
+  },
+  {
+    "id": "layer:commit",
+    "name": "提交层",
+    "description": "SVN 版本提交子系统，封装 svn update/commit/revert 命令以及冲突检测、行级补丁应用和 diff 生成等文件变更管理能力。",
+    "nodeIds": [
+      "file:src/commit/svn.py",
+      "file:src/commit/patcher.py",
+      "file:src/commit/__init__.py"
+    ]
+  },
+  {
+    "id": "layer:core",
+    "name": "核心基础层",
+    "description": "被所有业务层共享的基础模块：全局数据契约模型（models.py）、运行时配置加载（config.py）、Java 源码索引（source_index.py）、堆栈解析（stack_parser.py）和诊断报告序列化（report_writer.py）。",
+    "nodeIds": [
+      "file:src/models.py",
+      "file:src/config.py",
+      "file:src/source_index.py",
+      "file:src/stack_parser.py",
+      "file:src/report_writer.py"
+    ]
+  },
+  {
+    "id": "layer:project-support",
+    "name": "项目支撑层",
+    "description": "项目级文档、运行时配置文件、Python 包元数据、OpenSpec 变更规格文档、工具配置及工作区占位文件，不参与运行时逻辑但支撑项目工程管理。",
+    "nodeIds": [
+      "document:CLAUDE.md",
+      "config:config.yaml",
+      "config:pyproject.toml",
+      "document:bughunterv2.egg-info/SOURCES.txt",
+      "document:bughunterv2.egg-info/dependency_links.txt",
+      "document:bughunterv2.egg-info/requires.txt",
+      "document:bughunterv2.egg-info/top_level.txt",
+      "file:bughunterv2.egg-info/PKG-INFO",
+      "document:openspec/changes/m3-commit-fix/proposal.md",
+      "document:openspec/changes/m3-commit-fix/design.md",
+      "document:openspec/changes/m3-commit-fix/tasks.md",
+      "document:openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "document:openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+      "file:.understand-anything/.understandignore",
+      "config:.understand-anything/config.json",
+      "file:workspace/diagnosis/.gitkeep"
+    ]
+  }
+]

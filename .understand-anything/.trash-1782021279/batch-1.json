@@ -1,0 +1,623 @@
+{
+  "nodes": [
+    {
+      "id": "file:fix.py",
+      "type": "file",
+      "name": "fix.py",
+      "filePath": "fix.py",
+      "summary": "项目的命令行入口点，接收诊断报告路径和配置文件参数，驱动 FixAgent 执行代码修复并打印最终 FixProposal 摘要。",
+      "tags": ["入口点", "cli", "agent", "修复流程"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:fix.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "fix.py",
+      "lineRange": [13, 62],
+      "summary": "解析命令行参数，加载配置与诊断报告，实例化 FixAgent 并运行修复流程，最终打印结果摘要。",
+      "tags": ["入口点", "cli", "流程控制"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:fix.py:_load_report",
+      "type": "function",
+      "name": "_load_report",
+      "filePath": "fix.py",
+      "lineRange": [65, 106],
+      "summary": "从 JSON 文件加载诊断报告，将原始字典反序列化为 DiagnosisReport 和 DiagnosisInput 数据模型对象。",
+      "tags": ["数据加载", "反序列化", "诊断报告"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:fix.py:_print_summary",
+      "type": "function",
+      "name": "_print_summary",
+      "filePath": "fix.py",
+      "lineRange": [109, 139],
+      "summary": "格式化打印 FixProposal 的执行摘要，包括状态、修改文件列表及输出文件路径。",
+      "tags": ["输出格式化", "用户界面", "修复摘要"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/agent/fix_agent.py",
+      "type": "file",
+      "name": "fix_agent.py",
+      "filePath": "src/agent/fix_agent.py",
+      "summary": "实现核心 FixAgent 类，通过 LangChain ReAct agent 编排 apply_fix、run_build、run_tests 等工具，自动完成代码修复→构建→测试的迭代循环，并将结果持久化为 FixProposal。",
+      "tags": ["agent", "修复流程", "LangChain", "工具编排"],
+      "complexity": "complex",
+      "languageNotes": "使用 LangChain 的 create_react_agent 构建 ReAct 模式 agent，工具通过工厂函数注入，结果通过 result_holder 字典传递。"
+    },
+    {
+      "id": "class:src/agent/fix_agent.py:FixAgent",
+      "type": "class",
+      "name": "FixAgent",
+      "filePath": "src/agent/fix_agent.py",
+      "lineRange": [78, 174],
+      "summary": "核心修复 agent 类，封装 LLM 配置、工具集构建和 ReAct agent 执行逻辑，提供 run 方法完成端到端修复并通过 _checkpoint 原子持久化中间结果。",
+      "tags": ["agent", "LangChain", "修复流程", "持久化"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/agent/fix_agent.py:make_submit_fix_proposal_tool",
+      "type": "function",
+      "name": "make_submit_fix_proposal_tool",
+      "filePath": "src/agent/fix_agent.py",
+      "lineRange": [25, 75],
+      "summary": "工厂函数，创建供 LLM agent 调用的 submit_fix_proposal 工具，agent 调用该工具时将修复结果存入 result_holder 字典。",
+      "tags": ["工具工厂", "agent", "LangChain"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/agent/fix_agent.py:_build_user_message",
+      "type": "function",
+      "name": "_build_user_message",
+      "filePath": "src/agent/fix_agent.py",
+      "lineRange": [177, 202],
+      "summary": "根据诊断报告和目标项目目录构建发送给 LLM 的用户消息，将诊断结论格式化为结构化提示文本。",
+      "tags": ["提示工程", "LLM", "消息构建"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/agent/fix_agent.py:_build_fix_proposal",
+      "type": "function",
+      "name": "_build_fix_proposal",
+      "filePath": "src/agent/fix_agent.py",
+      "lineRange": [205, 244],
+      "summary": "从 result_holder 中提取 agent 执行结果，构建包含编辑列表、状态和错误信息的 FixProposal 数据对象。",
+      "tags": ["数据构建", "FixProposal", "结果处理"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/agent/fix_agent.py:_proposal_to_dict",
+      "type": "function",
+      "name": "_proposal_to_dict",
+      "filePath": "src/agent/fix_agent.py",
+      "lineRange": [247, 265],
+      "summary": "将 FixProposal 数据对象序列化为可 JSON 持久化的字典结构。",
+      "tags": ["序列化", "持久化", "数据转换"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/agent/fix_prompts.py",
+      "type": "file",
+      "name": "fix_prompts.py",
+      "filePath": "src/agent/fix_prompts.py",
+      "summary": "定义 FixAgent 使用的系统提示词，指导 LLM 按照 ReAct 模式执行代码修复任务的行为规范与约束。",
+      "tags": ["提示工程", "LLM", "agent", "系统提示"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/agent/fix_prompts.py:build_fix_system_prompt",
+      "type": "function",
+      "name": "build_fix_system_prompt",
+      "filePath": "src/agent/fix_prompts.py",
+      "lineRange": [4, 61],
+      "summary": "根据 max_steps 参数生成 FixAgent 的系统提示词字符串，描述 agent 可用工具、操作规范和终止条件。",
+      "tags": ["提示工程", "LLM", "系统提示"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/config.py",
+      "type": "file",
+      "name": "config.py",
+      "filePath": "src/config.py",
+      "summary": "定义项目配置数据类 Config 及其加载函数 load_config，从 YAML 文件读取 LLM 参数、目标项目路径、构建/测试命令等配置项，支持环境变量覆盖 API key。",
+      "tags": ["配置", "数据模型", "YAML加载"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/config.py:Config",
+      "type": "class",
+      "name": "Config",
+      "filePath": "src/config.py",
+      "lineRange": [29, 53],
+      "summary": "项目配置 dataclass，包含 LLM 连接参数、目标项目目录、构建/测试命令、最大步数等字段，在 __post_init__ 中执行必填项校验。",
+      "tags": ["配置", "数据模型", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/config.py:load_config",
+      "type": "function",
+      "name": "load_config",
+      "filePath": "src/config.py",
+      "lineRange": [56, 98],
+      "summary": "从指定 YAML 文件路径加载并解析配置，支持环境变量覆盖 llm_api_key，返回经过验证的 Config 实例。",
+      "tags": ["配置加载", "YAML", "工厂函数"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/tools/_command_runner.py",
+      "type": "file",
+      "name": "_command_runner.py",
+      "filePath": "src/tools/_command_runner.py",
+      "summary": "提供底层命令执行工具函数，包括 fix_id 格式校验和在指定工作区目录中安全执行 shell 命令并截断长输出的通用能力。",
+      "tags": ["工具函数", "命令执行", "validation", "底层工具"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/tools/_command_runner.py:validate_fix_id",
+      "type": "function",
+      "name": "validate_fix_id",
+      "filePath": "src/tools/_command_runner.py",
+      "lineRange": [13, 28],
+      "summary": "校验 fix_id 是否为合法 UUID 格式，不合法时返回错误字符串供 LLM agent 感知。",
+      "tags": ["validation", "UUID", "安全校验"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/_command_runner.py:run_command_in_workspace",
+      "type": "function",
+      "name": "run_command_in_workspace",
+      "filePath": "src/tools/_command_runner.py",
+      "lineRange": [31, 81],
+      "summary": "在指定工作区路径执行 shell 命令，捕获 stdout/stderr，截断超长输出，并返回结构化的成功/失败字符串结果给 LLM agent。",
+      "tags": ["命令执行", "工具函数", "安全限制", "输出截断"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/tools/apply_fix.py",
+      "type": "file",
+      "name": "apply_fix.py",
+      "filePath": "src/tools/apply_fix.py",
+      "summary": "实现代码修复应用工具，通过工厂函数 make_apply_fix_tool 生成 LangChain 工具，支持行级代码编辑、路径安全校验、工作区隔离（copy-on-write）和已修改文件注册表的原子持久化。",
+      "tags": ["工具工厂", "代码修复", "文件操作", "安全校验"],
+      "complexity": "complex",
+      "languageNotes": "使用 copy-on-write 策略隔离工作区：首次修改某文件时从原始目标项目复制整个目录树到工作区，后续修改在工作区内进行，避免污染原始代码。"
+    },
+    {
+      "id": "function:src/tools/apply_fix.py:make_apply_fix_tool",
+      "type": "function",
+      "name": "make_apply_fix_tool",
+      "filePath": "src/tools/apply_fix.py",
+      "lineRange": [113, 324],
+      "summary": "工厂函数，创建供 LLM agent 调用的 apply_fix LangChain 工具，内部实现工作区初始化、路径安全校验、行级编辑应用（倒序处理避免行号偏移）及修改注册表更新。",
+      "tags": ["工具工厂", "LangChain", "代码编辑", "工作区管理"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/tools/apply_fix.py:_validate_rel_path",
+      "type": "function",
+      "name": "_validate_rel_path",
+      "filePath": "src/tools/apply_fix.py",
+      "lineRange": [25, 48],
+      "summary": "校验相对路径不包含路径穿越序列（..），确保文件操作限制在指定 base 目录内，防止目录遍历攻击。",
+      "tags": ["安全校验", "路径验证", "工具函数"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/apply_fix.py:_load_modified_registry",
+      "type": "function",
+      "name": "_load_modified_registry",
+      "filePath": "src/tools/apply_fix.py",
+      "lineRange": [51, 64],
+      "summary": "从工作区加载已修改文件注册表 JSON，返回文件路径集合，用于追踪哪些文件已在工作区中被修改过。",
+      "tags": ["文件注册表", "持久化", "工作区管理"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/apply_fix.py:_save_modified_registry",
+      "type": "function",
+      "name": "_save_modified_registry",
+      "filePath": "src/tools/apply_fix.py",
+      "lineRange": [67, 83],
+      "summary": "原子写入已修改文件注册表到工作区，使用 tempfile+os.replace 保证写入的原子性，避免注册表损坏。",
+      "tags": ["文件注册表", "原子写入", "持久化"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/apply_fix.py:_atomic_write_lines",
+      "type": "function",
+      "name": "_atomic_write_lines",
+      "filePath": "src/tools/apply_fix.py",
+      "lineRange": [86, 110],
+      "summary": "原子写入文件行内容，使用 tempfile+os.replace 方式确保写入完整性，失败时自动清理临时文件。",
+      "tags": ["原子写入", "文件操作", "工具函数"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/tools/run_build.py",
+      "type": "file",
+      "name": "run_build.py",
+      "filePath": "src/tools/run_build.py",
+      "summary": "提供 make_run_build_tool 工厂函数，创建在工作区内执行 Maven 构建命令的 LangChain 工具，结果返回给 LLM agent。",
+      "tags": ["工具工厂", "构建工具", "LangChain", "Maven"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/run_build.py:make_run_build_tool",
+      "type": "function",
+      "name": "make_run_build_tool",
+      "filePath": "src/tools/run_build.py",
+      "lineRange": [14, 55],
+      "summary": "工厂函数，创建供 LLM agent 调用的构建工具，在校验 fix_id 和工作区目录后执行配置的构建命令并返回结果。",
+      "tags": ["工具工厂", "LangChain", "构建执行"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/tools/run_tests.py",
+      "type": "file",
+      "name": "run_tests.py",
+      "filePath": "src/tools/run_tests.py",
+      "summary": "提供 make_run_tests_tool 工厂函数，创建在工作区内执行测试命令的 LangChain 工具，将测试结果返回给 LLM agent 作为修复验证依据。",
+      "tags": ["工具工厂", "测试工具", "LangChain", "验证"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/run_tests.py:make_run_tests_tool",
+      "type": "function",
+      "name": "make_run_tests_tool",
+      "filePath": "src/tools/run_tests.py",
+      "lineRange": [14, 56],
+      "summary": "工厂函数，创建供 LLM agent 调用的测试执行工具，在校验 fix_id 和工作区目录后执行配置的测试命令并返回结果。",
+      "tags": ["工具工厂", "LangChain", "测试执行"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:fix.py",
+      "target": "file:src/agent/fix_agent.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fix.py",
+      "target": "file:src/config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fix.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/agent/fix_prompts.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/tools/apply_fix.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/tools/run_build.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "file:src/tools/run_tests.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "file:src/tools/_command_runner.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/tools/run_build.py",
+      "target": "file:src/tools/_command_runner.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/tools/run_tests.py",
+      "target": "file:src/tools/_command_runner.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fix.py",
+      "target": "function:fix.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:fix.py",
+      "target": "function:fix.py:_load_report",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:fix.py",
+      "target": "function:fix.py:_print_summary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "class:src/agent/fix_agent.py:FixAgent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "function:src/agent/fix_agent.py:make_submit_fix_proposal_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "function:src/agent/fix_agent.py:_build_user_message",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "function:src/agent/fix_agent.py:_build_fix_proposal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "function:src/agent/fix_agent.py:_proposal_to_dict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/fix_prompts.py",
+      "target": "function:src/agent/fix_prompts.py:build_fix_system_prompt",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/config.py",
+      "target": "class:src/config.py:Config",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/config.py",
+      "target": "function:src/config.py:load_config",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/_command_runner.py",
+      "target": "function:src/tools/_command_runner.py:validate_fix_id",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/_command_runner.py",
+      "target": "function:src/tools/_command_runner.py:run_command_in_workspace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:make_apply_fix_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:_validate_rel_path",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:_load_modified_registry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:_save_modified_registry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:_atomic_write_lines",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/run_build.py",
+      "target": "function:src/tools/run_build.py:make_run_build_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/run_tests.py",
+      "target": "function:src/tools/run_tests.py:make_run_tests_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:fix.py",
+      "target": "function:fix.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "class:src/agent/fix_agent.py:FixAgent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/agent/fix_agent.py",
+      "target": "function:src/agent/fix_agent.py:make_submit_fix_proposal_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/agent/fix_prompts.py",
+      "target": "function:src/agent/fix_prompts.py:build_fix_system_prompt",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/config.py",
+      "target": "class:src/config.py:Config",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/config.py",
+      "target": "function:src/config.py:load_config",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/_command_runner.py",
+      "target": "function:src/tools/_command_runner.py:validate_fix_id",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/_command_runner.py",
+      "target": "function:src/tools/_command_runner.py:run_command_in_workspace",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/apply_fix.py",
+      "target": "function:src/tools/apply_fix.py:make_apply_fix_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/run_build.py",
+      "target": "function:src/tools/run_build.py:make_run_build_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/run_tests.py",
+      "target": "function:src/tools/run_tests.py:make_run_tests_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fix.py:main",
+      "target": "class:src/agent/fix_agent.py:FixAgent",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fix.py:main",
+      "target": "function:src/config.py:load_config",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/fix_agent.py:FixAgent",
+      "target": "function:src/agent/fix_prompts.py:build_fix_system_prompt",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/fix_agent.py:FixAgent",
+      "target": "function:src/tools/apply_fix.py:make_apply_fix_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/fix_agent.py:FixAgent",
+      "target": "function:src/tools/run_build.py:make_run_build_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/fix_agent.py:FixAgent",
+      "target": "function:src/tools/run_tests.py:make_run_tests_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

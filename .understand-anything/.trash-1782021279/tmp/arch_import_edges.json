@@ -1,0 +1,219 @@
+[
+  {
+    "source": "file:fix.py",
+    "target": "file:src/agent/fix_agent.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:fix.py",
+    "target": "file:src/config.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:fix.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/agent/fix_prompts.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/config.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/tools/apply_fix.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/tools/run_build.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/tools/run_tests.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/tools/apply_fix.py",
+    "target": "file:src/tools/_command_runner.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/tools/run_build.py",
+    "target": "file:src/tools/_command_runner.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/tools/run_tests.py",
+    "target": "file:src/tools/_command_runner.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/agent/prompts.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/config.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/source_index.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/tools/find_callers.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/tools/read_source.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/tools/read_source.py",
+    "target": "file:src/source_index.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "file:src/agent/diagnosis_agent.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "file:src/config.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "file:src/report_writer.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "file:src/source_index.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "file:src/stack_parser.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/report_writer.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/stack_parser.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "file:src/agent/fix_agent.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "file:src/commit/patcher.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "file:src/commit/svn.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "file:src/config.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  }
+]

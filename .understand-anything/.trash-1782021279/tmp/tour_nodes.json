@@ -1,0 +1,282 @@
+[
+  {
+    "id": "file:fix.py",
+    "name": "fix.py",
+    "filePath": "fix.py",
+    "summary": "项目的命令行入口点，接收诊断报告路径和配置文件参数，驱动 FixAgent 执行代码修复并打印最终 FixProposal 摘要。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/agent/fix_agent.py",
+    "name": "fix_agent.py",
+    "filePath": "src/agent/fix_agent.py",
+    "summary": "实现核心 FixAgent 类，通过 LangChain ReAct agent 编排 apply_fix、run_build、run_tests 等工具，自动完成代码修复→构建→测试的迭代循环，并将结果持久化为 FixProposal。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/agent/fix_prompts.py",
+    "name": "fix_prompts.py",
+    "filePath": "src/agent/fix_prompts.py",
+    "summary": "定义 FixAgent 使用的系统提示词，指导 LLM 按照 ReAct 模式执行代码修复任务的行为规范与约束。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/config.py",
+    "name": "config.py",
+    "filePath": "src/config.py",
+    "summary": "定义项目配置数据类 Config 及其加载函数 load_config，从 YAML 文件读取 LLM 参数、目标项目路径、构建/测试命令等配置项，支持环境变量覆盖 API key。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/tools/_command_runner.py",
+    "name": "_command_runner.py",
+    "filePath": "src/tools/_command_runner.py",
+    "summary": "提供底层命令执行工具函数，包括 fix_id 格式校验和在指定工作区目录中安全执行 shell 命令并截断长输出的通用能力。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/tools/apply_fix.py",
+    "name": "apply_fix.py",
+    "filePath": "src/tools/apply_fix.py",
+    "summary": "实现代码修复应用工具，通过工厂函数 make_apply_fix_tool 生成 LangChain 工具，支持行级代码编辑、路径安全校验、工作区隔离（copy-on-write）和已修改文件注册表的原子持久化。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/tools/run_build.py",
+    "name": "run_build.py",
+    "filePath": "src/tools/run_build.py",
+    "summary": "提供 make_run_build_tool 工厂函数，创建在工作区内执行 Maven 构建命令的 LangChain 工具，结果返回给 LLM agent。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/tools/run_tests.py",
+    "name": "run_tests.py",
+    "filePath": "src/tools/run_tests.py",
+    "summary": "提供 make_run_tests_tool 工厂函数，创建在工作区内执行测试命令的 LangChain 工具，将测试结果返回给 LLM agent 作为修复验证依据。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/agent/diagnosis_agent.py",
+    "name": "diagnosis_agent.py",
+    "filePath": "src/agent/diagnosis_agent.py",
+    "summary": "核心诊断 agent 实现：封装 LangGraph ReAct agent，编排 read_source / find_callers / submit_diagnosis 三个工具，对 Java 异常堆栈进行回溯根因诊断，并将结果原子写入 workspace/diagnosis/ 目录。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/agent/prompts.py",
+    "name": "prompts.py",
+    "filePath": "src/agent/prompts.py",
+    "summary": "为 DiagnosisAgent 构建系统提示的模块，将回溯诊断算法、框架包过滤规则和终止条件编码到 LLM system prompt 字符串中。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/source_index.py",
+    "name": "source_index.py",
+    "filePath": "src/source_index.py",
+    "summary": "提供 Java 源文件索引功能：扫描 Maven 项目目录，建立简单类名到绝对路径的映射，支持全限定类名的最后段匹配解析。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/tools/find_callers.py",
+    "name": "find_callers.py",
+    "filePath": "src/tools/find_callers.py",
+    "summary": "提供 find_callers LangChain 工具的工厂模块：在 Java 源码目录中全文搜索指定方法名的调用点，返回带行号的匹配结果列表，结果上限 20 条。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/tools/read_source.py",
+    "name": "read_source.py",
+    "filePath": "src/tools/read_source.py",
+    "summary": "提供 read_source LangChain 工具的工厂模块：通过 SourceIndex 解析类名路径，读取指定行范围的 Java 源码片段并带行号返回。",
+    "type": "file"
+  },
+  {
+    "id": "file:diagnose.py",
+    "name": "diagnose.py",
+    "filePath": "diagnose.py",
+    "summary": "系统主入口脚本，负责解析命令行参数、加载配置、读取堆栈文件、构建 Java 源码索引、驱动 DiagnosisAgent 完成根因诊断，并将结果写入 JSON 报告文件。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/models.py",
+    "name": "models.py",
+    "filePath": "src/models.py",
+    "summary": "定义项目全局核心数据模型（dataclass），涵盖堆栈帧、证据条目、回溯步骤、诊断报告、修复提案等，是诊断与修复流程的数据契约层。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/report_writer.py",
+    "name": "report_writer.py",
+    "filePath": "src/report_writer.py",
+    "summary": "提供诊断报告的输出工具：`print_summary` 将 DiagnosisReport 格式化打印到控制台，`write_json` 将报告序列化为 JSON 文件写入磁盘。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/stack_parser.py",
+    "name": "stack_parser.py",
+    "filePath": "src/stack_parser.py",
+    "summary": "提供 Java 异常堆栈文本的解析工具：`parse_stack_trace` 使用正则将文本解析为 StackFrame 列表，`find_business_top_frame` 过滤框架包后定位到最顶层的业务栈帧。",
+    "type": "file"
+  },
+  {
+    "id": "file:commit_fix.py",
+    "name": "commit_fix.py",
+    "filePath": "commit_fix.py",
+    "summary": "修复流程的命令行入口脚本，负责加载修复提案与诊断报告、驱动 FixAgent 生成代码修改、校验冲突并通过 SVN 提交最终补丁，同时支持 dry-run 和多轮重试。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/commit/patcher.py",
+    "name": "patcher.py",
+    "filePath": "src/commit/patcher.py",
+    "summary": "提供文件补丁核心工具集：路径安全校验、修改前快照哈希、SVN 更新后冲突检测、行级编辑原子写入、以及生成 unified diff 以供人工审查。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/commit/svn.py",
+    "name": "svn.py",
+    "filePath": "src/commit/svn.py",
+    "summary": "封装三个 SVN 命令行操作：svn update（更新到最新版本）、svn commit（提交并返回版本号）、svn revert（按文件列表撤销修改），均通过 subprocess 调用并在失败时抛出 RuntimeError。",
+    "type": "file"
+  },
+  {
+    "id": "document:CLAUDE.md",
+    "name": "CLAUDE.md",
+    "filePath": "CLAUDE.md",
+    "summary": "Claude Code 项目级指令文件，定义了 bughunterv2 的北极星目标（Java+Maven+SVN 项目的 bug 根因诊断与人在环修复）、协作铁律、工作纪律及当前迭代阶段，每个 Claude 会话自动加载。",
+    "type": "document"
+  },
+  {
+    "id": "config:config.yaml",
+    "name": "config.yaml",
+    "filePath": "config.yaml",
+    "summary": "项目运行时配置文件，包含 Java 框架包前缀过滤列表、LLM 接入参数（base_url、model）、agent 最大步骤数，以及 M2 修复阶段所需的目标 Java 项目目录和构建 / 测试命令。",
+    "type": "config"
+  },
+  {
+    "id": "config:pyproject.toml",
+    "name": "pyproject.toml",
+    "filePath": "pyproject.toml",
+    "summary": "Python 项目元数据与工具链配置，声明了核心依赖（LangGraph、LangChain-OpenAI、PyYAML），以及 pytest、black、isort、mypy 等开发工具的配置，目标 Python 版本为 3.11。",
+    "type": "config"
+  },
+  {
+    "id": "document:bughunterv2.egg-info/SOURCES.txt",
+    "name": "SOURCES.txt",
+    "filePath": "bughunterv2.egg-info/SOURCES.txt",
+    "summary": "Python 包安装元数据文件，列出 bughunterv2 项目所有源文件清单，包含 src、tests 目录及 egg-info 自身文件，由 setuptools 自动生成。",
+    "type": "document"
+  },
+  {
+    "id": "document:bughunterv2.egg-info/dependency_links.txt",
+    "name": "dependency_links.txt",
+    "filePath": "bughunterv2.egg-info/dependency_links.txt",
+    "summary": "Python 包元数据文件，声明额外的依赖链接（dependency links），当前内容为空，表示所有依赖均来自 PyPI 标准源。",
+    "type": "document"
+  },
+  {
+    "id": "document:bughunterv2.egg-info/requires.txt",
+    "name": "requires.txt",
+    "filePath": "bughunterv2.egg-info/requires.txt",
+    "summary": "Python 包依赖声明文件，记录 bughunterv2 的运行时依赖（langgraph、langchain-openai、langchain-core、pyyaml）及开发依赖（pytest、black、isort、mypy），由 setuptools 从 pyproject.toml 生成。",
+    "type": "document"
+  },
+  {
+    "id": "document:bughunterv2.egg-info/top_level.txt",
+    "name": "top_level.txt",
+    "filePath": "bughunterv2.egg-info/top_level.txt",
+    "summary": "Python 包元数据文件，列出包安装后的顶层模块目录（docs、src、tests、workspace），用于 pip 卸载时定位并清理已安装内容。",
+    "type": "document"
+  },
+  {
+    "id": "document:openspec/changes/m3-commit-fix/proposal.md",
+    "name": "proposal.md",
+    "filePath": "openspec/changes/m3-commit-fix/proposal.md",
+    "summary": "M3 变更提案，描述「自动写回 + 版本提交」功能的问题背景、目标、核心方案（commit_fix.py 主流程）、关键约束与验收标准。",
+    "type": "document"
+  },
+  {
+    "id": "document:openspec/changes/m3-commit-fix/design.md",
+    "name": "design.md",
+    "filePath": "openspec/changes/m3-commit-fix/design.md",
+    "summary": "M3 详细技术设计文档，涵盖模块划分（commit_fix.py / svn.py / patcher.py）、接口设计、错误处理、主循环伪代码、完整测试计划（24 个用例）以及可观测性与运维说明。",
+    "type": "document"
+  },
+  {
+    "id": "document:openspec/changes/m3-commit-fix/tasks.md",
+    "name": "tasks.md",
+    "filePath": "openspec/changes/m3-commit-fix/tasks.md",
+    "summary": "M3 实施任务清单，将 proposal/design 分解为 7 个有序任务（Config 字段、svn.py、patcher.py、commit_fix.py、三套测试），含依赖关系图、变更影响分析、风险假设和文档覆盖映射。",
+    "type": "document"
+  },
+  {
+    "id": "file:.understand-anything/.understandignore",
+    "name": ".understandignore",
+    "filePath": ".understand-anything/.understandignore",
+    "summary": "understand-anything 插件的排除模式配置文件，语法与 .gitignore 相同，当前已激活排除 docs/ 和 tests/ 目录，其余测试文件模式以注释形式提供供选用。",
+    "type": "file"
+  },
+  {
+    "id": "config:.understand-anything/config.json",
+    "name": "config.json",
+    "filePath": ".understand-anything/config.json",
+    "summary": "understand-anything 插件的运行时配置文件，当前仅包含 outputLanguage 一项设置，控制分析报告的输出语言。",
+    "type": "config"
+  },
+  {
+    "id": "file:bughunterv2.egg-info/PKG-INFO",
+    "name": "PKG-INFO",
+    "filePath": "bughunterv2.egg-info/PKG-INFO",
+    "summary": "Python 包的元数据描述文件，由 setuptools 自动生成，记录 bughunterv2 包的名称、版本、作者和依赖信息。",
+    "type": "file"
+  },
+  {
+    "id": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+    "name": "proposal.md",
+    "filePath": "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+    "summary": "M2 里程碑「修复 Agent 与编译反馈环」的需求提案（已归档），定义了 FixAgent 从读取 DiagnosisReport 到生成行级修复方案、应用隔离工作区、编译验证的完整闭环设计，包含隔离策略、人工 Gate 和验收标准。",
+    "type": "document"
+  },
+  {
+    "id": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+    "name": "tasks.md",
+    "filePath": "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+    "summary": "M2 里程碑的详细实施任务清单（已归档），包含 9 个任务（数据模型、Config 扩展、apply_fix、run_build、run_tests、FixAgent Prompt、FixAgent、CLI 入口、单元测试）的逐项验收条件、文件变更清单与依赖关系图。",
+    "type": "document"
+  },
+  {
+    "id": "file:src/__init__.py",
+    "name": "__init__.py",
+    "filePath": "src/__init__.py",
+    "summary": "src 包的空初始化文件，将 src 目录标记为 Python 包，无任何导出或逻辑。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/agent/__init__.py",
+    "name": "__init__.py",
+    "filePath": "src/agent/__init__.py",
+    "summary": "agent 子包的空初始化文件，将 src/agent 目录标记为 Python 包，无任何导出或逻辑。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/commit/__init__.py",
+    "name": "__init__.py",
+    "filePath": "src/commit/__init__.py",
+    "summary": "commit 子包的空初始化文件，将 src/commit 目录标记为 Python 包，无任何导出或逻辑。",
+    "type": "file"
+  },
+  {
+    "id": "file:src/tools/__init__.py",
+    "name": "__init__.py",
+    "filePath": "src/tools/__init__.py",
+    "summary": "tools 子包的空初始化文件，将 src/tools 目录标记为 Python 包，无任何导出或逻辑。",
+    "type": "file"
+  },
+  {
+    "id": "file:workspace/diagnosis/.gitkeep",
+    "name": ".gitkeep",
+    "filePath": "workspace/diagnosis/.gitkeep",
+    "summary": "占位文件，用于将 workspace/diagnosis 空目录纳入 Git 版本控制，该目录用于存放诊断任务的输出产物。",
+    "type": "file"
+  }
+]

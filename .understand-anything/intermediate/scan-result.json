@@ -1,0 +1,346 @@
+{
+  "name": "bughunterv2",
+  "description": "基于 LangGraph 和 LangChain/OpenAI 构建的 Python agentic 系统，用于对 Java+Maven+SVN 目标项目进行线上 bug 的根因诊断与人在环修复。",
+  "languages": [
+    "json",
+    "markdown",
+    "python",
+    "toml",
+    "txt",
+    "unknown",
+    "yaml"
+  ],
+  "frameworks": [
+    "LangChain",
+    "LangGraph"
+  ],
+  "files": [
+    {
+      "path": ".understand-anything/.understandignore",
+      "language": "unknown",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".understand-anything/config.json",
+      "language": "json",
+      "sizeLines": 1,
+      "fileCategory": "config"
+    },
+    {
+      "path": "bughunterv2.egg-info/dependency_links.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "bughunterv2.egg-info/PKG-INFO",
+      "language": "unknown",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "bughunterv2.egg-info/requires.txt",
+      "language": "txt",
+      "sizeLines": 11,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "bughunterv2.egg-info/SOURCES.txt",
+      "language": "txt",
+      "sizeLines": 22,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "bughunterv2.egg-info/top_level.txt",
+      "language": "txt",
+      "sizeLines": 4,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CLAUDE.md",
+      "language": "markdown",
+      "sizeLines": 26,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "commit_fix.py",
+      "language": "python",
+      "sizeLines": 259,
+      "fileCategory": "code"
+    },
+    {
+      "path": "config.yaml",
+      "language": "yaml",
+      "sizeLines": 21,
+      "fileCategory": "config"
+    },
+    {
+      "path": "diagnose.py",
+      "language": "python",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "fix.py",
+      "language": "python",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "language": "markdown",
+      "sizeLines": 87,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+      "language": "markdown",
+      "sizeLines": 328,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/changes/m3-commit-fix/design.md",
+      "language": "markdown",
+      "sizeLines": 225,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/changes/m3-commit-fix/proposal.md",
+      "language": "markdown",
+      "sizeLines": 37,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/changes/m3-commit-fix/tasks.md",
+      "language": "markdown",
+      "sizeLines": 229,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "pyproject.toml",
+      "language": "toml",
+      "sizeLines": 44,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/agent/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/agent/diagnosis_agent.py",
+      "language": "python",
+      "sizeLines": 312,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/agent/fix_agent.py",
+      "language": "python",
+      "sizeLines": 265,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/agent/fix_prompts.py",
+      "language": "python",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/agent/prompts.py",
+      "language": "python",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/commit/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/commit/patcher.py",
+      "language": "python",
+      "sizeLines": 192,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/commit/svn.py",
+      "language": "python",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/config.py",
+      "language": "python",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/models.py",
+      "language": "python",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/report_writer.py",
+      "language": "python",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/source_index.py",
+      "language": "python",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stack_parser.py",
+      "language": "python",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/tools/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/tools/_command_runner.py",
+      "language": "python",
+      "sizeLines": 81,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/tools/apply_fix.py",
+      "language": "python",
+      "sizeLines": 324,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/tools/find_callers.py",
+      "language": "python",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/tools/read_source.py",
+      "language": "python",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/tools/run_build.py",
+      "language": "python",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/tools/run_tests.py",
+      "language": "python",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workspace/diagnosis/.gitkeep",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 40,
+  "filteredByIgnore": 23,
+  "estimatedComplexity": "moderate",
+  "importMap": {
+    ".understand-anything/.understandignore": [],
+    ".understand-anything/config.json": [],
+    "bughunterv2.egg-info/dependency_links.txt": [],
+    "bughunterv2.egg-info/PKG-INFO": [],
+    "bughunterv2.egg-info/requires.txt": [],
+    "bughunterv2.egg-info/SOURCES.txt": [],
+    "bughunterv2.egg-info/top_level.txt": [],
+    "CLAUDE.md": [],
+    "commit_fix.py": [
+      "src/agent/fix_agent.py",
+      "src/commit/patcher.py",
+      "src/commit/svn.py",
+      "src/config.py",
+      "src/models.py"
+    ],
+    "config.yaml": [],
+    "diagnose.py": [
+      "src/agent/diagnosis_agent.py",
+      "src/config.py",
+      "src/report_writer.py",
+      "src/source_index.py",
+      "src/stack_parser.py"
+    ],
+    "fix.py": [
+      "src/agent/fix_agent.py",
+      "src/config.py",
+      "src/models.py"
+    ],
+    "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md": [],
+    "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md": [],
+    "openspec/changes/m3-commit-fix/design.md": [],
+    "openspec/changes/m3-commit-fix/proposal.md": [],
+    "openspec/changes/m3-commit-fix/tasks.md": [],
+    "pyproject.toml": [],
+    "src/__init__.py": [],
+    "src/agent/__init__.py": [],
+    "src/agent/diagnosis_agent.py": [
+      "src/agent/prompts.py",
+      "src/config.py",
+      "src/models.py",
+      "src/source_index.py",
+      "src/tools/find_callers.py",
+      "src/tools/read_source.py"
+    ],
+    "src/agent/fix_agent.py": [
+      "src/agent/fix_prompts.py",
+      "src/config.py",
+      "src/models.py",
+      "src/tools/apply_fix.py",
+      "src/tools/run_build.py",
+      "src/tools/run_tests.py"
+    ],
+    "src/agent/fix_prompts.py": [],
+    "src/agent/prompts.py": [],
+    "src/commit/__init__.py": [],
+    "src/commit/patcher.py": [],
+    "src/commit/svn.py": [],
+    "src/config.py": [],
+    "src/models.py": [],
+    "src/report_writer.py": [
+      "src/models.py"
+    ],
+    "src/source_index.py": [],
+    "src/stack_parser.py": [
+      "src/models.py"
+    ],
+    "src/tools/__init__.py": [],
+    "src/tools/_command_runner.py": [],
+    "src/tools/apply_fix.py": [
+      "src/tools/_command_runner.py"
+    ],
+    "src/tools/find_callers.py": [],
+    "src/tools/read_source.py": [
+      "src/source_index.py"
+    ],
+    "src/tools/run_build.py": [
+      "src/tools/_command_runner.py"
+    ],
+    "src/tools/run_tests.py": [
+      "src/tools/_command_runner.py"
+    ],
+    "workspace/diagnosis/.gitkeep": []
+  }
+}

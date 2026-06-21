@@ -1,0 +1,92 @@
+{
+  "scriptCompleted": true,
+  "stats": {
+    "filesScanned": 40,
+    "filesWithImports": 11,
+    "totalEdges": 31
+  },
+  "importMap": {
+    ".understand-anything/.understandignore": [],
+    ".understand-anything/config.json": [],
+    "bughunterv2.egg-info/dependency_links.txt": [],
+    "bughunterv2.egg-info/PKG-INFO": [],
+    "bughunterv2.egg-info/requires.txt": [],
+    "bughunterv2.egg-info/SOURCES.txt": [],
+    "bughunterv2.egg-info/top_level.txt": [],
+    "CLAUDE.md": [],
+    "commit_fix.py": [
+      "src/agent/fix_agent.py",
+      "src/commit/patcher.py",
+      "src/commit/svn.py",
+      "src/config.py",
+      "src/models.py"
+    ],
+    "config.yaml": [],
+    "diagnose.py": [
+      "src/agent/diagnosis_agent.py",
+      "src/config.py",
+      "src/report_writer.py",
+      "src/source_index.py",
+      "src/stack_parser.py"
+    ],
+    "fix.py": [
+      "src/agent/fix_agent.py",
+      "src/config.py",
+      "src/models.py"
+    ],
+    "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md": [],
+    "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md": [],
+    "openspec/changes/m3-commit-fix/design.md": [],
+    "openspec/changes/m3-commit-fix/proposal.md": [],
+    "openspec/changes/m3-commit-fix/tasks.md": [],
+    "pyproject.toml": [],
+    "src/__init__.py": [],
+    "src/agent/__init__.py": [],
+    "src/agent/diagnosis_agent.py": [
+      "src/agent/prompts.py",
+      "src/config.py",
+      "src/models.py",
+      "src/source_index.py",
+      "src/tools/find_callers.py",
+      "src/tools/read_source.py"
+    ],
+    "src/agent/fix_agent.py": [
+      "src/agent/fix_prompts.py",
+      "src/config.py",
+      "src/models.py",
+      "src/tools/apply_fix.py",
+      "src/tools/run_build.py",
+      "src/tools/run_tests.py"
+    ],
+    "src/agent/fix_prompts.py": [],
+    "src/agent/prompts.py": [],
+    "src/commit/__init__.py": [],
+    "src/commit/patcher.py": [],
+    "src/commit/svn.py": [],
+    "src/config.py": [],
+    "src/models.py": [],
+    "src/report_writer.py": [
+      "src/models.py"
+    ],
+    "src/source_index.py": [],
+    "src/stack_parser.py": [
+      "src/models.py"
+    ],
+    "src/tools/__init__.py": [],
+    "src/tools/_command_runner.py": [],
+    "src/tools/apply_fix.py": [
+      "src/tools/_command_runner.py"
+    ],
+    "src/tools/find_callers.py": [],
+    "src/tools/read_source.py": [
+      "src/source_index.py"
+    ],
+    "src/tools/run_build.py": [
+      "src/tools/_command_runner.py"
+    ],
+    "src/tools/run_tests.py": [
+      "src/tools/_command_runner.py"
+    ],
+    "workspace/diagnosis/.gitkeep": []
+  }
+}

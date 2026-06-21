@@ -1,0 +1,296 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 10,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": ".understand-anything/.understandignore",
+      "language": "unknown",
+      "fileCategory": "code",
+      "totalLines": 32,
+      "nonEmptyLines": 28,
+      "metrics": {}
+    },
+    {
+      "path": ".understand-anything/config.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "sections": [
+        {
+          "heading": "outputLanguage",
+          "level": 1,
+          "line": 1
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": "bughunterv2.egg-info/PKG-INFO",
+      "language": "unknown",
+      "fileCategory": "code",
+      "totalLines": 14,
+      "nonEmptyLines": 14,
+      "metrics": {}
+    },
+    {
+      "path": "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 87,
+      "nonEmptyLines": 57,
+      "sections": [
+        {
+          "heading": "M2：修复 Agent 与编译反馈环",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "背景",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "问题",
+          "level": 2,
+          "line": 16
+        },
+        {
+          "heading": "目标",
+          "level": 2,
+          "line": 22
+        },
+        {
+          "heading": "核心方案",
+          "level": 2,
+          "line": 28
+        },
+        {
+          "heading": "隔离策略（ADR-0003 §1）",
+          "level": 3,
+          "line": 30
+        },
+        {
+          "heading": "修复方案格式（ADR-0003 §3）",
+          "level": 3,
+          "line": 40
+        },
+        {
+          "heading": "验证标准（ADR-0003 §2）",
+          "level": 3,
+          "line": 48
+        },
+        {
+          "heading": "人工 Gate（ADR-0003 §6）",
+          "level": 3,
+          "line": 53
+        },
+        {
+          "heading": "需求",
+          "level": 2,
+          "line": 58
+        },
+        {
+          "heading": "功能性需求",
+          "level": 3,
+          "line": 60
+        },
+        {
+          "heading": "非功能性需求",
+          "level": 3,
+          "line": 70
+        },
+        {
+          "heading": "验收标准",
+          "level": 2,
+          "line": 76
+        },
+        {
+          "heading": "不在范围",
+          "level": 2,
+          "line": 83
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 14
+      }
+    },
+    {
+      "path": "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 328,
+      "nonEmptyLines": 283,
+      "sections": [
+        {
+          "heading": "实施任务清单",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "依赖关系总览",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "变更影响概览",
+          "level": 2,
+          "line": 21
+        },
+        {
+          "heading": "文件变更清单",
+          "level": 3,
+          "line": 23
+        },
+        {
+          "heading": "受影响接口",
+          "level": 3,
+          "line": 39
+        },
+        {
+          "heading": "构建系统变更",
+          "level": 3,
+          "line": 46
+        },
+        {
+          "heading": "风险与假设",
+          "level": 2,
+          "line": 50
+        },
+        {
+          "heading": "任务列表",
+          "level": 2,
+          "line": 60
+        },
+        {
+          "heading": "任务 1: [ ] 数据模型：FixEdit 和 FixProposal",
+          "level": 3,
+          "line": 64
+        },
+        {
+          "heading": "任务 2: [ ] Config 扩展：target_project_dir / build_command / test_command",
+          "level": 3,
+          "line": 88
+        },
+        {
+          "heading": "任务 3: [ ] apply_fix 工具",
+          "level": 3,
+          "line": 114
+        },
+        {
+          "heading": "任务 4: [ ] run_build 工具",
+          "level": 3,
+          "line": 144
+        },
+        {
+          "heading": "任务 5: [ ] run_tests 工具",
+          "level": 3,
+          "line": 170
+        },
+        {
+          "heading": "任务 6: [ ] FixAgent 系统 Prompt",
+          "level": 3,
+          "line": 189
+        },
+        {
+          "heading": "任务 7: [ ] FixAgent",
+          "level": 3,
+          "line": 212
+        },
+        {
+          "heading": "任务 8: [ ] CLI 入口 fix.py",
+          "level": 3,
+          "line": 251
+        },
+        {
+          "heading": "任务 9: [ ] 单元测试",
+          "level": 3,
+          "line": 281
+        },
+        {
+          "heading": "文档覆盖映射",
+          "level": 2,
+          "line": 309
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 18
+      }
+    },
+    {
+      "path": "src/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 0,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/agent/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 0,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/commit/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 0,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/tools/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 0,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "workspace/diagnosis/.gitkeep",
+      "language": "unknown",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 0,
+      "metrics": {}
+    }
+  ]
+}

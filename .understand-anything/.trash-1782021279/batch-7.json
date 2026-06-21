@@ -1,0 +1,83 @@
+{
+  "nodes": [
+    {
+      "id": "document:openspec/changes/m3-commit-fix/proposal.md",
+      "type": "document",
+      "name": "proposal.md",
+      "filePath": "openspec/changes/m3-commit-fix/proposal.md",
+      "summary": "M3 变更提案，描述「自动写回 + 版本提交」功能的问题背景、目标、核心方案（commit_fix.py 主流程）、关键约束与验收标准。",
+      "tags": ["documentation", "requirements", "specification", "change-proposal"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:openspec/changes/m3-commit-fix/design.md",
+      "type": "document",
+      "name": "design.md",
+      "filePath": "openspec/changes/m3-commit-fix/design.md",
+      "summary": "M3 详细技术设计文档，涵盖模块划分（commit_fix.py / svn.py / patcher.py）、接口设计、错误处理、主循环伪代码、完整测试计划（24 个用例）以及可观测性与运维说明。",
+      "tags": ["documentation", "design", "architecture", "test-plan"],
+      "complexity": "complex",
+      "languageNotes": "采用纯 Python（difflib + hashlib）实现 patch 操作，不依赖外部 diff/patch 命令；冲突检测策略为文件 hash 比对（保守但安全）。"
+    },
+    {
+      "id": "document:openspec/changes/m3-commit-fix/tasks.md",
+      "type": "document",
+      "name": "tasks.md",
+      "filePath": "openspec/changes/m3-commit-fix/tasks.md",
+      "summary": "M3 实施任务清单，将 proposal/design 分解为 7 个有序任务（Config 字段、svn.py、patcher.py、commit_fix.py、三套测试），含依赖关系图、变更影响分析、风险假设和文档覆盖映射。",
+      "tags": ["documentation", "task-list", "implementation-plan", "testing"],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:openspec/changes/m3-commit-fix/design.md",
+      "target": "document:openspec/changes/m3-commit-fix/proposal.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+      "target": "document:openspec/changes/m3-commit-fix/proposal.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+      "target": "document:openspec/changes/m3-commit-fix/design.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/design.md",
+      "target": "file:src/config.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/design.md",
+      "target": "file:commit_fix.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+      "target": "file:src/config.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+      "target": "file:commit_fix.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

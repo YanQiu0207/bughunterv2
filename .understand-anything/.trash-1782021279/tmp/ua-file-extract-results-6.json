@@ -1,0 +1,39 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "bughunterv2.egg-info/SOURCES.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 23,
+      "nonEmptyLines": 23,
+      "metrics": {}
+    },
+    {
+      "path": "bughunterv2.egg-info/dependency_links.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 1,
+      "nonEmptyLines": 0,
+      "metrics": {}
+    },
+    {
+      "path": "bughunterv2.egg-info/requires.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 11,
+      "nonEmptyLines": 10,
+      "metrics": {}
+    },
+    {
+      "path": "bughunterv2.egg-info/top_level.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 4,
+      "nonEmptyLines": 4,
+      "metrics": {}
+    }
+  ]
+}

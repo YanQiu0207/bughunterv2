@@ -4,7 +4,9 @@ import argparse
 import os
 import sys
 
-from src.agent.diagnosis_agent import DiagnosisAgent
+from src.runtime_noise import configure_runtime_noise_filters
+
+configure_runtime_noise_filters()
 from src.config import load_config
 from src.report_writer import print_summary, write_json
 from src.source_index import SourceIndex
@@ -70,6 +72,8 @@ def main() -> None:
     index.build()
 
     # run diagnosis agent
+    from src.agent.diagnosis_agent import DiagnosisAgent
+
     agent = DiagnosisAgent(config=config, index=index, src_dir=args.src)
     report = agent.run(stack_trace=stack_text, frames=frames)
 

@@ -1,0 +1,78 @@
+{
+  "batchIndex": 8,
+  "files": [
+    {
+      "path": ".understand-anything/.understandignore",
+      "language": "unknown",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".understand-anything/config.json",
+      "language": "json",
+      "sizeLines": 1,
+      "fileCategory": "config"
+    },
+    {
+      "path": "bughunterv2.egg-info/PKG-INFO",
+      "language": "unknown",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "language": "markdown",
+      "sizeLines": 87,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+      "language": "markdown",
+      "sizeLines": 328,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/agent/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/commit/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/tools/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workspace/diagnosis/.gitkeep",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    ".understand-anything/.understandignore": [],
+    ".understand-anything/config.json": [],
+    "bughunterv2.egg-info/PKG-INFO": [],
+    "openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md": [],
+    "openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md": [],
+    "src/__init__.py": [],
+    "src/agent/__init__.py": [],
+    "src/commit/__init__.py": [],
+    "src/tools/__init__.py": [],
+    "workspace/diagnosis/.gitkeep": []
+  },
+  "neighborMap": {}
+}

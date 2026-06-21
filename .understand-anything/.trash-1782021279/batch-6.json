@@ -1,0 +1,42 @@
+{
+  "nodes": [
+    {
+      "id": "document:bughunterv2.egg-info/SOURCES.txt",
+      "type": "document",
+      "name": "SOURCES.txt",
+      "filePath": "bughunterv2.egg-info/SOURCES.txt",
+      "summary": "Python 包安装元数据文件，列出 bughunterv2 项目所有源文件清单，包含 src、tests 目录及 egg-info 自身文件，由 setuptools 自动生成。",
+      "tags": ["构建系统", "元数据", "配置"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:bughunterv2.egg-info/dependency_links.txt",
+      "type": "document",
+      "name": "dependency_links.txt",
+      "filePath": "bughunterv2.egg-info/dependency_links.txt",
+      "summary": "Python 包元数据文件，声明额外的依赖链接（dependency links），当前内容为空，表示所有依赖均来自 PyPI 标准源。",
+      "tags": ["构建系统", "元数据", "配置"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:bughunterv2.egg-info/requires.txt",
+      "type": "document",
+      "name": "requires.txt",
+      "filePath": "bughunterv2.egg-info/requires.txt",
+      "summary": "Python 包依赖声明文件，记录 bughunterv2 的运行时依赖（langgraph、langchain-openai、langchain-core、pyyaml）及开发依赖（pytest、black、isort、mypy），由 setuptools 从 pyproject.toml 生成。",
+      "tags": ["构建系统", "元数据", "依赖管理"],
+      "complexity": "simple",
+      "languageNotes": "依赖分为主依赖组和 [dev] 扩展组，对应 pyproject.toml 的 optional-dependencies。"
+    },
+    {
+      "id": "document:bughunterv2.egg-info/top_level.txt",
+      "type": "document",
+      "name": "top_level.txt",
+      "filePath": "bughunterv2.egg-info/top_level.txt",
+      "summary": "Python 包元数据文件，列出包安装后的顶层模块目录（docs、src、tests、workspace），用于 pip 卸载时定位并清理已安装内容。",
+      "tags": ["构建系统", "元数据", "配置"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": []
+}

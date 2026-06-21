@@ -1,0 +1,1159 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 3,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "commit_fix.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 259,
+      "nonEmptyLines": 223,
+      "functions": [
+        {
+          "name": "_revert_and_abort",
+          "startLine": 23,
+          "endLine": 30,
+          "params": [
+            "source_dir",
+            "files",
+            "msg"
+          ]
+        },
+        {
+          "name": "main",
+          "startLine": 33,
+          "endLine": 66,
+          "params": []
+        },
+        {
+          "name": "_run_with_workspace",
+          "startLine": 69,
+          "endLine": 153,
+          "params": [
+            "workspace_root",
+            "proposal_id",
+            "config",
+            "max_retry",
+            "dry_run"
+          ]
+        },
+        {
+          "name": "_load_proposal",
+          "startLine": 156,
+          "endLine": 206,
+          "params": [
+            "workspace_root",
+            "proposal_id"
+          ]
+        },
+        {
+          "name": "_load_diagnosis",
+          "startLine": 209,
+          "endLine": 255,
+          "params": [
+            "workspace_root",
+            "diagnosis_id"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "_revert_and_abort",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "main",
+          "line": 33,
+          "isDefault": false
+        },
+        {
+          "name": "_run_with_workspace",
+          "line": 69,
+          "isDefault": false
+        },
+        {
+          "name": "_load_proposal",
+          "line": 156,
+          "isDefault": false
+        },
+        {
+          "name": "_load_diagnosis",
+          "line": 209,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_revert_and_abort",
+          "callee": "print",
+          "lineNumber": 25
+        },
+        {
+          "caller": "_revert_and_abort",
+          "callee": "svn_revert",
+          "lineNumber": 27
+        },
+        {
+          "caller": "_revert_and_abort",
+          "callee": "print",
+          "lineNumber": 29
+        },
+        {
+          "caller": "_revert_and_abort",
+          "callee": "sys.exit",
+          "lineNumber": 30
+        },
+        {
+          "caller": "main",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 34
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 38
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 42
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 48
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 55
+        },
+        {
+          "caller": "main",
+          "callee": "parser.parse_args",
+          "lineNumber": 60
+        },
+        {
+          "caller": "main",
+          "callee": "load_config",
+          "lineNumber": 62
+        },
+        {
+          "caller": "main",
+          "callee": "os.path.join",
+          "lineNumber": 64
+        },
+        {
+          "caller": "main",
+          "callee": "os.path.dirname",
+          "lineNumber": 64
+        },
+        {
+          "caller": "main",
+          "callee": "os.path.abspath",
+          "lineNumber": 64
+        },
+        {
+          "caller": "main",
+          "callee": "_run_with_workspace",
+          "lineNumber": 66
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "_load_proposal",
+          "lineNumber": 87
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "print",
+          "lineNumber": 89
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "sys.exit",
+          "lineNumber": 94
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "_load_diagnosis",
+          "lineNumber": 96
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "range",
+          "lineNumber": 99
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "os.path.join",
+          "lineNumber": 100
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "list",
+          "lineNumber": 101
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "snapshot_hashes",
+          "lineNumber": 103
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "svn_update",
+          "lineNumber": 104
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "detect_conflicts",
+          "lineNumber": 106
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "print",
+          "lineNumber": 109
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "len",
+          "lineNumber": 111
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "os.path.join",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "uuid.uuid4",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "FixAgent",
+          "lineNumber": 116
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "agent.run",
+          "lineNumber": 117
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "print",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "sys.exit",
+          "lineNumber": 123
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "print",
+          "lineNumber": 127
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "len",
+          "lineNumber": 129
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "sys.exit",
+          "lineNumber": 132
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "generate_diff",
+          "lineNumber": 134
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "print",
+          "lineNumber": 135
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "print",
+          "lineNumber": 138
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "sys.exit",
+          "lineNumber": 139
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "apply_edits",
+          "lineNumber": 142
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "_revert_and_abort",
+          "lineNumber": 144
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "svn_commit",
+          "lineNumber": 148
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "_revert_and_abort",
+          "lineNumber": 150
+        },
+        {
+          "caller": "_run_with_workspace",
+          "callee": "print",
+          "lineNumber": 152
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "os.path.join",
+          "lineNumber": 169
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "os.path.isfile",
+          "lineNumber": 170
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "print",
+          "lineNumber": 171
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "sys.exit",
+          "lineNumber": 172
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "open",
+          "lineNumber": 174
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "json.load",
+          "lineNumber": 175
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "print",
+          "lineNumber": 177
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "sys.exit",
+          "lineNumber": 178
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "data.get",
+          "lineNumber": 181
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "isinstance",
+          "lineNumber": 182
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "str",
+          "lineNumber": 184
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "e.get",
+          "lineNumber": 184
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "os.path.isabs",
+          "lineNumber": 185
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "pathlib.PurePath",
+          "lineNumber": 185
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "print",
+          "lineNumber": 186
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "sys.exit",
+          "lineNumber": 191
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "edits.append",
+          "lineNumber": 192
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "FixEdit",
+          "lineNumber": 192
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "int",
+          "lineNumber": 194
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "e.get",
+          "lineNumber": 194
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "int",
+          "lineNumber": 195
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "e.get",
+          "lineNumber": 195
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "str",
+          "lineNumber": 196
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "e.get",
+          "lineNumber": 196
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "str",
+          "lineNumber": 197
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "e.get",
+          "lineNumber": 197
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "FixProposal",
+          "lineNumber": 199
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "str",
+          "lineNumber": 200
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "data.get",
+          "lineNumber": 200
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "str",
+          "lineNumber": 201
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "data.get",
+          "lineNumber": 201
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "str",
+          "lineNumber": 202
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "data.get",
+          "lineNumber": 202
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "str",
+          "lineNumber": 203
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "data.get",
+          "lineNumber": 203
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "str",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_load_proposal",
+          "callee": "data.get",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "os.path.join",
+          "lineNumber": 222
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "os.path.isfile",
+          "lineNumber": 223
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "print",
+          "lineNumber": 224
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "sys.exit",
+          "lineNumber": 225
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "open",
+          "lineNumber": 227
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "json.load",
+          "lineNumber": 228
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "print",
+          "lineNumber": 230
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "sys.exit",
+          "lineNumber": 231
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "data.get",
+          "lineNumber": 234
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "Conclusion",
+          "lineNumber": 236
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "c.get",
+          "lineNumber": 237
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "c.get",
+          "lineNumber": 238
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "c.get",
+          "lineNumber": 239
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "c.get",
+          "lineNumber": 240
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "c.get",
+          "lineNumber": 241
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "c.get",
+          "lineNumber": 242
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "data.get",
+          "lineNumber": 245
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "DiagnosisReport",
+          "lineNumber": 246
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "str",
+          "lineNumber": 247
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "data.get",
+          "lineNumber": 247
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "str",
+          "lineNumber": 248
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "data.get",
+          "lineNumber": 248
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "str",
+          "lineNumber": 249
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "data.get",
+          "lineNumber": 249
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "DiagnosisInput",
+          "lineNumber": 250
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "inp.get",
+          "lineNumber": 251
+        },
+        {
+          "caller": "_load_diagnosis",
+          "callee": "inp.get",
+          "lineNumber": 252
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 5,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/commit/patcher.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 192,
+      "nonEmptyLines": 154,
+      "functions": [
+        {
+          "name": "_safe_join",
+          "startLine": 14,
+          "endLine": 30,
+          "params": [
+            "base",
+            "rel"
+          ]
+        },
+        {
+          "name": "snapshot_hashes",
+          "startLine": 33,
+          "endLine": 51,
+          "params": [
+            "source_dir",
+            "files"
+          ]
+        },
+        {
+          "name": "detect_conflicts",
+          "startLine": 54,
+          "endLine": 74,
+          "params": [
+            "old_hashes",
+            "source_dir"
+          ]
+        },
+        {
+          "name": "apply_edits",
+          "startLine": 77,
+          "endLine": 135,
+          "params": [
+            "source_dir",
+            "edits"
+          ]
+        },
+        {
+          "name": "generate_diff",
+          "startLine": 138,
+          "endLine": 168,
+          "params": [
+            "source_dir",
+            "workspace_dir",
+            "files"
+          ]
+        },
+        {
+          "name": "_atomic_write_lines",
+          "startLine": 171,
+          "endLine": 184,
+          "params": [
+            "path",
+            "lines"
+          ]
+        },
+        {
+          "name": "_read_lines",
+          "startLine": 187,
+          "endLine": 192,
+          "params": [
+            "path"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "_safe_join",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "snapshot_hashes",
+          "line": 33,
+          "isDefault": false
+        },
+        {
+          "name": "detect_conflicts",
+          "line": 54,
+          "isDefault": false
+        },
+        {
+          "name": "apply_edits",
+          "line": 77,
+          "isDefault": false
+        },
+        {
+          "name": "generate_diff",
+          "line": 138,
+          "isDefault": false
+        },
+        {
+          "name": "_atomic_write_lines",
+          "line": 171,
+          "isDefault": false
+        },
+        {
+          "name": "_read_lines",
+          "line": 187,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_safe_join",
+          "callee": "ValueError",
+          "lineNumber": 21
+        },
+        {
+          "caller": "_safe_join",
+          "callee": "os.path.isabs",
+          "lineNumber": 22
+        },
+        {
+          "caller": "_safe_join",
+          "callee": "ValueError",
+          "lineNumber": 23
+        },
+        {
+          "caller": "_safe_join",
+          "callee": "pathlib.Path(base).resolve",
+          "lineNumber": 24
+        },
+        {
+          "caller": "_safe_join",
+          "callee": "pathlib.Path",
+          "lineNumber": 24
+        },
+        {
+          "caller": "_safe_join",
+          "callee": "(base_path / rel).resolve",
+          "lineNumber": 25
+        },
+        {
+          "caller": "_safe_join",
+          "callee": "target.relative_to",
+          "lineNumber": 27
+        },
+        {
+          "caller": "_safe_join",
+          "callee": "ValueError",
+          "lineNumber": 29
+        },
+        {
+          "caller": "_safe_join",
+          "callee": "str",
+          "lineNumber": 30
+        },
+        {
+          "caller": "snapshot_hashes",
+          "callee": "_safe_join",
+          "lineNumber": 48
+        },
+        {
+          "caller": "snapshot_hashes",
+          "callee": "open",
+          "lineNumber": 49
+        },
+        {
+          "caller": "snapshot_hashes",
+          "callee": "hashlib.sha256(fh.read()).hexdigest",
+          "lineNumber": 50
+        },
+        {
+          "caller": "snapshot_hashes",
+          "callee": "hashlib.sha256",
+          "lineNumber": 50
+        },
+        {
+          "caller": "snapshot_hashes",
+          "callee": "fh.read",
+          "lineNumber": 50
+        },
+        {
+          "caller": "detect_conflicts",
+          "callee": "old_hashes.items",
+          "lineNumber": 65
+        },
+        {
+          "caller": "detect_conflicts",
+          "callee": "_safe_join",
+          "lineNumber": 66
+        },
+        {
+          "caller": "detect_conflicts",
+          "callee": "os.path.exists",
+          "lineNumber": 67
+        },
+        {
+          "caller": "detect_conflicts",
+          "callee": "conflicts.append",
+          "lineNumber": 68
+        },
+        {
+          "caller": "detect_conflicts",
+          "callee": "open",
+          "lineNumber": 70
+        },
+        {
+          "caller": "detect_conflicts",
+          "callee": "hashlib.sha256(fh.read()).hexdigest",
+          "lineNumber": 71
+        },
+        {
+          "caller": "detect_conflicts",
+          "callee": "hashlib.sha256",
+          "lineNumber": 71
+        },
+        {
+          "caller": "detect_conflicts",
+          "callee": "fh.read",
+          "lineNumber": 71
+        },
+        {
+          "caller": "detect_conflicts",
+          "callee": "conflicts.append",
+          "lineNumber": 73
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "_safe_join",
+          "lineNumber": 98
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "edits_by_file.setdefault(edit.file, []).append",
+          "lineNumber": 99
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "edits_by_file.setdefault",
+          "lineNumber": 99
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "edits_by_file.items",
+          "lineNumber": 104
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "_safe_join",
+          "lineNumber": 105
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "open",
+          "lineNumber": 106
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "fh.readlines",
+          "lineNumber": 107
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "list",
+          "lineNumber": 109
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "len",
+          "lineNumber": 110
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "sorted",
+          "lineNumber": 112
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "ValueError",
+          "lineNumber": 115
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "reversed",
+          "lineNumber": 120
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "edit.new_content.splitlines",
+          "lineNumber": 122
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "_atomic_write_lines",
+          "lineNumber": 125
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "written.items",
+          "lineNumber": 130
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "_atomic_write_lines",
+          "lineNumber": 132
+        },
+        {
+          "caller": "apply_edits",
+          "callee": "_safe_join",
+          "lineNumber": 132
+        },
+        {
+          "caller": "generate_diff",
+          "callee": "_safe_join",
+          "lineNumber": 151
+        },
+        {
+          "caller": "generate_diff",
+          "callee": "_safe_join",
+          "lineNumber": 152
+        },
+        {
+          "caller": "generate_diff",
+          "callee": "_read_lines",
+          "lineNumber": 154
+        },
+        {
+          "caller": "generate_diff",
+          "callee": "_read_lines",
+          "lineNumber": 155
+        },
+        {
+          "caller": "generate_diff",
+          "callee": "list",
+          "lineNumber": 157
+        },
+        {
+          "caller": "generate_diff",
+          "callee": "difflib.unified_diff",
+          "lineNumber": 158
+        },
+        {
+          "caller": "generate_diff",
+          "callee": "chunks.extend",
+          "lineNumber": 166
+        },
+        {
+          "caller": "generate_diff",
+          "callee": "\"\".join",
+          "lineNumber": 168
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "os.path.dirname",
+          "lineNumber": 173
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "tempfile.mkstemp",
+          "lineNumber": 174
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "os.fdopen",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "fh.writelines",
+          "lineNumber": 177
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "os.replace",
+          "lineNumber": 178
+        },
+        {
+          "caller": "_atomic_write_lines",
+          "callee": "os.unlink",
+          "lineNumber": 181
+        },
+        {
+          "caller": "_read_lines",
+          "callee": "os.path.exists",
+          "lineNumber": 189
+        },
+        {
+          "caller": "_read_lines",
+          "callee": "open",
+          "lineNumber": 191
+        },
+        {
+          "caller": "_read_lines",
+          "callee": "fh.readlines",
+          "lineNumber": 192
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 7,
+        "functionCount": 7,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/commit/svn.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 77,
+      "nonEmptyLines": 63,
+      "functions": [
+        {
+          "name": "svn_update",
+          "startLine": 7,
+          "endLine": 25,
+          "params": [
+            "path"
+          ]
+        },
+        {
+          "name": "svn_commit",
+          "startLine": 28,
+          "endLine": 53,
+          "params": [
+            "path",
+            "message"
+          ]
+        },
+        {
+          "name": "svn_revert",
+          "startLine": 56,
+          "endLine": 77,
+          "params": [
+            "path",
+            "files"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "svn_update",
+          "line": 7,
+          "isDefault": false
+        },
+        {
+          "name": "svn_commit",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "svn_revert",
+          "line": 56,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "svn_update",
+          "callee": "subprocess.run",
+          "lineNumber": 16
+        },
+        {
+          "caller": "svn_update",
+          "callee": "RuntimeError",
+          "lineNumber": 23
+        },
+        {
+          "caller": "svn_update",
+          "callee": "result.stderr.strip",
+          "lineNumber": 24
+        },
+        {
+          "caller": "svn_commit",
+          "callee": "subprocess.run",
+          "lineNumber": 42
+        },
+        {
+          "caller": "svn_commit",
+          "callee": "RuntimeError",
+          "lineNumber": 49
+        },
+        {
+          "caller": "svn_commit",
+          "callee": "result.stderr.strip",
+          "lineNumber": 50
+        },
+        {
+          "caller": "svn_commit",
+          "callee": "re.search",
+          "lineNumber": 52
+        },
+        {
+          "caller": "svn_commit",
+          "callee": "match.group",
+          "lineNumber": 53
+        },
+        {
+          "caller": "svn_revert",
+          "callee": "subprocess.run",
+          "lineNumber": 68
+        },
+        {
+          "caller": "svn_revert",
+          "callee": "RuntimeError",
+          "lineNumber": 75
+        },
+        {
+          "caller": "svn_revert",
+          "callee": "result.stderr.strip",
+          "lineNumber": 76
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    }
+  ]
+}

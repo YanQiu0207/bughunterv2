@@ -1,0 +1,335 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/agent/diagnosis_agent.py",
+      "type": "file",
+      "name": "diagnosis_agent.py",
+      "filePath": "src/agent/diagnosis_agent.py",
+      "summary": "核心诊断 agent 实现：封装 LangGraph ReAct agent，编排 read_source / find_callers / submit_diagnosis 三个工具，对 Java 异常堆栈进行回溯根因诊断，并将结果原子写入 workspace/diagnosis/ 目录。",
+      "tags": ["service", "agent", "entry-point", "event-handler"],
+      "complexity": "complex",
+      "languageNotes": "使用工厂函数（make_*_tool）在运行时动态绑定工具上下文，通过 result_holder 字典捕获 LangGraph agent 的结构化输出，采用临时文件重命名实现 checkpoint 原子写入。"
+    },
+    {
+      "id": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "type": "class",
+      "name": "DiagnosisAgent",
+      "filePath": "src/agent/diagnosis_agent.py",
+      "lineRange": [93, 219],
+      "summary": "封装整个诊断流程的主控类：持有配置、SourceIndex 和源码目录，通过 run() 方法组装工具、构建 LLM、调用 LangGraph ReAct agent 并返回 DiagnosisReport。",
+      "tags": ["service", "agent", "singleton"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/agent/diagnosis_agent.py:make_submit_diagnosis_tool",
+      "type": "function",
+      "name": "make_submit_diagnosis_tool",
+      "filePath": "src/agent/diagnosis_agent.py",
+      "lineRange": [32, 90],
+      "summary": "工厂函数：返回一个 LangChain @tool 闭包 submit_diagnosis，将 agent 提交的根因诊断字段写入外部 result_holder 字典，重复调用时只保留第一次有效提交。",
+      "tags": ["factory", "tool-definition", "event-handler"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/agent/diagnosis_agent.py:_build_conclusion",
+      "type": "function",
+      "name": "_build_conclusion",
+      "filePath": "src/agent/diagnosis_agent.py",
+      "lineRange": [222, 248],
+      "summary": "从 result_holder 字典构建 Conclusion 数据对象，处理空提交和非法置信度值的边界情况。",
+      "tags": ["utility", "serialization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/agent/diagnosis_agent.py:_report_to_dict",
+      "type": "function",
+      "name": "_report_to_dict",
+      "filePath": "src/agent/diagnosis_agent.py",
+      "lineRange": [265, 312],
+      "summary": "将 DiagnosisReport 数据模型序列化为 JSON 兼容的 dict，用于 checkpoint 写盘和最终输出。",
+      "tags": ["utility", "serialization"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/agent/prompts.py",
+      "type": "file",
+      "name": "prompts.py",
+      "filePath": "src/agent/prompts.py",
+      "summary": "为 DiagnosisAgent 构建系统提示的模块，将回溯诊断算法、框架包过滤规则和终止条件编码到 LLM system prompt 字符串中。",
+      "tags": ["utility", "service"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/agent/prompts.py:build_system_prompt",
+      "type": "function",
+      "name": "build_system_prompt",
+      "filePath": "src/agent/prompts.py",
+      "lineRange": [4, 75],
+      "summary": "根据最大步数和框架包前缀列表动态生成诊断 agent 的 system prompt，包含完整的回溯算法描述和输出格式要求。",
+      "tags": ["utility", "factory"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/source_index.py",
+      "type": "file",
+      "name": "source_index.py",
+      "filePath": "src/source_index.py",
+      "summary": "提供 Java 源文件索引功能：扫描 Maven 项目目录，建立简单类名到绝对路径的映射，支持全限定类名的最后段匹配解析。",
+      "tags": ["utility", "service", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/source_index.py:SourceIndex",
+      "type": "class",
+      "name": "SourceIndex",
+      "filePath": "src/source_index.py",
+      "lineRange": [6, 57],
+      "summary": "Java 类名到文件路径的索引类，支持多源根目录扫描、简单类名和全限定类名两种解析模式。",
+      "tags": ["utility", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/tools/find_callers.py",
+      "type": "file",
+      "name": "find_callers.py",
+      "filePath": "src/tools/find_callers.py",
+      "summary": "提供 find_callers LangChain 工具的工厂模块：在 Java 源码目录中全文搜索指定方法名的调用点，返回带行号的匹配结果列表，结果上限 20 条。",
+      "tags": ["utility", "tool-definition", "api-handler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/find_callers.py:make_find_callers_tool",
+      "type": "function",
+      "name": "make_find_callers_tool",
+      "filePath": "src/tools/find_callers.py",
+      "lineRange": [10, 67],
+      "summary": "工厂函数：返回绑定到指定 src_dir 的 LangChain @tool 闭包，递归扫描所有 .java 文件查找方法调用点，最多返回 20 条结果。",
+      "tags": ["factory", "tool-definition", "utility"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/tools/read_source.py",
+      "type": "file",
+      "name": "read_source.py",
+      "filePath": "src/tools/read_source.py",
+      "summary": "提供 read_source LangChain 工具的工厂模块：通过 SourceIndex 解析类名路径，读取指定行范围的 Java 源码片段并带行号返回。",
+      "tags": ["utility", "tool-definition", "api-handler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/tools/read_source.py:make_read_source_tool",
+      "type": "function",
+      "name": "make_read_source_tool",
+      "filePath": "src/tools/read_source.py",
+      "lineRange": [10, 57],
+      "summary": "工厂函数：返回绑定到 SourceIndex 实例的 LangChain @tool 闭包，按行范围读取 Java 源码并自动截断到文件实际边界。",
+      "tags": ["factory", "tool-definition", "utility"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/agent/prompts.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/source_index.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/tools/find_callers.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "file:src/tools/read_source.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/tools/read_source.py",
+      "target": "file:src/source_index.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "function:src/agent/diagnosis_agent.py:make_submit_diagnosis_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "function:src/agent/diagnosis_agent.py:make_submit_diagnosis_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "function:src/agent/diagnosis_agent.py:_build_conclusion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/diagnosis_agent.py",
+      "target": "function:src/agent/diagnosis_agent.py:_report_to_dict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/prompts.py",
+      "target": "function:src/agent/prompts.py:build_system_prompt",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/agent/prompts.py",
+      "target": "function:src/agent/prompts.py:build_system_prompt",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/source_index.py",
+      "target": "class:src/source_index.py:SourceIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/source_index.py",
+      "target": "class:src/source_index.py:SourceIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/find_callers.py",
+      "target": "function:src/tools/find_callers.py:make_find_callers_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/find_callers.py",
+      "target": "function:src/tools/find_callers.py:make_find_callers_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/tools/read_source.py",
+      "target": "function:src/tools/read_source.py:make_read_source_tool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/tools/read_source.py",
+      "target": "function:src/tools/read_source.py:make_read_source_tool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "function:src/agent/prompts.py:build_system_prompt",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "function:src/tools/read_source.py:make_read_source_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "function:src/tools/find_callers.py:make_find_callers_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "function:src/agent/diagnosis_agent.py:make_submit_diagnosis_tool",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "class:src/source_index.py:SourceIndex",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "class:src/models.py:DiagnosisReport",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+      "target": "class:src/config.py:Config",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "function:src/tools/read_source.py:make_read_source_tool",
+      "target": "class:src/source_index.py:SourceIndex",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

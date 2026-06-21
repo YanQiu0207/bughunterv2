@@ -1,0 +1,23 @@
+{
+  "projectRoot": "E:/work/bughunterv2",
+  "batchFiles": [
+    {"path": "fix.py", "language": "python", "sizeLines": 143, "fileCategory": "code"},
+    {"path": "src/agent/fix_agent.py", "language": "python", "sizeLines": 265, "fileCategory": "code"},
+    {"path": "src/agent/fix_prompts.py", "language": "python", "sizeLines": 61, "fileCategory": "code"},
+    {"path": "src/config.py", "language": "python", "sizeLines": 98, "fileCategory": "code"},
+    {"path": "src/tools/_command_runner.py", "language": "python", "sizeLines": 81, "fileCategory": "code"},
+    {"path": "src/tools/apply_fix.py", "language": "python", "sizeLines": 324, "fileCategory": "code"},
+    {"path": "src/tools/run_build.py", "language": "python", "sizeLines": 55, "fileCategory": "code"},
+    {"path": "src/tools/run_tests.py", "language": "python", "sizeLines": 56, "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "fix.py": ["src/agent/fix_agent.py", "src/config.py", "src/models.py"],
+    "src/agent/fix_agent.py": ["src/agent/fix_prompts.py", "src/config.py", "src/models.py", "src/tools/apply_fix.py", "src/tools/run_build.py", "src/tools/run_tests.py"],
+    "src/agent/fix_prompts.py": [],
+    "src/config.py": [],
+    "src/tools/_command_runner.py": [],
+    "src/tools/apply_fix.py": ["src/tools/_command_runner.py"],
+    "src/tools/run_build.py": ["src/tools/_command_runner.py"],
+    "src/tools/run_tests.py": ["src/tools/_command_runner.py"]
+  }
+}

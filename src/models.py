@@ -1,4 +1,4 @@
-"""Data models shared across the M1 diagnosis pipeline."""
+"""Data models shared across the diagnosis and fix pipelines."""
 
 from dataclasses import dataclass, field
 from typing import Literal
@@ -76,3 +76,29 @@ class DiagnosisReport:
     input: DiagnosisInput
     backtrace_steps: list[BacktraceStep] = field(default_factory=list)
     conclusion: Conclusion | None = None
+
+
+@dataclass
+class FixEdit:
+    """One line-level code edit within a fix proposal."""
+
+    file: str
+    start_line: int
+    end_line: int
+    new_content: str
+    reason: str
+
+
+@dataclass
+class FixProposal:
+    """A complete fix proposal generated from a DiagnosisReport.
+
+    Persisted to workspace/fix/<proposal_id>.json.
+    """
+
+    proposal_id: str
+    diagnosis_id: str
+    created_at: str
+    status: Literal["draft", "applied", "verified"]
+    edits: list[FixEdit]
+    summary: str

@@ -8,7 +8,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from langchain_anthropic import ChatAnthropic
+from src.runtime_noise import configure_runtime_noise_filters
+
+configure_runtime_noise_filters()
+
+from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool
 from langgraph.prebuilt import create_react_agent
 
@@ -141,14 +145,18 @@ class DiagnosisAgent:
             make_submit_diagnosis_tool(result_holder),
         ]
 
-        llm = ChatAnthropic(
-            model="claude-sonnet-4-6",
+        llm = ChatOpenAI(
+            model=self._config.llm_model,
+            base_url=self._config.llm_base_url,
+            api_key=self._config.llm_api_key,
             max_tokens=4096,
         )
 
         system_prompt = build_system_prompt(
             max_steps=self._config.max_steps,
             framework_packages=self._config.framework_packages,
+            output_language=self._config.diagnosis_output_language,
+            extra_instructions=self._config.diagnosis_prompt_append,
         )
 
         # LangGraph 0.2 uses messages_modifier for system prompt injection

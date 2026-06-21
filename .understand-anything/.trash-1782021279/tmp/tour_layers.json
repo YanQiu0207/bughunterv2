@@ -1,0 +1,32 @@
+[
+  {
+    "id": "layer:entry",
+    "name": "入口层",
+    "description": "面向用户的命令行入口脚本（diagnose.py、fix.py、commit_fix.py），负责读取配置和输入、驱动完整的诊断或修复流程，以及 Python 包初始化文件。"
+  },
+  {
+    "id": "layer:agent",
+    "name": "Agent 层",
+    "description": "基于 LangGraph/LangChain 实现的 DiagnosisAgent 和 FixAgent，包含对应的系统提示词模板，负责编排 LLM ReAct 推理循环与工具调用策略。"
+  },
+  {
+    "id": "layer:tools",
+    "name": "工具层",
+    "description": "供 Agent 调用的 LangChain 工具封装，涵盖 Java 源码读取、调用方查找、代码修复应用、Maven 构建和测试执行，以及底层 shell 命令执行器。"
+  },
+  {
+    "id": "layer:commit",
+    "name": "提交层",
+    "description": "SVN 版本提交子系统，封装 svn update/commit/revert 命令以及冲突检测、行级补丁应用和 diff 生成等文件变更管理能力。"
+  },
+  {
+    "id": "layer:core",
+    "name": "核心基础层",
+    "description": "被所有业务层共享的基础模块：全局数据契约模型（models.py）、运行时配置加载（config.py）、Java 源码索引（source_index.py）、堆栈解析（stack_parser.py）和诊断报告序列化（report_writer.py）。"
+  },
+  {
+    "id": "layer:project-support",
+    "name": "项目支撑层",
+    "description": "项目级文档、运行时配置文件、Python 包元数据、OpenSpec 变更规格文档、工具配置及工作区占位文件，不参与运行时逻辑但支撑项目工程管理。"
+  }
+]

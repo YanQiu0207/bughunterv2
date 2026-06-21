@@ -1,0 +1,1178 @@
+[
+  {
+    "source": "file:fix.py",
+    "target": "file:src/agent/fix_agent.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:fix.py",
+    "target": "file:src/config.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:fix.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/agent/fix_prompts.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/config.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/tools/apply_fix.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/tools/run_build.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "file:src/tools/run_tests.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/tools/apply_fix.py",
+    "target": "file:src/tools/_command_runner.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/tools/run_build.py",
+    "target": "file:src/tools/_command_runner.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/tools/run_tests.py",
+    "target": "file:src/tools/_command_runner.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:fix.py",
+    "target": "function:fix.py:main",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:fix.py",
+    "target": "function:fix.py:_load_report",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:fix.py",
+    "target": "function:fix.py:_print_summary",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "class:src/agent/fix_agent.py:FixAgent",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "function:src/agent/fix_agent.py:make_submit_fix_proposal_tool",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "function:src/agent/fix_agent.py:_build_user_message",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "function:src/agent/fix_agent.py:_build_fix_proposal",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "function:src/agent/fix_agent.py:_proposal_to_dict",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/agent/fix_prompts.py",
+    "target": "function:src/agent/fix_prompts.py:build_fix_system_prompt",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/config.py",
+    "target": "class:src/config.py:Config",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/config.py",
+    "target": "function:src/config.py:load_config",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/tools/_command_runner.py",
+    "target": "function:src/tools/_command_runner.py:validate_fix_id",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/tools/_command_runner.py",
+    "target": "function:src/tools/_command_runner.py:run_command_in_workspace",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/tools/apply_fix.py",
+    "target": "function:src/tools/apply_fix.py:make_apply_fix_tool",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/tools/apply_fix.py",
+    "target": "function:src/tools/apply_fix.py:_validate_rel_path",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/tools/apply_fix.py",
+    "target": "function:src/tools/apply_fix.py:_load_modified_registry",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/tools/apply_fix.py",
+    "target": "function:src/tools/apply_fix.py:_save_modified_registry",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/tools/apply_fix.py",
+    "target": "function:src/tools/apply_fix.py:_atomic_write_lines",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/tools/run_build.py",
+    "target": "function:src/tools/run_build.py:make_run_build_tool",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/tools/run_tests.py",
+    "target": "function:src/tools/run_tests.py:make_run_tests_tool",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:fix.py",
+    "target": "function:fix.py:main",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "class:src/agent/fix_agent.py:FixAgent",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/agent/fix_agent.py",
+    "target": "function:src/agent/fix_agent.py:make_submit_fix_proposal_tool",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/agent/fix_prompts.py",
+    "target": "function:src/agent/fix_prompts.py:build_fix_system_prompt",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/config.py",
+    "target": "class:src/config.py:Config",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/config.py",
+    "target": "function:src/config.py:load_config",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/tools/_command_runner.py",
+    "target": "function:src/tools/_command_runner.py:validate_fix_id",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/tools/_command_runner.py",
+    "target": "function:src/tools/_command_runner.py:run_command_in_workspace",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/tools/apply_fix.py",
+    "target": "function:src/tools/apply_fix.py:make_apply_fix_tool",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/tools/run_build.py",
+    "target": "function:src/tools/run_build.py:make_run_build_tool",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/tools/run_tests.py",
+    "target": "function:src/tools/run_tests.py:make_run_tests_tool",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:fix.py:main",
+    "target": "class:src/agent/fix_agent.py:FixAgent",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:fix.py:main",
+    "target": "function:src/config.py:load_config",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "class:src/agent/fix_agent.py:FixAgent",
+    "target": "function:src/agent/fix_prompts.py:build_fix_system_prompt",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "class:src/agent/fix_agent.py:FixAgent",
+    "target": "function:src/tools/apply_fix.py:make_apply_fix_tool",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "class:src/agent/fix_agent.py:FixAgent",
+    "target": "function:src/tools/run_build.py:make_run_build_tool",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "class:src/agent/fix_agent.py:FixAgent",
+    "target": "function:src/tools/run_tests.py:make_run_tests_tool",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/agent/prompts.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/config.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/source_index.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/tools/find_callers.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "file:src/tools/read_source.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/tools/read_source.py",
+    "target": "file:src/source_index.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "function:src/agent/diagnosis_agent.py:make_submit_diagnosis_tool",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "function:src/agent/diagnosis_agent.py:make_submit_diagnosis_tool",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "function:src/agent/diagnosis_agent.py:_build_conclusion",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/agent/diagnosis_agent.py",
+    "target": "function:src/agent/diagnosis_agent.py:_report_to_dict",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/agent/prompts.py",
+    "target": "function:src/agent/prompts.py:build_system_prompt",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/agent/prompts.py",
+    "target": "function:src/agent/prompts.py:build_system_prompt",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/source_index.py",
+    "target": "class:src/source_index.py:SourceIndex",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/source_index.py",
+    "target": "class:src/source_index.py:SourceIndex",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/tools/find_callers.py",
+    "target": "function:src/tools/find_callers.py:make_find_callers_tool",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/tools/find_callers.py",
+    "target": "function:src/tools/find_callers.py:make_find_callers_tool",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/tools/read_source.py",
+    "target": "function:src/tools/read_source.py:make_read_source_tool",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/tools/read_source.py",
+    "target": "function:src/tools/read_source.py:make_read_source_tool",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+    "target": "function:src/agent/prompts.py:build_system_prompt",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+    "target": "function:src/tools/read_source.py:make_read_source_tool",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+    "target": "function:src/tools/find_callers.py:make_find_callers_tool",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+    "target": "function:src/agent/diagnosis_agent.py:make_submit_diagnosis_tool",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+    "target": "class:src/source_index.py:SourceIndex",
+    "type": "depends_on",
+    "direction": "forward",
+    "weight": 0.6
+  },
+  {
+    "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+    "target": "class:src/models.py:DiagnosisReport",
+    "type": "depends_on",
+    "direction": "forward",
+    "weight": 0.6
+  },
+  {
+    "source": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+    "target": "class:src/config.py:Config",
+    "type": "depends_on",
+    "direction": "forward",
+    "weight": 0.6
+  },
+  {
+    "source": "function:src/tools/read_source.py:make_read_source_tool",
+    "target": "class:src/source_index.py:SourceIndex",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "function:diagnose.py:main",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "function:diagnose.py:main",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "file:src/agent/diagnosis_agent.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "file:src/config.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "file:src/report_writer.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "file:src/source_index.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:diagnose.py",
+    "target": "file:src/stack_parser.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "function:diagnose.py:main",
+    "target": "class:src/agent/diagnosis_agent.py:DiagnosisAgent",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:diagnose.py:main",
+    "target": "class:src/source_index.py:SourceIndex",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:diagnose.py:main",
+    "target": "function:src/stack_parser.py:parse_stack_trace",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:diagnose.py:main",
+    "target": "function:src/stack_parser.py:find_business_top_frame",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:diagnose.py:main",
+    "target": "function:src/report_writer.py:print_summary",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:diagnose.py:main",
+    "target": "function:src/report_writer.py:write_json",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:diagnose.py:main",
+    "target": "function:src/config.py:load_config",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:StackFrame",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:StackFrame",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:Location",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:Location",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:EvidenceItem",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:EvidenceItem",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:BacktraceStep",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:BacktraceStep",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:Conclusion",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:Conclusion",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:DiagnosisInput",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:DiagnosisInput",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:DiagnosisReport",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:DiagnosisReport",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:FixEdit",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:FixEdit",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:FixProposal",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/models.py",
+    "target": "class:src/models.py:FixProposal",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/report_writer.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/report_writer.py",
+    "target": "function:src/report_writer.py:print_summary",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/report_writer.py",
+    "target": "function:src/report_writer.py:print_summary",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/report_writer.py",
+    "target": "function:src/report_writer.py:write_json",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/report_writer.py",
+    "target": "function:src/report_writer.py:write_json",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/stack_parser.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:src/stack_parser.py",
+    "target": "function:src/stack_parser.py:parse_stack_trace",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/stack_parser.py",
+    "target": "function:src/stack_parser.py:parse_stack_trace",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/stack_parser.py",
+    "target": "function:src/stack_parser.py:find_business_top_frame",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/stack_parser.py",
+    "target": "function:src/stack_parser.py:find_business_top_frame",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "file:src/agent/fix_agent.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "file:src/commit/patcher.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "file:src/commit/svn.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "file:src/config.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "file:src/models.py",
+    "type": "imports",
+    "direction": "forward",
+    "weight": 0.7
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "function:commit_fix.py:_revert_and_abort",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "function:commit_fix.py:main",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "function:commit_fix.py:_run_with_workspace",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "function:commit_fix.py:_load_proposal",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:commit_fix.py",
+    "target": "function:commit_fix.py:_load_diagnosis",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "function:commit_fix.py:_revert_and_abort",
+    "target": "function:src/commit/svn.py:svn_revert",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:main",
+    "target": "function:src/config.py:load_config",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_run_with_workspace",
+    "target": "function:src/commit/patcher.py:snapshot_hashes",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_run_with_workspace",
+    "target": "function:src/commit/svn.py:svn_update",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_run_with_workspace",
+    "target": "function:src/commit/patcher.py:detect_conflicts",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_run_with_workspace",
+    "target": "function:src/commit/patcher.py:apply_edits",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_run_with_workspace",
+    "target": "function:src/commit/patcher.py:generate_diff",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_run_with_workspace",
+    "target": "function:src/commit/svn.py:svn_commit",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_run_with_workspace",
+    "target": "function:commit_fix.py:_revert_and_abort",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_load_proposal",
+    "target": "class:src/models.py:FixEdit",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_load_proposal",
+    "target": "class:src/models.py:FixProposal",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_load_diagnosis",
+    "target": "class:src/models.py:Conclusion",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_load_diagnosis",
+    "target": "class:src/models.py:DiagnosisReport",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "function:commit_fix.py:_load_diagnosis",
+    "target": "class:src/models.py:DiagnosisInput",
+    "type": "calls",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/commit/patcher.py",
+    "target": "function:src/commit/patcher.py:_safe_join",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/commit/patcher.py",
+    "target": "function:src/commit/patcher.py:snapshot_hashes",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/commit/patcher.py",
+    "target": "function:src/commit/patcher.py:detect_conflicts",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/commit/patcher.py",
+    "target": "function:src/commit/patcher.py:apply_edits",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/commit/patcher.py",
+    "target": "function:src/commit/patcher.py:generate_diff",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/commit/svn.py",
+    "target": "function:src/commit/svn.py:svn_update",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/commit/svn.py",
+    "target": "function:src/commit/svn.py:svn_commit",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/commit/svn.py",
+    "target": "function:src/commit/svn.py:svn_revert",
+    "type": "contains",
+    "direction": "forward",
+    "weight": 1.0
+  },
+  {
+    "source": "file:src/commit/svn.py",
+    "target": "function:src/commit/svn.py:svn_update",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/commit/svn.py",
+    "target": "function:src/commit/svn.py:svn_commit",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/commit/svn.py",
+    "target": "function:src/commit/svn.py:svn_revert",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/commit/patcher.py",
+    "target": "function:src/commit/patcher.py:snapshot_hashes",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/commit/patcher.py",
+    "target": "function:src/commit/patcher.py:detect_conflicts",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/commit/patcher.py",
+    "target": "function:src/commit/patcher.py:apply_edits",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "file:src/commit/patcher.py",
+    "target": "function:src/commit/patcher.py:generate_diff",
+    "type": "exports",
+    "direction": "forward",
+    "weight": 0.8
+  },
+  {
+    "source": "config:pyproject.toml",
+    "target": "document:CLAUDE.md",
+    "type": "related",
+    "direction": "forward",
+    "weight": 0.5
+  },
+  {
+    "source": "document:openspec/changes/m3-commit-fix/design.md",
+    "target": "document:openspec/changes/m3-commit-fix/proposal.md",
+    "type": "related",
+    "direction": "forward",
+    "weight": 0.5
+  },
+  {
+    "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+    "target": "document:openspec/changes/m3-commit-fix/proposal.md",
+    "type": "related",
+    "direction": "forward",
+    "weight": 0.5
+  },
+  {
+    "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+    "target": "document:openspec/changes/m3-commit-fix/design.md",
+    "type": "related",
+    "direction": "forward",
+    "weight": 0.5
+  },
+  {
+    "source": "document:openspec/changes/m3-commit-fix/design.md",
+    "target": "file:src/config.py",
+    "type": "documents",
+    "direction": "forward",
+    "weight": 0.5
+  },
+  {
+    "source": "document:openspec/changes/m3-commit-fix/design.md",
+    "target": "file:commit_fix.py",
+    "type": "documents",
+    "direction": "forward",
+    "weight": 0.5
+  },
+  {
+    "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+    "target": "file:src/config.py",
+    "type": "documents",
+    "direction": "forward",
+    "weight": 0.5
+  },
+  {
+    "source": "document:openspec/changes/m3-commit-fix/tasks.md",
+    "target": "file:commit_fix.py",
+    "type": "documents",
+    "direction": "forward",
+    "weight": 0.5
+  },
+  {
+    "source": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+    "target": "document:openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md",
+    "type": "related",
+    "direction": "forward",
+    "weight": 0.5
+  }
+]

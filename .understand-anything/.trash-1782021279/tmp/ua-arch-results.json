@@ -1,0 +1,443 @@
+{
+  "scriptCompleted": true,
+  "directoryGroups": {
+    "root": [
+      "file:fix.py",
+      "file:diagnose.py",
+      "file:commit_fix.py",
+      "document:CLAUDE.md",
+      "config:config.yaml",
+      "config:pyproject.toml"
+    ],
+    "src/agent": [
+      "file:src/agent/fix_agent.py",
+      "file:src/agent/fix_prompts.py",
+      "file:src/agent/diagnosis_agent.py",
+      "file:src/agent/prompts.py",
+      "file:src/agent/__init__.py"
+    ],
+    "src/config.py": [
+      "file:src/config.py"
+    ],
+    "src/tools": [
+      "file:src/tools/_command_runner.py",
+      "file:src/tools/apply_fix.py",
+      "file:src/tools/run_build.py",
+      "file:src/tools/run_tests.py",
+      "file:src/tools/find_callers.py",
+      "file:src/tools/read_source.py",
+      "file:src/tools/__init__.py"
+    ],
+    "src/source_index.py": [
+      "file:src/source_index.py"
+    ],
+    "src/models.py": [
+      "file:src/models.py"
+    ],
+    "src/report_writer.py": [
+      "file:src/report_writer.py"
+    ],
+    "src/stack_parser.py": [
+      "file:src/stack_parser.py"
+    ],
+    "src/commit": [
+      "file:src/commit/patcher.py",
+      "file:src/commit/svn.py",
+      "file:src/commit/__init__.py"
+    ],
+    "egg-info": [
+      "document:bughunterv2.egg-info/SOURCES.txt",
+      "document:bughunterv2.egg-info/dependency_links.txt",
+      "document:bughunterv2.egg-info/requires.txt",
+      "document:bughunterv2.egg-info/top_level.txt",
+      "file:bughunterv2.egg-info/PKG-INFO"
+    ],
+    "openspec": [
+      "document:openspec/changes/m3-commit-fix/proposal.md",
+      "document:openspec/changes/m3-commit-fix/design.md",
+      "document:openspec/changes/m3-commit-fix/tasks.md",
+      "document:openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "document:openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md"
+    ],
+    ".understand-anything": [
+      "file:.understand-anything/.understandignore",
+      "config:.understand-anything/config.json"
+    ],
+    "src/__init__.py": [
+      "file:src/__init__.py"
+    ],
+    "workspace": [
+      "file:workspace/diagnosis/.gitkeep"
+    ]
+  },
+  "nodeTypeGroups": {
+    "file": [
+      "file:fix.py",
+      "file:src/agent/fix_agent.py",
+      "file:src/agent/fix_prompts.py",
+      "file:src/config.py",
+      "file:src/tools/_command_runner.py",
+      "file:src/tools/apply_fix.py",
+      "file:src/tools/run_build.py",
+      "file:src/tools/run_tests.py",
+      "file:src/agent/diagnosis_agent.py",
+      "file:src/agent/prompts.py",
+      "file:src/source_index.py",
+      "file:src/tools/find_callers.py",
+      "file:src/tools/read_source.py",
+      "file:diagnose.py",
+      "file:src/models.py",
+      "file:src/report_writer.py",
+      "file:src/stack_parser.py",
+      "file:commit_fix.py",
+      "file:src/commit/patcher.py",
+      "file:src/commit/svn.py",
+      "file:.understand-anything/.understandignore",
+      "file:bughunterv2.egg-info/PKG-INFO",
+      "file:src/__init__.py",
+      "file:src/agent/__init__.py",
+      "file:src/commit/__init__.py",
+      "file:src/tools/__init__.py",
+      "file:workspace/diagnosis/.gitkeep"
+    ],
+    "document": [
+      "document:CLAUDE.md",
+      "document:bughunterv2.egg-info/SOURCES.txt",
+      "document:bughunterv2.egg-info/dependency_links.txt",
+      "document:bughunterv2.egg-info/requires.txt",
+      "document:bughunterv2.egg-info/top_level.txt",
+      "document:openspec/changes/m3-commit-fix/proposal.md",
+      "document:openspec/changes/m3-commit-fix/design.md",
+      "document:openspec/changes/m3-commit-fix/tasks.md",
+      "document:openspec/changes/archive/2026-06-21-m2-fix-agent/proposal.md",
+      "document:openspec/changes/archive/2026-06-21-m2-fix-agent/tasks.md"
+    ],
+    "config": [
+      "config:config.yaml",
+      "config:pyproject.toml",
+      "config:.understand-anything/config.json"
+    ]
+  },
+  "crossCategoryEdges": [
+    {
+      "fromType": "config",
+      "toType": "document",
+      "edgeType": "related",
+      "count": 1
+    },
+    {
+      "fromType": "document",
+      "toType": "file",
+      "edgeType": "documents",
+      "count": 4
+    }
+  ],
+  "interGroupImports": [
+    {
+      "from": "src/agent",
+      "to": "src/tools",
+      "count": 5
+    },
+    {
+      "from": "root",
+      "to": "src/agent",
+      "count": 3
+    },
+    {
+      "from": "root",
+      "to": "src/config.py",
+      "count": 3
+    },
+    {
+      "from": "root",
+      "to": "src/models.py",
+      "count": 2
+    },
+    {
+      "from": "src/agent",
+      "to": "src/config.py",
+      "count": 2
+    },
+    {
+      "from": "src/agent",
+      "to": "src/models.py",
+      "count": 2
+    },
+    {
+      "from": "root",
+      "to": "src/commit",
+      "count": 2
+    },
+    {
+      "from": "src/agent",
+      "to": "src/source_index.py",
+      "count": 1
+    },
+    {
+      "from": "src/tools",
+      "to": "src/source_index.py",
+      "count": 1
+    },
+    {
+      "from": "root",
+      "to": "src/report_writer.py",
+      "count": 1
+    },
+    {
+      "from": "root",
+      "to": "src/source_index.py",
+      "count": 1
+    },
+    {
+      "from": "root",
+      "to": "src/stack_parser.py",
+      "count": 1
+    },
+    {
+      "from": "src/report_writer.py",
+      "to": "src/models.py",
+      "count": 1
+    },
+    {
+      "from": "src/stack_parser.py",
+      "to": "src/models.py",
+      "count": 1
+    }
+  ],
+  "intraGroupDensity": {
+    "root": {
+      "internalEdges": 0,
+      "totalEdges": 13,
+      "density": 0
+    },
+    "src/agent": {
+      "internalEdges": 2,
+      "totalEdges": 15,
+      "density": 0.133
+    },
+    "src/config.py": {
+      "internalEdges": 0,
+      "totalEdges": 5,
+      "density": 0
+    },
+    "src/tools": {
+      "internalEdges": 3,
+      "totalEdges": 9,
+      "density": 0.333
+    },
+    "src/source_index.py": {
+      "internalEdges": 0,
+      "totalEdges": 3,
+      "density": 0
+    },
+    "src/models.py": {
+      "internalEdges": 0,
+      "totalEdges": 6,
+      "density": 0
+    },
+    "src/report_writer.py": {
+      "internalEdges": 0,
+      "totalEdges": 2,
+      "density": 0
+    },
+    "src/stack_parser.py": {
+      "internalEdges": 0,
+      "totalEdges": 2,
+      "density": 0
+    },
+    "src/commit": {
+      "internalEdges": 0,
+      "totalEdges": 2,
+      "density": 0
+    },
+    "egg-info": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "openspec": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    ".understand-anything": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "src/__init__.py": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "workspace": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    }
+  },
+  "patternMatches": {
+    "root": "entry",
+    "src/agent": "service",
+    "src/config.py": "unknown",
+    "src/tools": "utility",
+    "src/source_index.py": "unknown",
+    "src/models.py": "unknown",
+    "src/report_writer.py": "unknown",
+    "src/stack_parser.py": "unknown",
+    "src/commit": "service",
+    "egg-info": "config",
+    "openspec": "documentation",
+    ".understand-anything": "config",
+    "src/__init__.py": "unknown",
+    "workspace": "infrastructure"
+  },
+  "deploymentTopology": {
+    "hasDockerfile": false,
+    "hasCompose": false,
+    "hasK8s": false,
+    "hasTerraform": false,
+    "hasCI": false,
+    "infraFiles": []
+  },
+  "dataPipeline": {
+    "schemaFiles": [],
+    "migrationFiles": [],
+    "dataModelFiles": [
+      "src/models.py"
+    ],
+    "apiHandlerFiles": []
+  },
+  "docCoverage": {
+    "groupsWithDocs": 3,
+    "totalGroups": 14,
+    "coverageRatio": 0.21,
+    "undocumentedGroups": [
+      "src/agent",
+      "src/config.py",
+      "src/tools",
+      "src/source_index.py",
+      "src/models.py",
+      "src/report_writer.py",
+      "src/stack_parser.py",
+      "src/commit",
+      ".understand-anything",
+      "src/__init__.py",
+      "workspace"
+    ]
+  },
+  "dependencyDirection": [
+    {
+      "dependent": "root",
+      "dependsOn": "src/agent"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/config.py"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/models.py"
+    },
+    {
+      "dependent": "src/agent",
+      "dependsOn": "src/config.py"
+    },
+    {
+      "dependent": "src/agent",
+      "dependsOn": "src/models.py"
+    },
+    {
+      "dependent": "src/agent",
+      "dependsOn": "src/tools"
+    },
+    {
+      "dependent": "src/agent",
+      "dependsOn": "src/source_index.py"
+    },
+    {
+      "dependent": "src/tools",
+      "dependsOn": "src/source_index.py"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/report_writer.py"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/source_index.py"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/stack_parser.py"
+    },
+    {
+      "dependent": "src/report_writer.py",
+      "dependsOn": "src/models.py"
+    },
+    {
+      "dependent": "src/stack_parser.py",
+      "dependsOn": "src/models.py"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/commit"
+    }
+  ],
+  "fileStats": {
+    "totalFileNodes": 40,
+    "filesPerGroup": {
+      "root": 6,
+      "src/agent": 5,
+      "src/config.py": 1,
+      "src/tools": 7,
+      "src/source_index.py": 1,
+      "src/models.py": 1,
+      "src/report_writer.py": 1,
+      "src/stack_parser.py": 1,
+      "src/commit": 3,
+      "egg-info": 5,
+      "openspec": 5,
+      ".understand-anything": 2,
+      "src/__init__.py": 1,
+      "workspace": 1
+    },
+    "nodeTypeCounts": {
+      "file": 27,
+      "document": 10,
+      "config": 3
+    }
+  },
+  "fileFanIn": {
+    "file:src/agent/fix_agent.py": 2,
+    "file:src/agent/fix_prompts.py": 1,
+    "file:src/config.py": 5,
+    "file:src/tools/_command_runner.py": 3,
+    "file:src/tools/apply_fix.py": 1,
+    "file:src/tools/run_build.py": 1,
+    "file:src/tools/run_tests.py": 1,
+    "file:src/agent/diagnosis_agent.py": 1,
+    "file:src/agent/prompts.py": 1,
+    "file:src/source_index.py": 3,
+    "file:src/tools/find_callers.py": 1,
+    "file:src/tools/read_source.py": 1,
+    "file:src/models.py": 6,
+    "file:src/report_writer.py": 1,
+    "file:src/stack_parser.py": 1,
+    "file:src/commit/patcher.py": 1,
+    "file:src/commit/svn.py": 1
+  },
+  "fileFanOut": {
+    "file:fix.py": 3,
+    "file:src/agent/fix_agent.py": 6,
+    "file:src/tools/apply_fix.py": 1,
+    "file:src/tools/run_build.py": 1,
+    "file:src/tools/run_tests.py": 1,
+    "file:src/agent/diagnosis_agent.py": 6,
+    "file:src/tools/read_source.py": 1,
+    "file:diagnose.py": 5,
+    "file:src/report_writer.py": 1,
+    "file:src/stack_parser.py": 1,
+    "file:commit_fix.py": 5
+  }
+}

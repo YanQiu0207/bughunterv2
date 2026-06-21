@@ -1,0 +1,3 @@
+  java.lang.NullPointerException: Cannot invoke "com.example.Order.getAmount()" because "order" is null
+      at com.example.OrderService.total(OrderService.java:5)
+      at com.example.OrderService.handle(OrderService.java:10)

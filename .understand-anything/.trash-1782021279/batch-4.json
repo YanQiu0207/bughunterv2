@@ -1,0 +1,436 @@
+{
+  "nodes": [
+    {
+      "id": "file:commit_fix.py",
+      "type": "file",
+      "name": "commit_fix.py",
+      "filePath": "commit_fix.py",
+      "summary": "修复流程的命令行入口脚本，负责加载修复提案与诊断报告、驱动 FixAgent 生成代码修改、校验冲突并通过 SVN 提交最终补丁，同时支持 dry-run 和多轮重试。",
+      "tags": ["入口点", "agent", "修复流程", "svn", "cli"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:commit_fix.py:_revert_and_abort",
+      "type": "function",
+      "name": "_revert_and_abort",
+      "filePath": "commit_fix.py",
+      "lineRange": [23, 30],
+      "summary": "出错回滚辅助函数：调用 svn_revert 撤销已修改的文件，打印错误信息后强制退出进程。",
+      "tags": ["工具函数", "错误处理", "svn"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:commit_fix.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "commit_fix.py",
+      "lineRange": [33, 66],
+      "summary": "CLI 入口：解析 --proposal-id、--diagnosis-id、--workspace、--max-retry、--dry-run 等参数，加载配置后调用 _run_with_workspace 启动完整修复流程。",
+      "tags": ["入口点", "cli", "参数解析"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:commit_fix.py:_run_with_workspace",
+      "type": "function",
+      "name": "_run_with_workspace",
+      "filePath": "commit_fix.py",
+      "lineRange": [69, 153],
+      "summary": "修复流程核心调度器：按重试次数循环执行「加载提案与诊断 → SVN 更新 → 冲突检测 → FixAgent 生成修改 → 应用补丁 → 差异确认 → SVN 提交」完整链路，任何环节失败均回滚。",
+      "tags": ["修复流程", "agent", "svn", "重试逻辑"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:commit_fix.py:_load_proposal",
+      "type": "function",
+      "name": "_load_proposal",
+      "filePath": "commit_fix.py",
+      "lineRange": [156, 206],
+      "summary": "从工作区目录读取 JSON 格式的修复提案文件，校验路径安全性与字段合法性后，构造并返回 FixProposal 对象（含 FixEdit 列表）。",
+      "tags": ["数据加载", "反序列化", "验证"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:commit_fix.py:_load_diagnosis",
+      "type": "function",
+      "name": "_load_diagnosis",
+      "filePath": "commit_fix.py",
+      "lineRange": [209, 255],
+      "summary": "从工作区目录读取 JSON 格式的诊断报告文件，构造 DiagnosisReport（含 Conclusion 与 DiagnosisInput）并返回，供修复 agent 使用。",
+      "tags": ["数据加载", "反序列化", "诊断"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/commit/patcher.py",
+      "type": "file",
+      "name": "patcher.py",
+      "filePath": "src/commit/patcher.py",
+      "summary": "提供文件补丁核心工具集：路径安全校验、修改前快照哈希、SVN 更新后冲突检测、行级编辑原子写入、以及生成 unified diff 以供人工审查。",
+      "tags": ["工具函数", "补丁", "冲突检测", "diff", "原子写入"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/commit/patcher.py:_safe_join",
+      "type": "function",
+      "name": "_safe_join",
+      "filePath": "src/commit/patcher.py",
+      "lineRange": [14, 30],
+      "summary": "安全路径拼接：拒绝绝对路径和路径穿越（path traversal），确保目标文件始终位于指定 base 目录内。",
+      "tags": ["安全", "路径校验", "工具函数"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/commit/patcher.py:snapshot_hashes",
+      "type": "function",
+      "name": "snapshot_hashes",
+      "filePath": "src/commit/patcher.py",
+      "lineRange": [33, 51],
+      "summary": "对指定文件列表计算 SHA-256 摘要快照，供后续冲突检测比对，返回文件相对路径到哈希值的映射字典。",
+      "tags": ["工具函数", "哈希", "冲突检测"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/commit/patcher.py:detect_conflicts",
+      "type": "function",
+      "name": "detect_conflicts",
+      "filePath": "src/commit/patcher.py",
+      "lineRange": [54, 74],
+      "summary": "对比快照哈希与当前文件内容，检测 SVN update 后哪些文件已被外部修改（产生冲突），返回冲突文件路径列表。",
+      "tags": ["冲突检测", "工具函数", "svn"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/commit/patcher.py:apply_edits",
+      "type": "function",
+      "name": "apply_edits",
+      "filePath": "src/commit/patcher.py",
+      "lineRange": [77, 135],
+      "summary": "将 FixEdit 编辑列表按文件分组、按行号倒序应用到源文件，使用原子写入保证文件一致性；支持行替换与删除两种操作模式。",
+      "tags": ["补丁应用", "行级编辑", "原子写入"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/commit/patcher.py:generate_diff",
+      "type": "function",
+      "name": "generate_diff",
+      "filePath": "src/commit/patcher.py",
+      "lineRange": [138, 168],
+      "summary": "对修改前后的文件内容生成 unified diff 字符串，依次处理提案涉及的所有文件并拼接成完整差异报告供用户确认。",
+      "tags": ["diff", "代码审查", "工具函数"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/commit/svn.py",
+      "type": "file",
+      "name": "svn.py",
+      "filePath": "src/commit/svn.py",
+      "summary": "封装三个 SVN 命令行操作：svn update（更新到最新版本）、svn commit（提交并返回版本号）、svn revert（按文件列表撤销修改），均通过 subprocess 调用并在失败时抛出 RuntimeError。",
+      "tags": ["svn", "工具函数", "版本控制", "subprocess"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/commit/svn.py:svn_update",
+      "type": "function",
+      "name": "svn_update",
+      "filePath": "src/commit/svn.py",
+      "lineRange": [7, 25],
+      "summary": "在指定路径执行 svn update，失败时抛出包含 stderr 信息的 RuntimeError。",
+      "tags": ["svn", "工具函数", "版本控制"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/commit/svn.py:svn_commit",
+      "type": "function",
+      "name": "svn_commit",
+      "filePath": "src/commit/svn.py",
+      "lineRange": [28, 53],
+      "summary": "在指定路径执行 svn commit，提交成功后从输出中正则提取版本号并返回，失败时抛出 RuntimeError。",
+      "tags": ["svn", "工具函数", "版本控制"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/commit/svn.py:svn_revert",
+      "type": "function",
+      "name": "svn_revert",
+      "filePath": "src/commit/svn.py",
+      "lineRange": [56, 77],
+      "summary": "对给定文件列表执行 svn revert，回滚工作副本中的本地修改，失败时抛出 RuntimeError。",
+      "tags": ["svn", "工具函数", "回滚"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:commit_fix.py",
+      "target": "file:src/agent/fix_agent.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "file:src/commit/patcher.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "file:src/commit/svn.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "file:src/config.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "file:src/models.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "function:commit_fix.py:_revert_and_abort",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "function:commit_fix.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "function:commit_fix.py:_run_with_workspace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "function:commit_fix.py:_load_proposal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:commit_fix.py",
+      "target": "function:commit_fix.py:_load_diagnosis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "function:commit_fix.py:_revert_and_abort",
+      "target": "function:src/commit/svn.py:svn_revert",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:main",
+      "target": "function:src/config.py:load_config",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/patcher.py:snapshot_hashes",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/svn.py:svn_update",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/patcher.py:detect_conflicts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/patcher.py:apply_edits",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/patcher.py:generate_diff",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:src/commit/svn.py:svn_commit",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_run_with_workspace",
+      "target": "function:commit_fix.py:_revert_and_abort",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_load_proposal",
+      "target": "class:src/models.py:FixEdit",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_load_proposal",
+      "target": "class:src/models.py:FixProposal",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_load_diagnosis",
+      "target": "class:src/models.py:Conclusion",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_load_diagnosis",
+      "target": "class:src/models.py:DiagnosisReport",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:commit_fix.py:_load_diagnosis",
+      "target": "class:src/models.py:DiagnosisInput",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:_safe_join",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:snapshot_hashes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:detect_conflicts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:apply_edits",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:generate_diff",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_update",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_commit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_revert",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_update",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_commit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/svn.py",
+      "target": "function:src/commit/svn.py:svn_revert",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:snapshot_hashes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:detect_conflicts",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:apply_edits",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/commit/patcher.py",
+      "target": "function:src/commit/patcher.py:generate_diff",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

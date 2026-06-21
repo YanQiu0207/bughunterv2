@@ -1,0 +1,265 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 3,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "openspec/changes/m3-commit-fix/design.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 225,
+      "nonEmptyLines": 163,
+      "sections": [
+        {
+          "heading": "Design: M3 — Commit Fix（自动写回 + 版本提交）",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. 设计方案 (Design)",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "1.1 方案概览",
+          "level": 3,
+          "line": 11
+        },
+        {
+          "heading": "1.2 组件设计 (Component Design)",
+          "level": 3,
+          "line": 41
+        },
+        {
+          "heading": "1.2.1 核心类/模块设计",
+          "level": 4,
+          "line": 43
+        },
+        {
+          "heading": "1.2.2 接口设计",
+          "level": 4,
+          "line": 54
+        },
+        {
+          "heading": "1.2.3 数据模型",
+          "level": 4,
+          "line": 82
+        },
+        {
+          "heading": "1.2.4 并发模型",
+          "level": 4,
+          "line": 86
+        },
+        {
+          "heading": "1.2.5 错误处理",
+          "level": 4,
+          "line": 90
+        },
+        {
+          "heading": "1.3 核心逻辑实现",
+          "level": 3,
+          "line": 101
+        },
+        {
+          "heading": "1.4 方案优劣分析",
+          "level": 3,
+          "line": 140
+        },
+        {
+          "heading": "2. 测试计划 (Test Plan)",
+          "level": 2,
+          "line": 154
+        },
+        {
+          "heading": "2.1 单元测试",
+          "level": 3,
+          "line": 156
+        },
+        {
+          "heading": "2.2 集成测试",
+          "level": 3,
+          "line": 180
+        },
+        {
+          "heading": "2.3 性能测试（如适用）",
+          "level": 3,
+          "line": 193
+        },
+        {
+          "heading": "3. 可观测性 & 运维 (Observability & Operations)",
+          "level": 2,
+          "line": 199
+        },
+        {
+          "heading": "3.1 可观测性",
+          "level": 3,
+          "line": 201
+        },
+        {
+          "heading": "3.2 配置参数 (Configuration)",
+          "level": 3,
+          "line": 207
+        },
+        {
+          "heading": "3.3 运维注意事项",
+          "level": 3,
+          "line": 213
+        },
+        {
+          "heading": "4. Changelog",
+          "level": 2,
+          "line": 221
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 20
+      }
+    },
+    {
+      "path": "openspec/changes/m3-commit-fix/proposal.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 37,
+      "nonEmptyLines": 25,
+      "sections": [
+        {
+          "heading": "M3 — Commit Fix（自动写回 + 版本提交）",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "问题",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "目标",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "核心方案",
+          "level": 2,
+          "line": 13
+        },
+        {
+          "heading": "关键约束",
+          "level": 2,
+          "line": 25
+        },
+        {
+          "heading": "验收标准",
+          "level": 2,
+          "line": 32
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": "openspec/changes/m3-commit-fix/tasks.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 229,
+      "nonEmptyLines": 191,
+      "sections": [
+        {
+          "heading": "实施任务清单",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "依赖关系总览",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "变更影响概览",
+          "level": 2,
+          "line": 20
+        },
+        {
+          "heading": "文件变更清单",
+          "level": 3,
+          "line": 22
+        },
+        {
+          "heading": "受影响接口",
+          "level": 3,
+          "line": 35
+        },
+        {
+          "heading": "构建系统变更",
+          "level": 3,
+          "line": 42
+        },
+        {
+          "heading": "风险与假设",
+          "level": 2,
+          "line": 46
+        },
+        {
+          "heading": "任务列表",
+          "level": 2,
+          "line": 54
+        },
+        {
+          "heading": "任务 1: [x] Config 新增 max_retry 字段",
+          "level": 3,
+          "line": 58
+        },
+        {
+          "heading": "任务 2: [x] 新建 src/commit/svn.py",
+          "level": 3,
+          "line": 78
+        },
+        {
+          "heading": "任务 3: [x] 新建 src/commit/patcher.py",
+          "level": 3,
+          "line": 100
+        },
+        {
+          "heading": "任务 4: [x] 新建 commit_fix.py",
+          "level": 3,
+          "line": 124
+        },
+        {
+          "heading": "任务 5: [x] tests/test_patcher.py（11 个用例）",
+          "level": 3,
+          "line": 151
+        },
+        {
+          "heading": "任务 6: [x] tests/test_svn.py（5 个用例）",
+          "level": 3,
+          "line": 170
+        },
+        {
+          "heading": "任务 7: [x] tests/test_commit_fix.py（8 个用例）",
+          "level": 3,
+          "line": 188
+        },
+        {
+          "heading": "文档覆盖映射",
+          "level": 2,
+          "line": 212
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 16
+      }
+    }
+  ]
+}

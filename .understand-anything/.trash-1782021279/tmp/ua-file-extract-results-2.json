@@ -1,0 +1,583 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 5,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "src/agent/diagnosis_agent.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 312,
+      "nonEmptyLines": 271,
+      "functions": [
+        {
+          "name": "make_submit_diagnosis_tool",
+          "startLine": 32,
+          "endLine": 90,
+          "params": [
+            "result_holder"
+          ]
+        },
+        {
+          "name": "_build_conclusion",
+          "startLine": 222,
+          "endLine": 248,
+          "params": [
+            "result_holder"
+          ]
+        },
+        {
+          "name": "_evidence_to_ref",
+          "startLine": 251,
+          "endLine": 262,
+          "params": [
+            "e"
+          ]
+        },
+        {
+          "name": "_report_to_dict",
+          "startLine": 265,
+          "endLine": 312,
+          "params": [
+            "report"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "DiagnosisAgent",
+          "startLine": 93,
+          "endLine": 219,
+          "methods": [
+            "__init__",
+            "run",
+            "_checkpoint"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "make_submit_diagnosis_tool",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "DiagnosisAgent",
+          "line": 93,
+          "isDefault": false
+        },
+        {
+          "name": "_build_conclusion",
+          "line": 222,
+          "isDefault": false
+        },
+        {
+          "name": "_evidence_to_ref",
+          "line": 251,
+          "isDefault": false
+        },
+        {
+          "name": "_report_to_dict",
+          "line": 265,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "submit_diagnosis",
+          "callee": "result_holder.update",
+          "lineNumber": 75
+        },
+        {
+          "caller": "run",
+          "callee": "str",
+          "lineNumber": 123
+        },
+        {
+          "caller": "run",
+          "callee": "uuid.uuid4",
+          "lineNumber": 123
+        },
+        {
+          "caller": "run",
+          "callee": "datetime.now(timezone.utc).isoformat",
+          "lineNumber": 124
+        },
+        {
+          "caller": "run",
+          "callee": "datetime.now",
+          "lineNumber": 124
+        },
+        {
+          "caller": "run",
+          "callee": "DiagnosisReport",
+          "lineNumber": 126
+        },
+        {
+          "caller": "run",
+          "callee": "DiagnosisInput",
+          "lineNumber": 130
+        },
+        {
+          "caller": "run",
+          "callee": "make_read_source_tool",
+          "lineNumber": 139
+        },
+        {
+          "caller": "run",
+          "callee": "make_find_callers_tool",
+          "lineNumber": 140
+        },
+        {
+          "caller": "run",
+          "callee": "make_submit_diagnosis_tool",
+          "lineNumber": 141
+        },
+        {
+          "caller": "run",
+          "callee": "ChatOpenAI",
+          "lineNumber": 144
+        },
+        {
+          "caller": "run",
+          "callee": "build_system_prompt",
+          "lineNumber": 151
+        },
+        {
+          "caller": "run",
+          "callee": "create_react_agent",
+          "lineNumber": 157
+        },
+        {
+          "caller": "run",
+          "callee": "\"\\n\".join",
+          "lineNumber": 163
+        },
+        {
+          "caller": "run",
+          "callee": "agent.invoke",
+          "lineNumber": 178
+        },
+        {
+          "caller": "run",
+          "callee": "Conclusion",
+          "lineNumber": 186
+        },
+        {
+          "caller": "run",
+          "callee": "type",
+          "lineNumber": 192
+        },
+        {
+          "caller": "run",
+          "callee": "self._checkpoint",
+          "lineNumber": 194
+        },
+        {
+          "caller": "run",
+          "callee": "_build_conclusion",
+          "lineNumber": 198
+        },
+        {
+          "caller": "run",
+          "callee": "self._checkpoint",
+          "lineNumber": 200
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "os.makedirs",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "os.path.join",
+          "lineNumber": 206
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "json.dumps",
+          "lineNumber": 207
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "_report_to_dict",
+          "lineNumber": 207
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "tempfile.mkstemp",
+          "lineNumber": 209
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "os.fdopen",
+          "lineNumber": 211
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "f.write",
+          "lineNumber": 212
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "os.replace",
+          "lineNumber": 213
+        },
+        {
+          "caller": "_checkpoint",
+          "callee": "os.unlink",
+          "lineNumber": 216
+        },
+        {
+          "caller": "_build_conclusion",
+          "callee": "Conclusion",
+          "lineNumber": 225
+        },
+        {
+          "caller": "_build_conclusion",
+          "callee": "result_holder.get",
+          "lineNumber": 234
+        },
+        {
+          "caller": "_build_conclusion",
+          "callee": "_evidence_to_ref",
+          "lineNumber": 239
+        },
+        {
+          "caller": "_build_conclusion",
+          "callee": "result_holder.get",
+          "lineNumber": 239
+        },
+        {
+          "caller": "_build_conclusion",
+          "callee": "Conclusion",
+          "lineNumber": 241
+        },
+        {
+          "caller": "_build_conclusion",
+          "callee": "result_holder.get",
+          "lineNumber": 242
+        },
+        {
+          "caller": "_build_conclusion",
+          "callee": "result_holder.get",
+          "lineNumber": 244
+        },
+        {
+          "caller": "_build_conclusion",
+          "callee": "result_holder.get",
+          "lineNumber": 245
+        },
+        {
+          "caller": "_build_conclusion",
+          "callee": "result_holder.get",
+          "lineNumber": 247
+        },
+        {
+          "caller": "_evidence_to_ref",
+          "callee": "isinstance",
+          "lineNumber": 253
+        },
+        {
+          "caller": "_evidence_to_ref",
+          "callee": "e.get",
+          "lineNumber": 254
+        },
+        {
+          "caller": "_evidence_to_ref",
+          "callee": "e.get",
+          "lineNumber": 255
+        },
+        {
+          "caller": "_evidence_to_ref",
+          "callee": "int",
+          "lineNumber": 257
+        },
+        {
+          "caller": "_evidence_to_ref",
+          "callee": "e.get",
+          "lineNumber": 260
+        },
+        {
+          "caller": "_evidence_to_ref",
+          "callee": "str",
+          "lineNumber": 262
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 5,
+        "functionCount": 4,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "src/agent/prompts.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 75,
+      "nonEmptyLines": 60,
+      "functions": [
+        {
+          "name": "build_system_prompt",
+          "startLine": 4,
+          "endLine": 75,
+          "params": [
+            "max_steps",
+            "framework_packages"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "build_system_prompt",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "build_system_prompt",
+          "callee": "\", \".join",
+          "lineNumber": 27
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/source_index.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 57,
+      "nonEmptyLines": 44,
+      "classes": [
+        {
+          "name": "SourceIndex",
+          "startLine": 6,
+          "endLine": 57,
+          "methods": [
+            "__init__",
+            "build",
+            "resolve"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "SourceIndex",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "build",
+          "callee": "os.walk",
+          "lineNumber": 29
+        },
+        {
+          "caller": "build",
+          "callee": "filename.endswith",
+          "lineNumber": 31
+        },
+        {
+          "caller": "build",
+          "callee": "os.path.abspath",
+          "lineNumber": 33
+        },
+        {
+          "caller": "build",
+          "callee": "os.path.join",
+          "lineNumber": 33
+        },
+        {
+          "caller": "resolve",
+          "callee": "class_name.rsplit",
+          "lineNumber": 56
+        },
+        {
+          "caller": "resolve",
+          "callee": "self._index.get",
+          "lineNumber": 57
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "src/tools/find_callers.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 67,
+      "nonEmptyLines": 52,
+      "functions": [
+        {
+          "name": "make_find_callers_tool",
+          "startLine": 10,
+          "endLine": 67,
+          "params": [
+            "src_dir"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "make_find_callers_tool",
+          "line": 10,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "find_callers",
+          "callee": "os.walk",
+          "lineNumber": 38
+        },
+        {
+          "caller": "find_callers",
+          "callee": "filename.endswith",
+          "lineNumber": 40
+        },
+        {
+          "caller": "find_callers",
+          "callee": "os.path.join",
+          "lineNumber": 42
+        },
+        {
+          "caller": "find_callers",
+          "callee": "open",
+          "lineNumber": 44
+        },
+        {
+          "caller": "find_callers",
+          "callee": "enumerate",
+          "lineNumber": 45
+        },
+        {
+          "caller": "find_callers",
+          "callee": "matches.append",
+          "lineNumber": 47
+        },
+        {
+          "caller": "find_callers",
+          "callee": "line.rstrip",
+          "lineNumber": 48
+        },
+        {
+          "caller": "find_callers",
+          "callee": "len",
+          "lineNumber": 50
+        },
+        {
+          "caller": "find_callers",
+          "callee": "len",
+          "lineNumber": 54
+        },
+        {
+          "caller": "find_callers",
+          "callee": "len",
+          "lineNumber": 56
+        },
+        {
+          "caller": "find_callers",
+          "callee": "\"\\n\".join",
+          "lineNumber": 62
+        },
+        {
+          "caller": "find_callers",
+          "callee": "len",
+          "lineNumber": 63
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/tools/read_source.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 57,
+      "nonEmptyLines": 42,
+      "functions": [
+        {
+          "name": "make_read_source_tool",
+          "startLine": 10,
+          "endLine": 57,
+          "params": [
+            "index"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "make_read_source_tool",
+          "line": 10,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "read_source",
+          "callee": "index.resolve",
+          "lineNumber": 33
+        },
+        {
+          "caller": "read_source",
+          "callee": "open",
+          "lineNumber": 38
+        },
+        {
+          "caller": "read_source",
+          "callee": "f.readlines",
+          "lineNumber": 39
+        },
+        {
+          "caller": "read_source",
+          "callee": "len",
+          "lineNumber": 43
+        },
+        {
+          "caller": "read_source",
+          "callee": "max",
+          "lineNumber": 45
+        },
+        {
+          "caller": "read_source",
+          "callee": "min",
+          "lineNumber": 46
+        },
+        {
+          "caller": "read_source",
+          "callee": "\"\".join",
+          "lineNumber": 52
+        },
+        {
+          "caller": "read_source",
+          "callee": "enumerate",
+          "lineNumber": 53
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}
