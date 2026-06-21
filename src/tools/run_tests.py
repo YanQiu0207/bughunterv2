@@ -1,22 +1,29 @@
 """run_tests tool: execute the configured test command in the fix workspace."""
 
 import os
+from collections.abc import Callable
 from typing import Any
 
 from langchain_core.tools import tool
 
 from src.tools._command_runner import run_command_in_workspace, validate_fix_id
 
-
 _TIMEOUT_SECONDS = 300
 
 
-def make_run_tests_tool(workspace_root: str, test_command: str) -> Any:  # type: ignore[return]
+def make_run_tests_tool(
+    workspace_root: str,
+    test_command: str,
+    expected_fix_id: str | None = None,
+    on_result: Callable[[str, bool], None] | None = None,
+) -> Any:  # type: ignore[return]
     """Return a run_tests tool bound to workspace_root and test_command.
 
     Args:
         workspace_root: Root directory for all fix workspaces (e.g. "workspace").
         test_command: Shell command to run inside the workspace directory.
+        expected_fix_id: Optional fix_id bound to this tool instance.
+        on_result: Optional callback receiving (fix_id, succeeded).
 
     Returns:
         A LangChain @tool function.
@@ -33,7 +40,7 @@ def make_run_tests_tool(workspace_root: str, test_command: str) -> Any:  # type:
         Args:
             fix_id: Identifier of the fix workspace (must exist; call apply_fix first).
         """
-        err = validate_fix_id(fix_id, "run_tests")
+        err = validate_fix_id(fix_id, "run_tests", expected_fix_id)
         if err:
             return err
 
@@ -44,7 +51,7 @@ def make_run_tests_tool(workspace_root: str, test_command: str) -> Any:  # type:
                 "Call apply_fix first."
             )
 
-        return run_command_in_workspace(
+        result = run_command_in_workspace(
             tool_tag="run_tests",
             command=test_command,
             workspace_path=workspace_path,
@@ -52,5 +59,8 @@ def make_run_tests_tool(workspace_root: str, test_command: str) -> Any:  # type:
             success_label="Tests passed.",
             failure_label="Tests failed",
         )
+        if on_result is not None:
+            on_result(fix_id, result.startswith("[run_tests] Tests passed."))
+        return result
 
     return run_tests

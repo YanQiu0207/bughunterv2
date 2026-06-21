@@ -34,11 +34,16 @@ def main() -> None:
         sys.exit(1)
 
     config = load_config(args.config)
+    config.svn_cache_dir = _resolve_config_relative_path(
+        config.svn_cache_dir,
+        args.config,
+    )
 
     missing = [
         name
         for name, val in (
             ("target_project_dir", config.target_project_dir),
+            ("svn_cache_dir", config.svn_cache_dir),
             ("build_command", config.build_command),
             ("test_command", config.test_command),
         )
@@ -54,7 +59,9 @@ def main() -> None:
         sys.exit(1)
 
     report = _load_report(args.report)
-    workspace_root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "workspace")
+    workspace_root = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "workspace"
+    )
 
     agent = FixAgent(config=config, workspace_root=workspace_root)
     proposal = agent.run(report)
@@ -106,6 +113,14 @@ def _load_report(path: str) -> DiagnosisReport:
     )
 
 
+def _resolve_config_relative_path(path: str, config_path: str) -> str:
+    """Resolve a config path relative to the config file location."""
+    if not path or os.path.isabs(path):
+        return path
+    config_dir = os.path.dirname(os.path.abspath(config_path))
+    return os.path.abspath(os.path.join(config_dir, path))
+
+
 def _print_summary(proposal: FixProposal, workspace_root: str) -> None:
     """Print a human-readable fix summary to stdout."""
     print("\n" + "=" * 60)
@@ -120,7 +135,9 @@ def _print_summary(proposal: FixProposal, workspace_root: str) -> None:
         for f in affected:
             print(f"  {f}")
 
-    json_path = os.path.join(workspace_root, "fix", f"{proposal.proposal_id}.json")
+    json_path = os.path.join(
+        workspace_root, "fix", f"{proposal.proposal_id}.json"
+    )
     workspace_path = os.path.join(workspace_root, "fix", proposal.proposal_id)
     print(f"\nFull proposal : {json_path}")
     print(f"Workspace     : {workspace_path}")
@@ -128,13 +145,15 @@ def _print_summary(proposal: FixProposal, workspace_root: str) -> None:
     if proposal.status == "verified":
         print(
             "\n✔ Build and unit tests passed in the isolated workspace.\n"
-            "  Review the diff and commit to SVN when ready:\n"
-            f"  diff -rq {workspace_path} <original_project_dir>"
+            "  Review the workspace, then write back when ready:\n"
+            f"  python .\\commit_fix.py {proposal.proposal_id} --dry-run\n"
+            f"  python .\\commit_fix.py {proposal.proposal_id} --yes"
         )
     else:
         print(
             "\n⚠ Proposal is a best-effort draft (build/tests did not fully pass).\n"
-            "  Inspect the workspace and iterate manually if needed."
+            "  Review the workspace and iterate manually if needed.\n"
+            "  When ready, use commit_fix.py --dry-run / --yes to write back."
         )
     print("=" * 60)
 

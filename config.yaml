@@ -21,5 +21,7 @@ diagnosis_prompt_append: ""
 
 # M2：修复 Agent 配置（需填写以下字段才能使用 fix.py）
 target_project_dir: ""   # 目标 Java 项目根目录，如 "/home/dev/myproject"
+svn_url: ""              # 预留：目标 SVN 仓库地址；当前不由 fix.py 自动 checkout
+svn_cache_dir: "workspace/cache/svn-clean"  # 干净 SVN 缓存副本目录
 build_command: ""        # 编译命令，如 "javac -cp lib/*:. -d classes src/**/*.java"
 test_command: ""         # 单测命令，如 "java -cp classes:lib/* org.junit.runner.JUnitCore com.example.AllTests"

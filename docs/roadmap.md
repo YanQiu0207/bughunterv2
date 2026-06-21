@@ -28,7 +28,8 @@
 - [x] F2 生成修复方案 / F3 应用到隔离工作区 / F4 编译报错回灌迭代
 - [x] 跑通「方案 → review → 改 → 编译 + 单测 → 再改」的人在环循环
 - [x] 验证标准：编译通过 + 单测全绿（运行时验证交 QA）
-- [x] 隔离策略：Linux 硬链接工作区，原目录全程不动（见 ADR-0003）
+- [x] 隔离策略：已从 Linux 硬链接工作区调整为干净 SVN 缓存副本方案（见 ADR-0004）
+- [x] 同步实现 `apply_fix.py`，从 `workspace/cache/svn-clean` 复制出 `workspace/fix/<fix_id>/`
 - [ ] 在最小 Java 项目上验收 `fix.py`
 
 ## M3A — SVN 写回与提交链路（已实现，待真实 SVN 验收）

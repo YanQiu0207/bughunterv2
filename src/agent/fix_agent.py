@@ -8,8 +8,8 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any
 
-from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool
+from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 
 from src.agent.fix_prompts import build_fix_system_prompt
@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 def make_submit_fix_proposal_tool(
     result_holder: dict[str, Any],
+    verification_state: dict[str, bool] | None = None,
 ) -> Any:  # type: ignore[return]
     """Return a submit_fix_proposal tool that stores its result in result_holder.
 
@@ -31,6 +32,7 @@ def make_submit_fix_proposal_tool(
 
     Args:
         result_holder: Mutable dict populated with fix proposal fields on call.
+        verification_state: Optional tool-observed build/test state.
 
     Returns:
         A LangChain @tool function.
@@ -60,11 +62,27 @@ def make_submit_fix_proposal_tool(
         if result_holder:
             return "Fix proposal already submitted. Do not call any more tools."
 
+        final_status = status
+        final_summary = summary
+        if status == "verified" and verification_state is not None:
+            is_verified = (
+                verification_state.get("applied", False)
+                and verification_state.get("build_ok", False)
+                and verification_state.get("tests_ok", False)
+            )
+            if not is_verified:
+                final_status = "draft"
+                final_summary = (
+                    f"{summary}\n\n"
+                    "Downgraded to draft: build and test success were not "
+                    "confirmed by tool results for this fix_id."
+                )
+
         result_holder.update(
             {
                 "edits": edits,
-                "summary": summary,
-                "status": status,
+                "summary": final_summary,
+                "status": final_status,
             }
         )
         return (
@@ -105,12 +123,48 @@ class FixAgent:
         diagnosis_id = report.diagnosis_id
 
         result_holder: dict[str, Any] = {}
+        verification_state = {
+            "applied": False,
+            "build_ok": False,
+            "tests_ok": False,
+        }
+
+        def record_apply(fix_id: str) -> None:
+            if fix_id == proposal_id:
+                verification_state["applied"] = True
+                verification_state["build_ok"] = False
+                verification_state["tests_ok"] = False
+
+        def record_build(fix_id: str, succeeded: bool) -> None:
+            if fix_id == proposal_id:
+                verification_state["build_ok"] = succeeded
+                if not succeeded:
+                    verification_state["tests_ok"] = False
+
+        def record_tests(fix_id: str, succeeded: bool) -> None:
+            if fix_id == proposal_id:
+                verification_state["tests_ok"] = succeeded
 
         tools = [
-            make_apply_fix_tool(self._workspace_root, self._config.target_project_dir),
-            make_run_build_tool(self._workspace_root, self._config.build_command),
-            make_run_tests_tool(self._workspace_root, self._config.test_command),
-            make_submit_fix_proposal_tool(result_holder),
+            make_apply_fix_tool(
+                self._workspace_root,
+                self._config.svn_cache_dir,
+                expected_fix_id=proposal_id,
+                on_success=record_apply,
+            ),
+            make_run_build_tool(
+                self._workspace_root,
+                self._config.build_command,
+                expected_fix_id=proposal_id,
+                on_result=record_build,
+            ),
+            make_run_tests_tool(
+                self._workspace_root,
+                self._config.test_command,
+                expected_fix_id=proposal_id,
+                on_result=record_tests,
+            ),
+            make_submit_fix_proposal_tool(result_holder, verification_state),
         ]
 
         llm = ChatOpenAI(
@@ -120,11 +174,18 @@ class FixAgent:
             max_tokens=4096,
         )
 
-        system_prompt = build_fix_system_prompt(max_steps=self._config.max_steps)
+        system_prompt = build_fix_system_prompt(
+            max_steps=self._config.max_steps
+        )
 
         agent = create_react_agent(llm, tools, prompt=system_prompt)
 
-        user_message = _build_user_message(report, proposal_id, self._config.target_project_dir)
+        user_message = _build_user_message(
+            report,
+            proposal_id,
+            self._config.target_project_dir,
+            self._config.svn_cache_dir,
+        )
         recursion_limit = self._config.max_steps * 4 + 10
 
         try:
@@ -151,7 +212,9 @@ class FixAgent:
                 proposal_id,
             )
 
-        proposal = _build_fix_proposal(result_holder, proposal_id, diagnosis_id, created_at)
+        proposal = _build_fix_proposal(
+            result_holder, proposal_id, diagnosis_id, created_at
+        )
         self._checkpoint(proposal)
         return proposal
 
@@ -160,7 +223,9 @@ class FixAgent:
         fix_dir = os.path.join(self._workspace_root, "fix")
         os.makedirs(fix_dir, exist_ok=True)
         target = os.path.join(fix_dir, f"{proposal.proposal_id}.json")
-        data = json.dumps(_proposal_to_dict(proposal), ensure_ascii=False, indent=2)
+        data = json.dumps(
+            _proposal_to_dict(proposal), ensure_ascii=False, indent=2
+        )
         fd, tmp_path = tempfile.mkstemp(dir=fix_dir, suffix=".json.tmp")
         try:
             with os.fdopen(fd, "w", encoding="utf-8") as fh:
@@ -178,6 +243,7 @@ def _build_user_message(
     report: DiagnosisReport,
     proposal_id: str,
     target_project_dir: str,
+    svn_cache_dir: str,
 ) -> str:
     """Compose the user message sent to the fix agent."""
     conclusion = report.conclusion
@@ -196,7 +262,11 @@ def _build_user_message(
         f"Fix this Java bug based on the diagnosis below.\n\n"
         f"Diagnosis ID : {report.diagnosis_id}\n"
         f"Fix ID       : {proposal_id}\n"
-        f"Project dir  : {target_project_dir}\n\n"
+        f"Project dir  : {target_project_dir}\n"
+        f"SVN cache    : {svn_cache_dir}\n\n"
+        f"Apply edits only through apply_fix. It will copy the clean SVN cache "
+        f"into the isolated workspace. Keep the project dir as the final "
+        f"write-back target after human review.\n\n"
         f"--- Diagnosis ---\n{diagnosis_text}\n\n"
         f"Use fix_id='{proposal_id}' in all tool calls."
     )
@@ -220,7 +290,11 @@ def _build_fix_proposal(
         )
 
     raw_status = result_holder.get("status", "draft")
-    status: Any = raw_status if raw_status in ("draft", "applied", "verified") else "draft"
+    status: Any = (
+        raw_status
+        if raw_status in ("draft", "applied", "verified")
+        else "draft"
+    )
 
     edits = [
         FixEdit(

@@ -28,5 +28,6 @@ M1–M3A 原型已实现，当前进入 **端到端手工验收阶段**（见 `d
 验收前默认约束：
 
 - 真实 LLM 配置统一走 `config.yaml` + 环境变量 `LLM_API_KEY`。
-- `target_project_dir`、`build_command`、`test_command` 为空时，不运行 `fix.py`。
+- `target_project_dir`、`svn_cache_dir`、`build_command`、`test_command` 为空时，不运行 `fix.py`。
+- 隔离策略以 ADR-0004 为准：从干净 SVN 缓存副本复制出 `workspace/fix/<fix_id>/`。
 - `commit_fix.py` 默认只展示 diff；必须显式传 `--yes` 才允许写回和提交。

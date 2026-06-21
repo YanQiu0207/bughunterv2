@@ -269,3 +269,217 @@ Task 3 (堆栈解析器)  Task 5 (工具: read_source + find_callers)
 | §4.8 状态/落盘格式 | Task 1, 6, 7 | 数据模型 + 写盘逻辑 |
 | §4.9 工具清单 | Task 5 | read_source + find_callers |
 | §4.10 实现架构（组件、数据流、关键决策） | Task 1–8 全覆盖 | — |
+
+---
+
+# 实施任务清单 — ADR-0004 干净 SVN 缓存副本隔离实现
+
+> 由 ADR-0004、`docs/standards/tool-contract.md` 与本 `spec.md` 生成
+> 任务总数：5
+> 核心原则：先建后迁后删——先补配置契约，再迁移 `apply_fix` 隔离来源，最后更新调用方、测试与文档核销
+
+## 依赖关系总览
+
+```text
+Task 10 (配置扩展与 CLI 校验)
+  ↓
+Task 11 (apply_fix 从干净 SVN 缓存复制工作区)
+  ↓
+Task 12 (FixAgent 调用方与输出文案迁移)
+  ↓
+Task 13 (测试覆盖与回归)
+  ↓
+Task 14 (intent 沉淀核销与文档同步检查)
+```
+
+并行机会：无。`apply_fix` 工厂签名、配置字段、调用方与测试互相依赖，保守串行。
+
+## 变更影响概览
+
+### 文件变更清单
+
+| 文件 | 操作 | 涉及任务 | 说明 |
+|------|------|---------|------|
+| `src/config.py` | 修改 | Task 10 | 新增 `svn_url`、`svn_cache_dir` 配置字段与默认值 |
+| `config.yaml` | 修改 | Task 10 | 增加 SVN 缓存副本配置示例与注释 |
+| `fix.py` | 修改 | Task 10, 12 | 校验 `svn_cache_dir`；更新验收后提示文案 |
+| `src/tools/apply_fix.py` | 修改 | Task 11 | 从硬链接目标目录改为复制干净 SVN 缓存副本 |
+| `src/agent/fix_agent.py` | 修改 | Task 12 | 注册 `apply_fix` 时传入 `config.svn_cache_dir` |
+| `tests/test_config.py` | 修改 | Task 10, 13 | 覆盖新增配置字段 |
+| `tests/test_fix_tools.py` | 修改 | Task 11, 13 | 更新硬链接相关测试，新增缓存干净检查 |
+| `tests/test_fix_agent.py` | 修改 | Task 12, 13 | 更新 `_make_config` 与调用方断言 |
+| `docs/adr/0004-svn-clean-cache-isolation-strategy.md` | 核对 | Task 14 | 若实现取舍变化，回填决策说明 |
+| `docs/standards/tool-contract.md` | 核对 | Task 14 | 确认工具契约与实现一致 |
+| `docs/roadmap.md` | 核对 | Task 14 | 实现完成后更新 M2 待办状态 |
+| `docs/design-docs/bugfix-agent/pipeline/e2e-manual-acceptance.md` | 核对 | Task 14 | 确认验收步骤与实现一致 |
+| `CLAUDE.md` | 核对 | Task 14 | 确认 Claude Code 入口提示与实现一致 |
+
+### 受影响接口
+
+| 接口 | 变更类型 | 调用方 | 涉及任务 |
+|------|---------|--------|---------|
+| `Config` | 新增字段 | `fix.py`, `src/agent/fix_agent.py`, 测试 | Task 10, 12, 13 |
+| `load_config(path)` | 读取字段扩展 | 所有 CLI 入口 | Task 10, 13 |
+| `make_apply_fix_tool(workspace_root, target_project_dir)` | 签名语义变更为 `make_apply_fix_tool(workspace_root, svn_cache_dir)` | `FixAgent.run()`、测试 | Task 11, 12, 13 |
+| `apply_fix(fix_id, edits)` | 行为变更 | LLM 工具调用、测试 | Task 11, 13 |
+
+### 构建系统变更
+
+- 无新增 Python 包依赖。
+- 新增 `svn status` 调用依赖本机已安装 SVN CLI；单元测试必须 mock，不依赖真实 SVN。
+
+## 风险与假设
+
+| # | 描述 | 影响任务 | 假设/处理 |
+|---|------|---------|----------|
+| 1 | 是否自动 `svn checkout` 初始化缓存副本 | Task 10, 11 | 本轮只消费已存在的 `svn_cache_dir`，不自动 checkout；`svn_url` 先作为预留字段，不作为 `fix.py` 必填 |
+| 2 | `workspace/fix/<fix_id>` 是否保留 `.svn` | Task 11, 13 | 默认普通复制整个缓存副本，保留 `.svn`；仍禁止编辑 dot-path，避免修改元数据 |
+| 3 | 缓存副本干净性依赖 SVN CLI | Task 11, 13 | 每次应用修改前执行 `svn status <svn_cache_dir>`；非零退出或 stdout 非空均拒绝创建或修改工作区 |
+| 4 | 重复调用 `apply_fix` 的恢复基线 | Task 11, 13 | 继续使用 `.fix_modified_files` registry，但恢复来源从 `target_project_dir` 改为 `svn_cache_dir` |
+| 5 | 现有文档已先于代码切换到 ADR-0004 | Task 14 | 代码实现完成后核对并去掉旧的待同步提示 |
+
+## 任务列表
+
+### 任务 10: [x] 配置扩展与 `fix.py` 校验
+
+- 状态: 完成
+- 文件:
+  - `src/config.py`（修改）
+  - `config.yaml`（修改）
+  - `fix.py`（修改）
+  - `tests/test_config.py`（修改）
+- 依赖: 无
+- spec 映射: spec §3.1（F3 应用修改）、§3.2（安全）、ADR-0004（干净 SVN 缓存副本配置）
+- 说明: 增加 SVN 缓存副本相关配置字段，`fix.py` 在进入修复流程前校验 `svn_cache_dir` 已配置；`svn_url` 仅作为后续自动初始化缓存的预留配置。
+- context:
+  - `src/config.py:Config` — 直接修改目标，新增字段与默认值
+  - `src/config.py:load_config()` — 上游配置解析，给 CLI 与 Agent 传入运行参数
+  - `config.yaml` — 用户配置入口
+  - `fix.py:main()` — 下游校验配置并创建 `FixAgent`
+  - `tests/test_config.py` — 配置加载回归测试
+- 验收标准:
+  - [x] `python -c "from src.config import load_config; c = load_config('config.yaml'); assert c.svn_cache_dir"` 执行无异常
+  - [x] `python -m pytest tests/test_config.py -q` 通过
+  - [x] `Select-String -Path .\\fix.py -Pattern "svn_cache_dir"` 能找到校验逻辑
+- 子任务:
+  - [x] 10.1: 在 `Config` 增加 `svn_url: str` 与 `svn_cache_dir: str`
+  - [x] 10.2: 在 `load_config()` 中解析新增字段，缺省值分别为 `""` 与 `"workspace/cache/svn-clean"`
+  - [x] 10.3: 在 `config.yaml` 增加 `svn_url`、`svn_cache_dir` 示例与中文注释
+  - [x] 10.4: 在 `fix.py` 必填校验中加入 `svn_cache_dir`，但不强制 `svn_url`
+  - [x] 10.5: 更新 `tests/test_config.py` 覆盖默认值与显式配置值
+
+### 任务 11: [x] `apply_fix` 从干净 SVN 缓存复制工作区
+
+- 状态: 完成
+- 文件:
+  - `src/tools/apply_fix.py`（修改）
+  - `tests/test_fix_tools.py`（修改）
+- 依赖: Task 10
+- spec 映射: spec §3.1（F3 应用修改）、§3.2（安全）、ADR-0004（隔离工作区创建与安全约束）
+- 说明: 将 `apply_fix` 的工作区创建来源从 `target_project_dir` 硬链接复制改为 `svn_cache_dir` 普通复制；每次应用修改前检查缓存副本是干净 SVN 工作副本。
+- context:
+  - `src/tools/apply_fix.py:make_apply_fix_tool()` — 直接修改目标，调整参数语义与 workspace 创建逻辑
+  - `src/tools/apply_fix.py:apply_fix()` — 下游 LLM 工具调用入口
+  - `src/tools/apply_fix.py:_load_modified_registry()` — 重复调用恢复状态依赖
+  - `tests/test_fix_tools.py:TestApplyFix` — 行为回归测试
+- 验收标准:
+  - [x] `python -m pytest tests/test_fix_tools.py -q` 通过
+  - [x] mock `subprocess.run(["svn", "status", svn_cache_dir], ...)` 返回 stdout 非空时，`apply_fix` 返回错误且不创建 `workspace/fix/<fix_id>`
+  - [x] 缓存源文件内容在 `apply_fix` 后保持不变
+  - [x] 第二轮 `apply_fix` 从 `svn_cache_dir` 基线恢复，而不是叠加第一轮修改
+- 子任务:
+  - [x] 11.1: 将工厂参数语义改为 `workspace_root, svn_cache_dir`
+  - [x] 11.2: 新增缓存干净检查：每次应用修改前执行 `svn status <svn_cache_dir>`，非零退出或 stdout 非空均返回错误
+  - [x] 11.3: 首次创建 `workspace/fix/<fix_id>` 时使用普通 `shutil.copytree(svn_cache_dir, workspace_path)`
+  - [x] 11.4: 重复调用时用 `svn_cache_dir` 恢复 registry 中记录的已修改文件
+  - [x] 11.5: 保留路径穿越、dot-path、编辑数量、内容大小、原子写入与重叠范围校验
+  - [x] 11.6: 更新 `tests/test_fix_tools.py`，删除硬链接 inode 专属断言，改为缓存副本不变与恢复基线断言
+
+### 任务 12: [x] 迁移 `FixAgent` 调用方与输出文案
+
+- 状态: 完成
+- 文件:
+  - `src/agent/fix_agent.py`（修改）
+  - `fix.py`（修改）
+  - `tests/test_fix_agent.py`（修改）
+- 依赖: Task 11
+- spec 映射: spec §3.1（人在环迭代循环）、ADR-0004（最终写回仍由 `target_project_dir` 承担）
+- 说明: `FixAgent` 注册 `apply_fix` 时使用 `config.svn_cache_dir`；用户提示中区分「最终目标工作副本」与「干净缓存副本」；CLI 汇总文案不再推荐硬链接时代的原目录 diff。
+- context:
+  - `src/agent/fix_agent.py:FixAgent.run()` — 上游创建工具列表
+  - `src/agent/fix_agent.py:_build_user_message()` — LLM 输入提示，消费配置语义
+  - `fix.py:_print_summary()` — 下游人工 review 入口提示
+  - `tests/test_fix_agent.py` — 调用方结构回归测试
+- 验收标准:
+  - [x] `python -m pytest tests/test_fix_agent.py -q` 通过
+  - [x] `Select-String -Path .\\src\\agent\\fix_agent.py -Pattern "svn_cache_dir"` 能找到传参逻辑
+  - [x] `fix.py` 不再输出旧的原目录 diff 提示
+- 子任务:
+  - [x] 12.1: `FixAgent.run()` 调用 `make_apply_fix_tool(self._workspace_root, self._config.svn_cache_dir)`
+  - [x] 12.2: `_build_user_message()` 保留 `target_project_dir` 作为最终提交目录，并补充缓存副本路径说明
+  - [x] 12.3: `_print_summary()` 改为提示 review `workspace/fix/<fix_id>`，后续用 `commit_fix.py --dry-run` / `--yes` 写回
+  - [x] 12.4: 更新 `tests/test_fix_agent.py` 的 `_make_config()` 与相关断言
+
+### 任务 13: [x] 测试覆盖与端到端回归
+
+- 状态: 完成
+- 文件:
+  - `tests/test_config.py`（修改）
+  - `tests/test_fix_tools.py`（修改）
+  - `tests/test_fix_agent.py`（修改）
+  - `tests/test_commit_fix.py`（按需修改）
+- 依赖: Task 12
+- spec 映射: spec §3.2（安全）、ADR-0004（验收与拒绝条件）
+- 说明: 补齐 ADR-0004 行为的测试覆盖，并跑全量非集成回归，确认 M2 修复隔离实现没有破坏 M1/M3A。
+- context:
+  - `tests/test_fix_tools.py:TestApplyFix` — 直接验证缓存复制、dirty 拒绝、重复调用恢复
+  - `tests/test_fix_agent.py:TestFixAgentStructure` — 验证调用方注册工具不触发 LLM
+  - `tests/test_config.py` — 验证配置默认值与显式值
+  - `tests/test_commit_fix.py` — 下游 M3A 写回链路，确认无需同步改动或完成必要调整
+- 验收标准:
+  - [x] `python -m pytest -q -m "not integration"` 通过
+  - [x] `python -m py_compile src\\config.py src\\tools\\apply_fix.py src\\agent\\fix_agent.py fix.py` 通过
+  - [x] `git diff --check` 通过
+- 子任务:
+  - [x] 13.1: 增加 `svn status` 成功、dirty、命令失败三类 mock 测试
+  - [x] 13.2: 增加缓存文件不变、workspace 文件可编辑、跨轮恢复三类行为测试
+  - [x] 13.3: 更新调用方测试，确保 `FixAgent` 能构造四个工具且不触发真实 LLM
+  - [x] 13.4: 跑全量非集成回归并修复新增失败
+
+### 任务 14: [x] intent 沉淀核销与文档同步检查
+
+- 状态: 完成
+- 文件:
+  - `docs/adr/0004-svn-clean-cache-isolation-strategy.md`（核对/按需修改）
+  - `docs/standards/tool-contract.md`（核对/按需修改）
+  - `docs/roadmap.md`（核对/按需修改）
+  - `docs/design-docs/bugfix-agent/pipeline/e2e-manual-acceptance.md`（核对/按需修改）
+  - `CLAUDE.md`（核对/按需修改）
+  - `docs/design-docs/bugfix-agent/pipeline/tasks.md`（修改状态）
+- 依赖: Task 13
+- spec 映射: spec §3.2（文档沉淀）、ADR-0004（已接受决策）
+- 说明: 实现完成后核对文档中的旧待同步提示是否仍成立，并按 `project-knowledge` 做交付前沉淀检查。
+- context:
+  - `docs/adr/0004-svn-clean-cache-isolation-strategy.md` — intent 权威来源
+  - `docs/standards/tool-contract.md` — 工具行为契约
+  - `docs/roadmap.md` — 里程碑状态入口
+  - `CLAUDE.md` — Claude Code 协作入口
+- 验收标准:
+  - [x] 文档中旧的待同步提示已移除；`硬链接` / `hardlink` 命中均为 ADR-0003 历史描述、放弃方案或已明确更新
+  - [x] `git diff --check` 通过
+  - [x] 交付报告逐条给出沉淀检查结论：架构决策、放弃方案、新红线约束、普通功能变更
+- 子任务:
+  - [x] 14.1: 将任务状态按实际执行结果更新为「完成 / 需人工 / 阻塞」
+  - [x] 14.2: 核对 ADR-0004 与实现差异；若有新增取舍，补充到 ADR
+  - [x] 14.3: 更新 roadmap 与验收清单中的「实现待同步」状态
+  - [x] 14.4: 执行交付前沉淀检查并在最终汇总中逐条核销
+
+## Spec 覆盖映射
+
+| Spec 章节 / 决策来源 | 任务 | 说明 |
+|----------------------|------|------|
+| spec §3.1 F3 应用修改 | Task 10, 11, 12 | 配置、隔离工作区创建、调用方迁移 |
+| spec §3.1 F6 版本纳入 | Task 12, 14 | CLI 提示保留人工 review 与 `commit_fix.py` 写回路径 |
+| spec §3.2 安全 | Task 11, 13 | 缓存干净检查、路径安全、dot-path 拒绝、测试覆盖 |
+| spec §3.2 文档沉淀 | Task 14 | ADR-0004 与相关文档核销 |
+| ADR-0004 干净 SVN 缓存副本 | Task 10, 11, 12, 13, 14 | 从配置到实现、验证、文档同步全覆盖 |

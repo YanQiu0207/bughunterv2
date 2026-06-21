@@ -145,11 +145,17 @@ Diagnosis already submitted. Do not call any more tools.
 
 ## M2 工具契约
 
+### M2 修复工具通用信任链
+
+- `apply_fix`、`run_build`、`run_tests` 在 `FixAgent` 内必须绑定本轮 `proposal_id`；若工具入参 `fix_id` 与本轮 `proposal_id` 不一致，必须拒绝执行。
+- `FixProposal.status == "verified"` 不能只信任 LLM 提交值；必须由工具结果证明同一 `fix_id` 已成功执行 `apply_fix`、`run_build` 和 `run_tests`。
+- 若 LLM 提交 `verified`，但工具结果没有证明编译与单测均成功，代码必须降级为 `draft`。
+
 ### `apply_fix` — 将修复写入隔离工作区
 
-**用途**：创建硬链接隔离工作区，并将行级编辑指令应用到隔离区文件，原目录全程不动。
+**用途**：从干净 SVN 缓存副本创建隔离工作区，并将行级编辑指令应用到隔离区文件。原 `target_project_dir` 全程不动。
 
-**工厂函数**：`make_apply_fix_tool(workspace_dir: str, target_project_dir: str) -> Tool`
+**工厂函数**：`make_apply_fix_tool(workspace_dir: str, svn_cache_dir: str) -> Tool`
 
 **输入参数**：
 
@@ -159,9 +165,10 @@ Diagnosis already submitted. Do not call any more tools.
 | `edits` | `list[dict]` | 行级编辑指令列表，每项含 `file`、`start_line`、`end_line`、`new_content` |
 
 **行为**：
-1. 若隔离工作区不存在，用 `shutil.copytree(..., copy_function=os.link)` 从 `target_project_dir` 创建
-2. 按 `file` 分组，**从后往前**（行号降序）应用编辑，避免行号偏移
-3. 修改文件时先 `os.unlink`，再写入新内容（断开硬链接，保护原文件）
+1. 每次应用修改前，检查 `svn_cache_dir` 干净；若 `svn status` 有任何输出，返回错误，不创建或修改工作区。
+2. 若隔离工作区不存在，从 `svn_cache_dir` 复制到 `workspace/fix/<fix_id>/`。
+3. 按 `file` 分组，**从后往前**（行号降序）应用编辑，避免行号偏移。
+4. 修改只发生在 `workspace/fix/<fix_id>/`，不得写入 `svn_cache_dir` 或 `target_project_dir`。
 
 **返回格式（成功）**：
 
@@ -181,7 +188,7 @@ Diagnosis already submitted. Do not call any more tools.
 
 **人工 gate**：否（写隔离工作区，不碰原目录）。
 
-**M2 实现类型**：真实实现。
+**M2 实现类型**：真实实现（已同步 ADR-0004）。
 
 ---
 

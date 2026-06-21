@@ -11,7 +11,6 @@ from src.tools.apply_fix import make_apply_fix_tool
 from src.tools.run_build import make_run_build_tool
 from src.tools.run_tests import make_run_tests_tool
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -45,6 +44,17 @@ _VALID_UUID = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d"
 class TestApplyFix:
     FIX_ID = _VALID_UUID
 
+    @pytest.fixture(autouse=True)
+    def svn_status(self):
+        with patch("src.tools.apply_fix.subprocess.run") as mock_run:
+            mock_run.return_value = subprocess.CompletedProcess(
+                args=["svn", "status"],
+                returncode=0,
+                stdout="",
+                stderr="",
+            )
+            yield mock_run
+
     def _tool(self, workspace_root: str, target_dir: str):
         return make_apply_fix_tool(workspace_root, target_dir)
 
@@ -76,15 +86,13 @@ class TestApplyFix:
         ws_file = ws_root / "fix" / self.FIX_ID / java_rel
         assert _read(str(ws_file)) == "line1\nREPLACED\nline3\n"
 
-    @pytest.mark.skipif(sys.platform == "win32", reason="inode check is Linux-specific")
-    def test_original_file_inode_unchanged(self, tmp_path):
+    def test_cache_file_unchanged_after_edit(self, tmp_path):
         target = tmp_path / "project"
         ws_root = tmp_path / "workspace"
         java_rel = "src/Bar.java"
         java_abs = target / java_rel
 
         _write(str(java_abs), "a\nb\nc\n")
-        orig_inode = os.stat(str(java_abs)).st_ino
 
         tool = self._tool(str(ws_root), str(target))
         tool.invoke(
@@ -102,17 +110,15 @@ class TestApplyFix:
             }
         )
 
-        assert os.stat(str(java_abs)).st_ino == orig_inode, "Original inode must not change"
+        assert _read(str(java_abs)) == "a\nb\nc\n"
 
-    @pytest.mark.skipif(sys.platform == "win32", reason="inode check is Linux-specific")
-    def test_workspace_file_has_different_inode(self, tmp_path):
+    def test_workspace_file_edit_does_not_mutate_cache(self, tmp_path):
         target = tmp_path / "project"
         ws_root = tmp_path / "workspace"
         java_rel = "src/Baz.java"
         java_abs = target / java_rel
 
         _write(str(java_abs), "a\nb\n")
-        orig_inode = os.stat(str(java_abs)).st_ino
 
         tool = self._tool(str(ws_root), str(target))
         tool.invoke(
@@ -130,8 +136,238 @@ class TestApplyFix:
             }
         )
 
-        ws_inode = os.stat(str(ws_root / "fix" / self.FIX_ID / java_rel)).st_ino
-        assert ws_inode != orig_inode, "Workspace file must have a new inode after edit"
+        ws_file = ws_root / "fix" / self.FIX_ID / java_rel
+        assert _read(str(ws_file)) == "NEW\nb\n"
+        assert _read(str(java_abs)) == "a\nb\n"
+
+    def test_dirty_svn_cache_returns_error_without_workspace(
+        self, tmp_path, svn_status
+    ):
+        target = tmp_path / "project"
+        ws_root = tmp_path / "workspace"
+        _write(str(target / "A.java"), "x\n")
+        svn_status.return_value = subprocess.CompletedProcess(
+            args=["svn", "status"],
+            returncode=0,
+            stdout="M       A.java\n",
+            stderr="",
+        )
+
+        tool = self._tool(str(ws_root), str(target))
+        result = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "y\n",
+                        "reason": "r",
+                    }
+                ],
+            }
+        )
+
+        assert "[apply_fix] Error" in result
+        assert "local changes" in result
+        assert not (ws_root / "fix" / self.FIX_ID).exists()
+
+    def test_svn_status_failure_returns_error_without_workspace(
+        self, tmp_path, svn_status
+    ):
+        target = tmp_path / "project"
+        ws_root = tmp_path / "workspace"
+        _write(str(target / "A.java"), "x\n")
+        svn_status.return_value = subprocess.CompletedProcess(
+            args=["svn", "status"],
+            returncode=1,
+            stdout="",
+            stderr="not a working copy",
+        )
+
+        tool = self._tool(str(ws_root), str(target))
+        result = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "y\n",
+                        "reason": "r",
+                    }
+                ],
+            }
+        )
+
+        assert "[apply_fix] Error" in result
+        assert "svn status failed" in result
+        assert "not a working copy" in result
+        assert not (ws_root / "fix" / self.FIX_ID).exists()
+
+    def test_svn_status_stderr_output_rejected(self, tmp_path, svn_status):
+        target = tmp_path / "project"
+        ws_root = tmp_path / "workspace"
+        _write(str(target / "A.java"), "x\n")
+        svn_status.return_value = subprocess.CompletedProcess(
+            args=["svn", "status"],
+            returncode=0,
+            stdout="",
+            stderr="warning: suspicious working copy\n",
+        )
+
+        tool = self._tool(str(ws_root), str(target))
+        result = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "y\n",
+                        "reason": "r",
+                    }
+                ],
+            }
+        )
+
+        assert "[apply_fix] Error" in result
+        assert "local changes" in result
+        assert not (ws_root / "fix" / self.FIX_ID).exists()
+
+    def test_dirty_svn_cache_rejected_when_workspace_exists(
+        self, tmp_path, svn_status
+    ):
+        target = tmp_path / "project"
+        ws_root = tmp_path / "workspace"
+        _write(str(target / "A.java"), "original\n")
+        _write(str(target / "B.java"), "other\n")
+        tool = self._tool(str(ws_root), str(target))
+
+        result = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "round1\n",
+                        "reason": "r1",
+                    }
+                ],
+            }
+        )
+        assert "[apply_fix] Applied" in result
+
+        svn_status.return_value = subprocess.CompletedProcess(
+            args=["svn", "status"],
+            returncode=0,
+            stdout="M       A.java\n",
+            stderr="",
+        )
+        result2 = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "B.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "round2\n",
+                        "reason": "r2",
+                    }
+                ],
+            }
+        )
+
+        assert "[apply_fix] Error" in result2
+        assert "local changes" in result2
+        ws_path = ws_root / "fix" / self.FIX_ID
+        assert _read(str(ws_path / "A.java")) == "round1\n"
+        assert _read(str(ws_path / "B.java")) == "other\n"
+
+    def test_unexpected_fix_id_rejected(self, tmp_path):
+        target = tmp_path / "project"
+        ws_root = tmp_path / "workspace"
+        _write(str(target / "A.java"), "x\n")
+        expected = "11111111-1111-4111-8111-111111111111"
+        tool = make_apply_fix_tool(
+            str(ws_root), str(target), expected_fix_id=expected
+        )
+
+        result = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "y\n",
+                        "reason": "r",
+                    }
+                ],
+            }
+        )
+
+        assert "[apply_fix] Error" in result
+        assert "does not match" in result
+
+    def test_restore_unlinks_workspace_symlink_before_copy(self, tmp_path):
+        target = tmp_path / "project"
+        ws_root = tmp_path / "workspace"
+        outside = tmp_path / "outside.txt"
+        _write(str(target / "A.java"), "original\n")
+        _write(str(target / "B.java"), "other\n")
+        outside.write_text("outside\n", encoding="utf-8")
+        tool = self._tool(str(ws_root), str(target))
+
+        result = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "round1\n",
+                        "reason": "r1",
+                    }
+                ],
+            }
+        )
+        assert "[apply_fix] Applied" in result
+
+        ws_a = ws_root / "fix" / self.FIX_ID / "A.java"
+        try:
+            os.unlink(str(ws_a))
+            os.symlink(str(outside), str(ws_a))
+        except (OSError, NotImplementedError) as exc:
+            pytest.skip(f"symlink not available: {exc}")
+
+        result2 = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "B.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "round2\n",
+                        "reason": "r2",
+                    }
+                ],
+            }
+        )
+
+        assert "[apply_fix] Applied" in result2
+        assert outside.read_text(encoding="utf-8") == "outside\n"
+        assert not os.path.islink(str(ws_a))
+        assert _read(str(ws_a)) == "original\n"
 
     def test_reapply_same_file_restores_to_original(self, tmp_path):
         target = tmp_path / "project"
@@ -408,7 +644,7 @@ class TestApplyFix:
                         "file": ".fix_modified_files",
                         "start_line": 1,
                         "end_line": 1,
-                        "new_content": "[\"../../../etc/passwd\"]\n",
+                        "new_content": '["../../../etc/passwd"]\n',
                         "reason": "attack",
                     }
                 ],
@@ -491,7 +727,9 @@ class TestApplyFix:
             }
         ]
         tool = self._tool(str(ws_root), str(target))
-        result = tool.invoke({"fix_id": self.FIX_ID, "edits": single_large_edit})
+        result = tool.invoke(
+            {"fix_id": self.FIX_ID, "edits": single_large_edit}
+        )
         assert "[apply_fix] Error" in result
         # Could be per-edit limit (512KB) or total limit (4MB) — either is correct.
         assert "limit" in result.lower() or "bytes" in result
@@ -592,7 +830,9 @@ class TestApplyFix:
                     ],
                 }
             )
-            assert "[apply_fix] Error" in result, f"Expected error for {hidden_path!r}"
+            assert (
+                "[apply_fix] Error" in result
+            ), f"Expected error for {hidden_path!r}"
             assert "hidden" in result
 
     def test_restore_syncs_deleted_source_file(self, tmp_path):
@@ -640,16 +880,23 @@ class TestApplyFix:
         )
         assert "Applied" in result2
         ws_path = ws_root / "fix" / self.FIX_ID
-        assert not (ws_path / "A.java").exists(), "Workspace A.java must be removed"
+        assert not (
+            ws_path / "A.java"
+        ).exists(), "Workspace A.java must be removed"
         assert _read(str(ws_path / "B.java")) == "b_edit\n"
 
         # Registry must not retain the deleted-source entry.
         import json
+
         registry_path = ws_path / ".fix_modified_files"
         registry = json.loads(registry_path.read_text(encoding="utf-8"))
-        assert "A.java" not in registry, "Deleted-source file must be removed from registry"
+        assert (
+            "A.java" not in registry
+        ), "Deleted-source file must be removed from registry"
 
-    def test_invalid_range_on_second_file_does_not_corrupt_workspace(self, tmp_path):
+    def test_invalid_range_on_second_file_does_not_corrupt_workspace(
+        self, tmp_path
+    ):
         """P2 regression: validation failure on file B must not leave file A written but unregistered."""
         target = tmp_path / "project"
         ws_root = tmp_path / "workspace"
@@ -658,27 +905,49 @@ class TestApplyFix:
 
         tool = self._tool(str(ws_root), str(target))
 
-        result = tool.invoke({
-            "fix_id": self.FIX_ID,
-            "edits": [
-                {"file": "A.java", "start_line": 1, "end_line": 1, "new_content": "MODIFIED\n", "reason": "r"},
-                {"file": "B.java", "start_line": 5, "end_line": 5, "new_content": "oops\n", "reason": "bad"},
-            ],
-        })
+        result = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "MODIFIED\n",
+                        "reason": "r",
+                    },
+                    {
+                        "file": "B.java",
+                        "start_line": 5,
+                        "end_line": 5,
+                        "new_content": "oops\n",
+                        "reason": "bad",
+                    },
+                ],
+            }
+        )
         assert "[apply_fix] Error" in result
 
-        # A.java in workspace must be the original unmodified hardlink copy
+        # A.java in workspace must be the original unmodified cache copy.
         ws_a = ws_root / "fix" / self.FIX_ID / "A.java"
         if ws_a.exists():
             assert _read(str(ws_a)) == "a1\na2\n"
 
         # A second call must be able to apply edits to A.java from original state
-        result2 = tool.invoke({
-            "fix_id": self.FIX_ID,
-            "edits": [
-                {"file": "A.java", "start_line": 1, "end_line": 1, "new_content": "CORRECT\n", "reason": "r"},
-            ],
-        })
+        result2 = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "CORRECT\n",
+                        "reason": "r",
+                    },
+                ],
+            }
+        )
         assert "[apply_fix] Applied" in result2
         assert _read(str(ws_a)) == "CORRECT\na2\n"
 
@@ -762,11 +1031,21 @@ class TestRunBuild:
     def test_timeout_returns_error(self, tmp_path):
         ws_root, _ = _setup_workspace(tmp_path, self.FIX_ID)
         with patch("src.tools._command_runner.subprocess.run") as mock_run:
-            mock_run.side_effect = subprocess.TimeoutExpired(cmd="sleep", timeout=120)
+            mock_run.side_effect = subprocess.TimeoutExpired(
+                cmd="sleep", timeout=120
+            )
             tool = make_run_build_tool(ws_root, "sleep 999")
             result = tool.invoke({"fix_id": self.FIX_ID})
         assert "timed out" in result
         assert "120" in result
+
+    def test_unexpected_fix_id_rejected(self, tmp_path):
+        ws_root, _ = _setup_workspace(tmp_path, self.FIX_ID)
+        expected = "11111111-1111-4111-8111-111111111111"
+        tool = make_run_build_tool(ws_root, "echo hi", expected_fix_id=expected)
+        result = tool.invoke({"fix_id": self.FIX_ID})
+        assert "[run_build] Error" in result
+        assert "does not match" in result
 
 
 # ---------------------------------------------------------------------------
@@ -806,8 +1085,18 @@ class TestRunTests:
     def test_timeout_returns_error(self, tmp_path):
         ws_root, _ = _setup_workspace(tmp_path, self.FIX_ID)
         with patch("src.tools._command_runner.subprocess.run") as mock_run:
-            mock_run.side_effect = subprocess.TimeoutExpired(cmd="sleep", timeout=300)
+            mock_run.side_effect = subprocess.TimeoutExpired(
+                cmd="sleep", timeout=300
+            )
             tool = make_run_tests_tool(ws_root, "sleep 999")
             result = tool.invoke({"fix_id": self.FIX_ID})
         assert "timed out" in result
         assert "300" in result
+
+    def test_unexpected_fix_id_rejected(self, tmp_path):
+        ws_root, _ = _setup_workspace(tmp_path, self.FIX_ID)
+        expected = "11111111-1111-4111-8111-111111111111"
+        tool = make_run_tests_tool(ws_root, "echo hi", expected_fix_id=expected)
+        result = tool.invoke({"fix_id": self.FIX_ID})
+        assert "[run_tests] Error" in result
+        assert "does not match" in result

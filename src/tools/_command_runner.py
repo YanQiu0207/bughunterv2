@@ -11,7 +11,11 @@ _UUID_RE = re.compile(
 )
 
 
-def validate_fix_id(fix_id: str, tool_tag: str) -> str | None:
+def validate_fix_id(
+    fix_id: str,
+    tool_tag: str,
+    expected_fix_id: str | None = None,
+) -> str | None:
     """Check that fix_id is a well-formed UUID.
 
     Args:
@@ -25,6 +29,11 @@ def validate_fix_id(fix_id: str, tool_tag: str) -> str | None:
         return (
             f"[{tool_tag}] Error: fix_id '{fix_id}' is not a valid UUID. "
             "Use the fix_id provided at the start of the session."
+        )
+    if expected_fix_id is not None and fix_id != expected_fix_id:
+        return (
+            f"[{tool_tag}] Error: fix_id '{fix_id}' does not match the current "
+            "session fix_id."
         )
     return None
 

@@ -38,7 +38,8 @@ docs/
 └── adr/                               # 架构决策记录（ADR）
     ├── 0001-project-foundation-decisions.md  # 项目地基决策
     ├── 0002-diagnosis-backtrace-loop.md      # 诊断回溯循环骨架
-    └── 0003-m2-fix-isolation-strategy.md     # M2 修复隔离与验证策略
+    ├── 0003-m2-fix-isolation-strategy.md     # M2 硬链接隔离策略（已被 ADR-0004 取代）
+    └── 0004-svn-clean-cache-isolation-strategy.md  # 干净 SVN 缓存副本隔离策略
 ```
 
 > 标注 `[待建]` 的文件，在对应里程碑启动前创建或补齐。`tool-contract.md` 已补齐 M1/M2 工具契约。
@@ -48,7 +49,7 @@ docs/
 M1–M3 原型已实现，进入真实目标项目验收阶段。
 
 - M1：`diagnose.py` 已实现「堆栈 + 源码 → 诊断报告」。
-- M2：`fix.py`、`FixAgent` 与硬链接隔离工作区已实现。
+- M2：`fix.py`、`FixAgent` 与隔离工作区已实现；隔离策略已同步为干净 SVN 缓存副本方案（见 ADR-0004）。
 - M3A：`commit_fix.py` 已实现「已验证修复方案 → SVN 工作副本写回 / 提交」的半自动链路。
 - 下一步：按 [e2e-manual-acceptance.md](design-docs/bugfix-agent/pipeline/e2e-manual-acceptance.md) 在最小 Java + SVN 项目上验收。
 

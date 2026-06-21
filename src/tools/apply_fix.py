@@ -1,22 +1,23 @@
-"""apply_fix tool: create a hardlink workspace and apply line-level edits."""
+"""apply_fix tool: create an SVN-cache workspace and apply line-level edits."""
 
 import json
 import logging
 import os
 import pathlib
 import shutil
+import subprocess
 import tempfile
+from collections.abc import Callable
 from typing import Any
 
 from langchain_core.tools import tool
 
 from src.tools._command_runner import validate_fix_id
 
-
 _MAX_EDITS = 50
 _MODIFIED_REGISTRY = ".fix_modified_files"
-_REGISTRY_MAX_BYTES = 1 * 1024 * 1024       # 1 MB guard against tampered registry
-_MAX_NEW_CONTENT_BYTES = 512 * 1024         # per-edit cap (512 KB)
+_REGISTRY_MAX_BYTES = 1 * 1024 * 1024  # 1 MB guard against tampered registry
+_MAX_NEW_CONTENT_BYTES = 512 * 1024  # per-edit cap (512 KB)
 _MAX_TOTAL_CONTENT_BYTES = 4 * 1024 * 1024  # whole-batch cap (4 MB)
 
 logger = logging.getLogger(__name__)
@@ -84,8 +85,7 @@ def _save_modified_registry(workspace_path: str, files: set[str]) -> None:
 def _atomic_write_lines(ws_file: str, lines: list[str]) -> None:
     """Write lines to ws_file atomically using a temp file in the same directory.
 
-    This breaks any existing hardlink by replacing ws_file's directory entry
-    with a new inode, leaving the original source inode untouched.
+    This replaces ws_file atomically while leaving the SVN cache untouched.
 
     Args:
         ws_file: Absolute path to the destination file in the workspace.
@@ -108,19 +108,73 @@ def _atomic_write_lines(ws_file: str, lines: list[str]) -> None:
         raise
 
 
+def _check_svn_cache_clean(svn_cache_dir: str) -> str | None:
+    """Return an error message when svn_cache_dir is not a clean SVN checkout."""
+    try:
+        result = subprocess.run(
+            ["svn", "status", svn_cache_dir],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except OSError as exc:
+        return f"[apply_fix] Error checking SVN cache: {exc}"
+
+    output = (result.stdout or "") + (result.stderr or "")
+    if result.returncode != 0:
+        detail = output.strip()
+        suffix = f": {detail}" if detail else ""
+        return (
+            f"[apply_fix] Error: svn status failed for cache "
+            f"'{svn_cache_dir}'{suffix}"
+        )
+    if output:
+        return (
+            f"[apply_fix] Error: SVN cache '{svn_cache_dir}' has local changes. "
+            "Clean or refresh the cache before applying a fix."
+        )
+    return None
+
+
+def _copy_cache_to_workspace(
+    svn_cache_dir: str, workspace_path: str
+) -> str | None:
+    """Copy svn_cache_dir into workspace_path without deleting concurrent work."""
+    fix_root = os.path.dirname(workspace_path)
+    os.makedirs(fix_root, exist_ok=True)
+    tmp_path = tempfile.mkdtemp(
+        dir=fix_root,
+        prefix=f".{os.path.basename(workspace_path)}.tmp-",
+    )
+    try:
+        shutil.copytree(svn_cache_dir, tmp_path, dirs_exist_ok=True)
+        try:
+            os.rename(tmp_path, workspace_path)
+        except FileExistsError:
+            shutil.rmtree(tmp_path, ignore_errors=True)
+    except OSError as exc:
+        shutil.rmtree(tmp_path, ignore_errors=True)
+        return f"[apply_fix] Error creating workspace: {exc}"
+    return None
+
+
 def make_apply_fix_tool(
     workspace_root: str,
-    target_project_dir: str,
+    svn_cache_dir: str,
+    expected_fix_id: str | None = None,
+    on_success: Callable[[str], None] | None = None,
 ) -> Any:  # type: ignore[return]
-    """Return an apply_fix tool bound to workspace_root and target_project_dir.
+    """Return an apply_fix tool bound to workspace_root and svn_cache_dir.
 
-    The tool creates a hardlink-based isolation workspace on first call, then
-    applies line-level edits to workspace files.  The original project directory
-    is never modified.
+    The tool copies a clean SVN cache into an isolation workspace on first call,
+    then applies line-level edits to workspace files.  The SVN cache directory is
+    never modified.
 
     Args:
         workspace_root: Root directory for all fix workspaces (e.g. "workspace").
-        target_project_dir: Absolute path to the Java project being fixed.
+        svn_cache_dir: Clean SVN working copy used as the workspace baseline.
+        expected_fix_id: Optional fix_id bound to this tool instance.
+        on_success: Optional callback receiving fix_id after edits are applied.
 
     Returns:
         A LangChain @tool function.
@@ -128,13 +182,12 @@ def make_apply_fix_tool(
 
     @tool
     def apply_fix(fix_id: str, edits: list[dict[str, Any]]) -> str:
-        """Apply line-level code edits to an isolated hardlink workspace.
+        """Apply line-level code edits to an isolated workspace.
 
-        On the first call, creates the workspace by hardlinking all files from
-        the target project (near-zero disk overhead).  On each subsequent call,
-        ALL previously modified files are restored to their original content
-        before the new edits are applied, ensuring the workspace exactly
-        reflects the current edits list.
+        On the first call, creates the workspace by copying all files from the
+        clean SVN cache.  On each subsequent call, ALL previously modified files
+        are restored from the SVN cache before the new edits are applied,
+        ensuring the workspace exactly reflects the current edits list.
 
         Args:
             fix_id: Unique identifier for this fix; must be the UUID provided in
@@ -149,7 +202,7 @@ def make_apply_fix_tool(
                 - reason (str): one-sentence rationale for this change
         """
         # --- fix_id validation ---
-        err = validate_fix_id(fix_id, "apply_fix")
+        err = validate_fix_id(fix_id, "apply_fix", expected_fix_id)
         if err:
             return err
 
@@ -178,7 +231,7 @@ def make_apply_fix_tool(
 
             try:
                 _validate_rel_path(workspace_path, rel)
-                _validate_rel_path(target_project_dir, rel)
+                _validate_rel_path(svn_cache_dir, rel)
             except ValueError as exc:
                 return f"[apply_fix] Error: {exc}"
 
@@ -202,21 +255,20 @@ def make_apply_fix_tool(
                 "exceeds the 4 MB batch limit."
             )
 
+        # The cache is the restore baseline for every apply_fix call, not just
+        # the first workspace creation. Refuse to proceed if it is no longer
+        # clean; otherwise a later re-apply could restore from a dirty baseline.
+        cache_error = _check_svn_cache_clean(svn_cache_dir)
+        if cache_error:
+            return cache_error
+
         # --- workspace creation ---
         if not os.path.exists(workspace_path):
-            try:
-                shutil.copytree(
-                    target_project_dir,
-                    workspace_path,
-                    copy_function=os.link,
-                )
-            except OSError as exc:
-                if os.path.exists(workspace_path):
-                    try:
-                        shutil.rmtree(workspace_path)
-                    except OSError:
-                        pass
-                return f"[apply_fix] Error creating workspace: {exc}"
+            create_error = _copy_cache_to_workspace(
+                svn_cache_dir, workspace_path
+            )
+            if create_error:
+                return create_error
 
         # --- restore ALL previously modified files ---
         # Validate each registry entry before trusting it; skip corrupt entries.
@@ -234,7 +286,7 @@ def make_apply_fix_tool(
 
         for rel_file in list(previously_modified):
             ws_file = os.path.join(workspace_path, rel_file)
-            orig_file = os.path.join(target_project_dir, rel_file)
+            orig_file = os.path.join(svn_cache_dir, rel_file)
             if not os.path.exists(orig_file):
                 # Source file was deleted; sync workspace to match.
                 if os.path.exists(ws_file):
@@ -249,11 +301,13 @@ def make_apply_fix_tool(
                 previously_modified.discard(rel_file)
                 continue
             try:
-                if os.path.exists(ws_file):
+                if os.path.lexists(ws_file):
                     os.unlink(ws_file)
-                os.link(orig_file, ws_file)
+                shutil.copy2(orig_file, ws_file, follow_symlinks=False)
             except OSError as exc:
-                return f"[apply_fix] Error: could not restore '{rel_file}': {exc}"
+                return (
+                    f"[apply_fix] Error: could not restore '{rel_file}': {exc}"
+                )
 
         # --- group edits by file ---
         edits_by_file: dict[str, list[dict[str, Any]]] = {}
@@ -265,9 +319,7 @@ def make_apply_fix_tool(
         for rel_file in edits_by_file:
             ws_file = os.path.join(workspace_path, rel_file)
             if not os.path.exists(ws_file):
-                return (
-                    f"[apply_fix] Error: file '{rel_file}' not found in workspace."
-                )
+                return f"[apply_fix] Error: file '{rel_file}' not found in workspace."
 
         # --- read all files and validate all ranges before writing anything ---
         # A validation failure on any file must not leave other files partially
@@ -327,7 +379,12 @@ def make_apply_fix_tool(
             newly_modified.add(rel_file)
 
         # Accumulate all ever-modified files so the next call can restore them.
-        _save_modified_registry(workspace_path, previously_modified | newly_modified)
+        _save_modified_registry(
+            workspace_path, previously_modified | newly_modified
+        )
+
+        if on_success is not None:
+            on_success(fix_id)
 
         files_list = "\n  ".join(sorted(newly_modified))
         return (

@@ -22,6 +22,8 @@ _DEFAULT_LLM_MODEL = "gpt-4o"
 _DEFAULT_DIAGNOSIS_OUTPUT_LANGUAGE = "zh-CN"
 _DEFAULT_DIAGNOSIS_PROMPT_APPEND = ""
 _DEFAULT_TARGET_PROJECT_DIR = ""
+_DEFAULT_SVN_URL = ""
+_DEFAULT_SVN_CACHE_DIR = "workspace/cache/svn-clean"
 _DEFAULT_BUILD_COMMAND = ""
 _DEFAULT_TEST_COMMAND = ""
 
@@ -42,6 +44,8 @@ class Config:
     diagnosis_output_language: str = _DEFAULT_DIAGNOSIS_OUTPUT_LANGUAGE
     diagnosis_prompt_append: str = _DEFAULT_DIAGNOSIS_PROMPT_APPEND
     target_project_dir: str = _DEFAULT_TARGET_PROJECT_DIR
+    svn_url: str = _DEFAULT_SVN_URL
+    svn_cache_dir: str = _DEFAULT_SVN_CACHE_DIR
     build_command: str = _DEFAULT_BUILD_COMMAND
     test_command: str = _DEFAULT_TEST_COMMAND
 
@@ -112,6 +116,8 @@ def load_config(path: str) -> Config:
         target_project_dir=str(
             raw.get("target_project_dir", _DEFAULT_TARGET_PROJECT_DIR)
         ),
+        svn_url=str(raw.get("svn_url", _DEFAULT_SVN_URL)),
+        svn_cache_dir=str(raw.get("svn_cache_dir", _DEFAULT_SVN_CACHE_DIR)),
         build_command=str(raw.get("build_command", _DEFAULT_BUILD_COMMAND)),
         test_command=str(raw.get("test_command", _DEFAULT_TEST_COMMAND)),
     )
