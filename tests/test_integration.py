@@ -1,6 +1,6 @@
 """Integration test: canonical NPE example end-to-end diagnosis.
 
-Requires a real ANTHROPIC_API_KEY environment variable.
+Requires a real LLM_API_KEY environment variable and config.yaml model settings.
 Run with: pytest tests/test_integration.py -v -m integration
 """
 
@@ -10,13 +10,15 @@ from pathlib import Path
 import pytest
 
 from src.agent.diagnosis_agent import DiagnosisAgent
-from src.config import Config
+from src.config import load_config
 from src.source_index import SourceIndex
 from src.stack_parser import parse_stack_trace
 
+_PROJECT_ROOT = Path(__file__).parent.parent
 _FIXTURES_DIR = Path(__file__).parent / "fixtures"
 _STACK_TRACE_FILE = _FIXTURES_DIR / "stack_trace.txt"
 _SRC_DIR = str(_FIXTURES_DIR / "src")
+_CONFIG_FILE = _PROJECT_ROOT / "config.yaml"
 
 
 @pytest.fixture(scope="module")
@@ -25,9 +27,12 @@ def stack_text() -> str:
 
 
 @pytest.fixture(scope="module")
-def diagnosis_report(stack_text: str, tmp_path_factory: pytest.TempPathFactory):
+def diagnosis_report(stack_text: str):
     """Run the full diagnosis pipeline once and return the report."""
-    config = Config()
+    config = load_config(str(_CONFIG_FILE))
+    if not config.llm_api_key:
+        pytest.skip("LLM_API_KEY is required for integration diagnosis tests.")
+
     index = SourceIndex(_SRC_DIR)
     index.build()
 

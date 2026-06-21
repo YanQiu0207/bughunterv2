@@ -23,4 +23,10 @@
 
 ## 当前阶段
 
-需求澄清已完成，进入 **M1 诊断设计**（见 `docs/roadmap.md`、`docs/adr/0001-project-foundation-decisions.md`）。
+M1–M3A 原型已实现，当前进入 **端到端手工验收阶段**（见 `docs/roadmap.md` 与 `docs/design-docs/bugfix-agent/pipeline/e2e-manual-acceptance.md`）。
+
+验收前默认约束：
+
+- 真实 LLM 配置统一走 `config.yaml` + 环境变量 `LLM_API_KEY`。
+- `target_project_dir`、`build_command`、`test_command` 为空时，不运行 `fix.py`。
+- `commit_fix.py` 默认只展示 diff；必须显式传 `--yes` 才允许写回和提交。
