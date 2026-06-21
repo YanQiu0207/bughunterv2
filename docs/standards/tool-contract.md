@@ -148,8 +148,18 @@ Diagnosis already submitted. Do not call any more tools.
 ### M2 修复工具通用信任链
 
 - `apply_fix`、`run_build`、`run_tests` 在 `FixAgent` 内必须绑定本轮 `proposal_id`；若工具入参 `fix_id` 与本轮 `proposal_id` 不一致，必须拒绝执行。
-- `FixProposal.status == "verified"` 不能只信任 LLM 提交值；必须由工具结果证明同一 `fix_id` 已成功执行 `apply_fix`、`run_build` 和 `run_tests`。
-- 若 LLM 提交 `verified`，但工具结果没有证明编译与单测均成功，代码必须降级为 `draft`。
+- `FixProposal.status == "verified"` 不能只信任 LLM 提交值；必须由工具结果证明同一 `fix_id` 的同一批规范化 `edits` 已成功执行 `apply_fix`、`run_build` 和 `run_tests`。
+- 若 LLM 提交 `verified`，但工具结果没有证明编译与单测均成功，或提交的 `edits` 与最后一次已验证 `edits` 不一致，代码必须降级为 `draft`。
+
+### M2 工厂内部注入参数
+
+以下参数由 `FixAgent` 在创建工具时注入，不由 LLM 在工具调用入参中提供：
+
+| 参数 | 适用工具 | 说明 |
+| ---- | -------- | ---- |
+| `expected_fix_id` | `apply_fix`、`run_build`、`run_tests` | 绑定本轮 `proposal_id`，用于拒绝跨会话或伪造的 `fix_id`。 |
+| `on_success` | `apply_fix` | 内部回调，接收 `fix_id` 与本次已应用 `edits`，用于记录最后一次已应用 edits hash。 |
+| `on_result` | `run_build`、`run_tests` | 内部回调，接收 `fix_id` 与结构化成功标记；成功状态绑定当前最后一次已应用 edits hash。 |
 
 ### `apply_fix` — 将修复写入隔离工作区
 

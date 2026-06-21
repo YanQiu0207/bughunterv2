@@ -260,7 +260,7 @@ Exception in thread "main" java.lang.NullPointerException
 
 回溯到「码外来源」（如 `userDao.findById(id)` 的返回值）时，agent **记录该节点并停止该分支回溯**，在证据链中标注：「根因疑似在数据层 [具体位置]，当前环境无法验证」，置信度降为 `low`。不暂停流程，不请求人工介入。
 
-所有工具遵循统一契约：返回结构体含 `data`、`total`、`truncated` 三字段；完整契约见 `docs/standards/tool-contract.md`（待建）。
+所有工具遵循统一契约：工具外部返回人类可读文本，失败时返回带 `[tool_name]` 前缀的错误字符串；完整契约见 `docs/standards/tool-contract.md`。
 
 ### 4.10 M1 实现架构
 

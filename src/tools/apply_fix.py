@@ -19,6 +19,8 @@ _MODIFIED_REGISTRY = ".fix_modified_files"
 _REGISTRY_MAX_BYTES = 1 * 1024 * 1024  # 1 MB guard against tampered registry
 _MAX_NEW_CONTENT_BYTES = 512 * 1024  # per-edit cap (512 KB)
 _MAX_TOTAL_CONTENT_BYTES = 4 * 1024 * 1024  # whole-batch cap (4 MB)
+_SVN_STATUS_TIMEOUT_SECONDS = 30
+_SVN_STATUS_DETAIL_MAX_CHARS = 2000
 
 logger = logging.getLogger(__name__)
 
@@ -54,13 +56,29 @@ def _load_modified_registry(workspace_path: str) -> set[str]:
     registry = os.path.join(workspace_path, _MODIFIED_REGISTRY)
     if not os.path.exists(registry):
         return set()
-    if os.path.getsize(registry) > _REGISTRY_MAX_BYTES:
+    try:
+        if os.path.getsize(registry) > _REGISTRY_MAX_BYTES:
+            raise RuntimeError(
+                f"Registry file at '{registry}' exceeds {_REGISTRY_MAX_BYTES} bytes. "
+                "The workspace may be corrupt; delete the workspace directory and retry."
+            )
+        with open(registry, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except RuntimeError:
+        raise
+    except (json.JSONDecodeError, TypeError, OSError) as exc:
         raise RuntimeError(
-            f"Registry file at '{registry}' exceeds {_REGISTRY_MAX_BYTES} bytes. "
-            "The workspace may be corrupt; delete the workspace directory and retry."
+            f"Registry file at '{registry}' is corrupt or unreadable: {exc}. "
+            "Delete the workspace directory and retry."
+        ) from exc
+    if not isinstance(data, list) or not all(
+        isinstance(item, str) for item in data
+    ):
+        raise RuntimeError(
+            f"Registry file at '{registry}' must contain a JSON list of file paths. "
+            "Delete the workspace directory and retry."
         )
-    with open(registry, encoding="utf-8") as fh:
-        return set(json.load(fh))
+    return set(data)
 
 
 def _save_modified_registry(workspace_path: str, files: set[str]) -> None:
@@ -108,31 +126,93 @@ def _atomic_write_lines(ws_file: str, lines: list[str]) -> None:
         raise
 
 
+def _format_svn_status_detail(output: str | None) -> str:
+    """Return truncated svn status output suitable for tool error messages."""
+    detail = (output or "").strip()
+    if len(detail) <= _SVN_STATUS_DETAIL_MAX_CHARS:
+        return detail
+    return (
+        detail[:_SVN_STATUS_DETAIL_MAX_CHARS]
+        + f"... [truncated to {_SVN_STATUS_DETAIL_MAX_CHARS} chars]"
+    )
+
+
 def _check_svn_cache_clean(svn_cache_dir: str) -> str | None:
     """Return an error message when svn_cache_dir is not a clean SVN checkout."""
     try:
-        result = subprocess.run(
-            ["svn", "status", svn_cache_dir],
-            capture_output=True,
-            text=True,
-            check=False,
+        with tempfile.TemporaryFile(
+            mode="w+", encoding="utf-8", errors="replace"
+        ) as output_file:
+            result = subprocess.run(
+                ["svn", "status", svn_cache_dir],
+                stdout=output_file,
+                stderr=subprocess.STDOUT,
+                text=True,
+                check=False,
+                timeout=_SVN_STATUS_TIMEOUT_SECONDS,
+            )
+            output_file.seek(0)
+            output = output_file.read(_SVN_STATUS_DETAIL_MAX_CHARS + 1)
+            if not output:
+                output = (getattr(result, "stdout", None) or "") + (
+                    getattr(result, "stderr", None) or ""
+                )
+    except subprocess.TimeoutExpired as exc:
+        stdout = (
+            exc.output.decode(errors="replace")
+            if isinstance(exc.output, bytes)
+            else (exc.output or "")
+        )
+        stderr = (
+            exc.stderr.decode(errors="replace")
+            if isinstance(exc.stderr, bytes)
+            else (exc.stderr or "")
+        )
+        detail = _format_svn_status_detail(stdout + stderr)
+        suffix = f": {detail}" if detail else ""
+        return (
+            f"[apply_fix] Error: svn status timed out after "
+            f"{_SVN_STATUS_TIMEOUT_SECONDS} seconds for cache "
+            f"'{svn_cache_dir}'{suffix}"
         )
     except OSError as exc:
         return f"[apply_fix] Error checking SVN cache: {exc}"
 
-    output = (result.stdout or "") + (result.stderr or "")
     if result.returncode != 0:
-        detail = output.strip()
+        detail = _format_svn_status_detail(output)
         suffix = f": {detail}" if detail else ""
         return (
             f"[apply_fix] Error: svn status failed for cache "
             f"'{svn_cache_dir}'{suffix}"
         )
     if output:
+        detail = _format_svn_status_detail(output)
+        suffix = f" Details: {detail}" if detail else ""
         return (
             f"[apply_fix] Error: SVN cache '{svn_cache_dir}' has local changes. "
-            "Clean or refresh the cache before applying a fix."
+            "Clean the cache before applying a fix."
+            f"{suffix}"
         )
+    return None
+
+
+def _restore_written_files_from_cache(
+    workspace_path: str,
+    svn_cache_dir: str,
+    rel_files: set[str],
+) -> str | None:
+    """Restore files written during a failed batch from the SVN cache."""
+    for rel_file in sorted(rel_files):
+        ws_file = os.path.join(workspace_path, rel_file)
+        orig_file = os.path.join(svn_cache_dir, rel_file)
+        try:
+            if os.path.lexists(ws_file):
+                os.unlink(ws_file)
+            if os.path.exists(orig_file):
+                os.makedirs(os.path.dirname(ws_file), exist_ok=True)
+                shutil.copy2(orig_file, ws_file, follow_symlinks=False)
+        except OSError as exc:
+            return f"rollback failed for '{rel_file}': {exc}"
     return None
 
 
@@ -162,8 +242,9 @@ def make_apply_fix_tool(
     workspace_root: str,
     svn_cache_dir: str,
     expected_fix_id: str | None = None,
-    on_success: Callable[[str], None] | None = None,
-) -> Any:  # type: ignore[return]
+    on_success: Callable[[str, list[dict[str, Any]]], None] | None = None,
+    on_failure: Callable[[str], None] | None = None,
+) -> Any:
     """Return an apply_fix tool bound to workspace_root and svn_cache_dir.
 
     The tool copies a clean SVN cache into an isolation workspace on first call,
@@ -174,7 +255,10 @@ def make_apply_fix_tool(
         workspace_root: Root directory for all fix workspaces (e.g. "workspace").
         svn_cache_dir: Clean SVN working copy used as the workspace baseline.
         expected_fix_id: Optional fix_id bound to this tool instance.
-        on_success: Optional callback receiving fix_id after edits are applied.
+        on_success: Optional callback receiving fix_id and edits after edits
+            are applied.
+        on_failure: Optional callback receiving fix_id after a validated
+            apply attempt fails.
 
     Returns:
         A LangChain @tool function.
@@ -206,8 +290,13 @@ def make_apply_fix_tool(
         if err:
             return err
 
+        def fail(message: str) -> str:
+            if on_failure is not None:
+                on_failure(fix_id)
+            return message
+
         if len(edits) > _MAX_EDITS:
-            return (
+            return fail(
                 f"[apply_fix] Error: {len(edits)} edits exceed the maximum of "
                 f"{_MAX_EDITS}. Split into smaller batches."
             )
@@ -224,7 +313,7 @@ def make_apply_fix_tool(
             # Reject hidden/metadata files (dot-prefix components) to prevent
             # the LLM from overwriting internal files like .fix_modified_files.
             if any(part.startswith(".") for part in pathlib.Path(rel).parts):
-                return (
+                return fail(
                     f"[apply_fix] Error: editing hidden/metadata files is not "
                     f"allowed: {rel!r}"
                 )
@@ -233,24 +322,24 @@ def make_apply_fix_tool(
                 _validate_rel_path(workspace_path, rel)
                 _validate_rel_path(svn_cache_dir, rel)
             except ValueError as exc:
-                return f"[apply_fix] Error: {exc}"
+                return fail(f"[apply_fix] Error: {exc}")
 
             nc = edit.get("new_content", "")
             if not nc:
-                return (
+                return fail(
                     f"[apply_fix] Error: 'new_content' for edit on '{rel}' is empty. "
                     "Provide the replacement text, or at minimum a single newline."
                 )
             nc_bytes = len(nc.encode())
             if nc_bytes > _MAX_NEW_CONTENT_BYTES:
-                return (
+                return fail(
                     f"[apply_fix] Error: 'new_content' for edit on '{rel}' is "
                     f"{nc_bytes} bytes, exceeding the 512 KB per-edit limit."
                 )
             total_content_bytes += nc_bytes
 
         if total_content_bytes > _MAX_TOTAL_CONTENT_BYTES:
-            return (
+            return fail(
                 f"[apply_fix] Error: total new_content size ({total_content_bytes} bytes) "
                 "exceeds the 4 MB batch limit."
             )
@@ -260,7 +349,7 @@ def make_apply_fix_tool(
         # clean; otherwise a later re-apply could restore from a dirty baseline.
         cache_error = _check_svn_cache_clean(svn_cache_dir)
         if cache_error:
-            return cache_error
+            return fail(cache_error)
 
         # --- workspace creation ---
         if not os.path.exists(workspace_path):
@@ -268,14 +357,14 @@ def make_apply_fix_tool(
                 svn_cache_dir, workspace_path
             )
             if create_error:
-                return create_error
+                return fail(create_error)
 
         # --- restore ALL previously modified files ---
         # Validate each registry entry before trusting it; skip corrupt entries.
         try:
             raw_registry = _load_modified_registry(workspace_path)
         except RuntimeError as exc:
-            return f"[apply_fix] Error: {exc}"
+            return fail(f"[apply_fix] Error: {exc}")
         previously_modified: set[str] = set()
         for rel_file in raw_registry:
             try:
@@ -293,7 +382,10 @@ def make_apply_fix_tool(
                     try:
                         os.unlink(ws_file)
                     except OSError as exc:
-                        return f"[apply_fix] Error: cannot sync deleted file '{rel_file}': {exc}"
+                        return fail(
+                            f"[apply_fix] Error: cannot sync deleted file "
+                            f"'{rel_file}': {exc}"
+                        )
                 logger.warning(
                     "Source file '%s' no longer exists; removed workspace copy.",
                     rel_file,
@@ -305,7 +397,7 @@ def make_apply_fix_tool(
                     os.unlink(ws_file)
                 shutil.copy2(orig_file, ws_file, follow_symlinks=False)
             except OSError as exc:
-                return (
+                return fail(
                     f"[apply_fix] Error: could not restore '{rel_file}': {exc}"
                 )
 
@@ -319,7 +411,9 @@ def make_apply_fix_tool(
         for rel_file in edits_by_file:
             ws_file = os.path.join(workspace_path, rel_file)
             if not os.path.exists(ws_file):
-                return f"[apply_fix] Error: file '{rel_file}' not found in workspace."
+                return fail(
+                    f"[apply_fix] Error: file '{rel_file}' not found in workspace."
+                )
 
         # --- read all files and validate all ranges before writing anything ---
         # A validation failure on any file must not leave other files partially
@@ -344,7 +438,7 @@ def make_apply_fix_tool(
                 a_end = int(sorted_edits_asc[i].get("end_line", 0))
                 b_start = int(sorted_edits_asc[i + 1].get("start_line", 0))
                 if b_start <= a_end:
-                    return (
+                    return fail(
                         f"[apply_fix] Error: overlapping edits on '{rel_file}': "
                         f"edit ending at line {a_end} overlaps with edit starting "
                         f"at line {b_start}. Each edit must target a distinct line range."
@@ -355,7 +449,7 @@ def make_apply_fix_tool(
                 start = int(edit.get("start_line", 0))
                 end = int(edit.get("end_line", 0))
                 if start < 1 or end < start or end > orig_len:
-                    return (
+                    return fail(
                         f"[apply_fix] Error: line range [{start}, {end}] is invalid "
                         f"for '{rel_file}' ({orig_len} lines total)."
                     )
@@ -365,26 +459,46 @@ def make_apply_fix_tool(
 
         # --- all validations passed; apply edits and write ---
         newly_modified: set[str] = set()
-        for rel_file, sorted_edits_asc in file_sorted_edits.items():
-            ws_file = os.path.join(workspace_path, rel_file)
-            lines = file_lines[rel_file]
+        attempted_writes: set[str] = set()
+        try:
+            for rel_file, sorted_edits_asc in file_sorted_edits.items():
+                ws_file = os.path.join(workspace_path, rel_file)
+                lines = file_lines[rel_file]
 
-            for edit in reversed(sorted_edits_asc):
-                start = int(edit.get("start_line", 0))
-                end = int(edit.get("end_line", 0))
-                new_content: str = edit.get("new_content", "")
-                lines[start - 1 : end] = new_content.splitlines(keepends=True)
+                for edit in reversed(sorted_edits_asc):
+                    start = int(edit.get("start_line", 0))
+                    end = int(edit.get("end_line", 0))
+                    new_content: str = edit.get("new_content", "")
+                    lines[start - 1 : end] = new_content.splitlines(
+                        keepends=True
+                    )
 
-            _atomic_write_lines(ws_file, lines)
-            newly_modified.add(rel_file)
+                attempted_writes.add(rel_file)
+                _atomic_write_lines(ws_file, lines)
+                newly_modified.add(rel_file)
 
-        # Accumulate all ever-modified files so the next call can restore them.
-        _save_modified_registry(
-            workspace_path, previously_modified | newly_modified
-        )
+            # Accumulate all ever-modified files so the next call can restore them.
+            _save_modified_registry(
+                workspace_path, previously_modified | newly_modified
+            )
+        except OSError as exc:
+            rollback_error = _restore_written_files_from_cache(
+                workspace_path,
+                svn_cache_dir,
+                attempted_writes,
+            )
+            if rollback_error:
+                return fail(
+                    f"[apply_fix] Error: failed to write edits: {exc}; "
+                    f"{rollback_error}"
+                )
+            return fail(
+                f"[apply_fix] Error: failed to write edits: {exc}. "
+                "Rolled back files written in this batch."
+            )
 
         if on_success is not None:
-            on_success(fix_id)
+            on_success(fix_id, edits)
 
         files_list = "\n  ".join(sorted(newly_modified))
         return (

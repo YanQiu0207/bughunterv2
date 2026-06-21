@@ -27,8 +27,8 @@ workspace/fix/<fix_id>/             # 每次修复从缓存复制出的隔离工
 
 核心流程：
 
-1. 初始化或刷新 `workspace/cache/svn-clean`。
-2. 创建 `workspace/fix/<fix_id>/` 前，强制检查缓存副本干净。
+1. 使用已存在的 `workspace/cache/svn-clean`。
+2. 创建 `workspace/fix/<fix_id>/` 前，强制校验缓存副本干净。
 3. 从 `workspace/cache/svn-clean` 复制出 `workspace/fix/<fix_id>/`。
 4. Agent 只修改 `workspace/fix/<fix_id>/`。
 5. `run_build` / `run_tests` 只在 `workspace/fix/<fix_id>/` 中执行。
@@ -39,15 +39,13 @@ workspace/fix/<fix_id>/             # 每次修复从缓存复制出的隔离工
 
 ### 1. 缓存副本只读给 agent
 
-`workspace/cache/svn-clean` 只允许工具执行：
+本轮实现中，`workspace/cache/svn-clean` 只允许工具执行：
 
 ```text
-svn checkout
-svn update
 svn status
 ```
 
-Agent 不得在缓存副本中执行代码修改、构建或测试。
+Agent 不得在缓存副本中执行代码修改、构建或测试。`svn checkout` / `svn update` 初始化或刷新缓存副本属于后续能力，不在本轮 `apply_fix` 中执行。
 
 ### 2. 创建隔离工作区前必须检查缓存干净
 
@@ -95,7 +93,7 @@ svn status <target_project_dir>
 
 ## 影响
 
-- `apply_fix` 的工作区创建逻辑应从「硬链接复制 `target_project_dir`」改为「刷新 / 校验 `workspace/cache/svn-clean` 后复制缓存副本」。
+- `apply_fix` 的工作区创建逻辑应从「硬链接复制 `target_project_dir`」改为「校验已存在的 `workspace/cache/svn-clean` 后复制缓存副本」。
 - `run_build` / `run_tests` 继续在 `workspace/fix/<fix_id>/` 执行，接口可保持不变。
 - `commit_fix.py` 写回前应继续检查 `target_project_dir` 干净，并在失败时 revert 已写文件。
 - `config.yaml` 后续需要补充缓存相关配置，例如：
@@ -119,4 +117,4 @@ svn_cache_dir: "workspace/cache/svn-clean"
 - 需要多维护一个干净 SVN 缓存副本。
 - 本地磁盘占用高于硬链接方案。
 - 复制大型工作副本仍有 I/O 成本。
-- 需要新增缓存初始化、刷新、干净性检查和清理规则。
+- 本轮只实现已存在缓存副本的干净性检查；缓存初始化、刷新和清理规则是后续能力。

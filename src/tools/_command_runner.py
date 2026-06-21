@@ -3,12 +3,21 @@
 import re
 import shlex
 import subprocess
+from dataclasses import dataclass
 
 _MAX_OUTPUT_LINES = 200
 _UUID_RE = re.compile(
     r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
     re.IGNORECASE,
 )
+
+
+@dataclass(frozen=True)
+class CommandResult:
+    """Structured command result for internal callbacks."""
+
+    message: str
+    succeeded: bool
 
 
 def validate_fix_id(
@@ -38,15 +47,15 @@ def validate_fix_id(
     return None
 
 
-def run_command_in_workspace(
+def run_command_result_in_workspace(
     tool_tag: str,
     command: str,
     workspace_path: str,
     timeout: int,
     success_label: str,
     failure_label: str,
-) -> str:
-    """Run a shell command in workspace_path and return formatted output.
+) -> CommandResult:
+    """Run a shell command in workspace_path and return structured output.
 
     Args:
         tool_tag: Prefix string used in error/status messages (e.g. "run_build").
@@ -57,12 +66,15 @@ def run_command_in_workspace(
         failure_label: Status line prefix on non-zero exit (e.g. "Build failed").
 
     Returns:
-        Human-readable result string with status header and captured output.
+        CommandResult with human-readable output and success flag.
     """
     try:
         cmd_args = shlex.split(command)
     except ValueError as exc:
-        return f"[{tool_tag}] Error: invalid command syntax: {exc}"
+        return CommandResult(
+            message=f"[{tool_tag}] Error: invalid command syntax: {exc}",
+            succeeded=False,
+        )
     try:
         proc = subprocess.run(
             cmd_args,
@@ -72,9 +84,14 @@ def run_command_in_workspace(
             timeout=timeout,
         )
     except subprocess.TimeoutExpired:
-        return f"[{tool_tag}] Error: timed out after {timeout} seconds."
+        return CommandResult(
+            message=f"[{tool_tag}] Error: timed out after {timeout} seconds.",
+            succeeded=False,
+        )
     except OSError as exc:
-        return f"[{tool_tag}] Error: {exc}"
+        return CommandResult(
+            message=f"[{tool_tag}] Error: {exc}", succeeded=False
+        )
 
     output = proc.stdout + proc.stderr
     lines = output.splitlines()
@@ -87,8 +104,36 @@ def run_command_in_workspace(
     )
 
     if proc.returncode == 0:
-        return f"[{tool_tag}] {success_label}\n--- output ---\n{display}{truncation_note}"
-    return (
-        f"[{tool_tag}] {failure_label} (exit code {proc.returncode}).\n"
-        f"--- output ---\n{display}{truncation_note}"
+        return CommandResult(
+            message=(
+                f"[{tool_tag}] {success_label}\n"
+                f"--- output ---\n{display}{truncation_note}"
+            ),
+            succeeded=True,
+        )
+    return CommandResult(
+        message=(
+            f"[{tool_tag}] {failure_label} (exit code {proc.returncode}).\n"
+            f"--- output ---\n{display}{truncation_note}"
+        ),
+        succeeded=False,
     )
+
+
+def run_command_in_workspace(
+    tool_tag: str,
+    command: str,
+    workspace_path: str,
+    timeout: int,
+    success_label: str,
+    failure_label: str,
+) -> str:
+    """Run a shell command in workspace_path and return formatted output."""
+    return run_command_result_in_workspace(
+        tool_tag=tool_tag,
+        command=command,
+        workspace_path=workspace_path,
+        timeout=timeout,
+        success_label=success_label,
+        failure_label=failure_label,
+    ).message

@@ -9,6 +9,7 @@ from src.agent.fix_agent import (
     FixAgent,
     _build_fix_proposal,
     _build_user_message,
+    _hash_edits,
     make_submit_fix_proposal_tool,
 )
 from src.config import Config
@@ -101,7 +102,11 @@ class TestSubmitFixProposalTool:
 
     def test_verified_submission_downgraded_without_tool_proof(self):
         holder: dict = {}
-        state = {"applied": True, "build_ok": True, "tests_ok": False}
+        state = {
+            "applied_hash": "hash",
+            "build_hash": "hash",
+            "tests_hash": None,
+        }
         tool = make_submit_fix_proposal_tool(holder, state)
 
         result = tool.invoke(
@@ -118,12 +123,26 @@ class TestSubmitFixProposalTool:
 
     def test_verified_submission_allowed_with_tool_proof(self):
         holder: dict = {}
-        state = {"applied": True, "build_ok": True, "tests_ok": True}
+        edits = [
+            {
+                "file": "A.java",
+                "start_line": 1,
+                "end_line": 1,
+                "new_content": "x\n",
+                "reason": "r",
+            }
+        ]
+        edit_hash = _hash_edits(edits)
+        state = {
+            "applied_hash": edit_hash,
+            "build_hash": edit_hash,
+            "tests_hash": edit_hash,
+        }
         tool = make_submit_fix_proposal_tool(holder, state)
 
         tool.invoke(
             {
-                "edits": [],
+                "edits": edits,
                 "summary": "verified",
                 "status": "verified",
             }
@@ -415,3 +434,260 @@ class TestFixAgentStructure:
         assert json_path.exists()
         data = json.loads(json_path.read_text(encoding="utf-8"))
         assert data["status"] == "draft"
+
+    def test_verified_edits_mismatch_downgrades_to_draft(self, tmp_path):
+        config = _make_config(tmp_path)
+        ws_root = tmp_path / "ws"
+        agent = FixAgent(config=config, workspace_root=str(ws_root))
+
+        callbacks: dict = {}
+
+        def fake_apply_tool(*args, **kwargs):
+            callbacks["expected_fix_id"] = kwargs["expected_fix_id"]
+            callbacks["apply"] = kwargs["on_success"]
+            fake_tool = MagicMock()
+            fake_tool.name = "apply_fix"
+            return fake_tool
+
+        def fake_build_tool(*args, **kwargs):
+            callbacks["build"] = kwargs["on_result"]
+            fake_tool = MagicMock()
+            fake_tool.name = "run_build"
+            return fake_tool
+
+        def fake_tests_tool(*args, **kwargs):
+            callbacks["tests"] = kwargs["on_result"]
+            fake_tool = MagicMock()
+            fake_tool.name = "run_tests"
+            return fake_tool
+
+        applied_edits = [
+            {
+                "file": "Foo.java",
+                "start_line": 1,
+                "end_line": 1,
+                "new_content": "applied\n",
+                "reason": "r",
+            }
+        ]
+        submitted_edits = [
+            {
+                "file": "Foo.java",
+                "start_line": 1,
+                "end_line": 1,
+                "new_content": "different\n",
+                "reason": "r",
+            }
+        ]
+
+        def fake_create_react_agent(llm, tools, **kwargs):
+            submit_tool = next(
+                t for t in tools if t.name == "submit_fix_proposal"
+            )
+            mock_agent = MagicMock()
+
+            def invoke_side_effect(inputs, **kw):
+                fix_id = callbacks["expected_fix_id"]
+                callbacks["apply"](fix_id, applied_edits)
+                callbacks["build"](fix_id, True)
+                callbacks["tests"](fix_id, True)
+                submit_tool.invoke(
+                    {
+                        "edits": submitted_edits,
+                        "summary": "claims verified",
+                        "status": "verified",
+                    }
+                )
+
+            mock_agent.invoke.side_effect = invoke_side_effect
+            return mock_agent
+
+        with (
+            patch("src.agent.fix_agent.ChatOpenAI"),
+            patch(
+                "src.agent.fix_agent.make_apply_fix_tool",
+                side_effect=fake_apply_tool,
+            ),
+            patch(
+                "src.agent.fix_agent.make_run_build_tool",
+                side_effect=fake_build_tool,
+            ),
+            patch(
+                "src.agent.fix_agent.make_run_tests_tool",
+                side_effect=fake_tests_tool,
+            ),
+            patch(
+                "src.agent.fix_agent.create_react_agent",
+                side_effect=fake_create_react_agent,
+            ),
+        ):
+            proposal = agent.run(_make_report())
+
+        assert proposal.status == "draft"
+        assert "Downgraded to draft" in proposal.summary
+
+    def test_verified_edits_match_stays_verified(self, tmp_path):
+        config = _make_config(tmp_path)
+        ws_root = tmp_path / "ws"
+        agent = FixAgent(config=config, workspace_root=str(ws_root))
+
+        callbacks: dict = {}
+
+        def fake_apply_tool(*args, **kwargs):
+            callbacks["expected_fix_id"] = kwargs["expected_fix_id"]
+            callbacks["apply"] = kwargs["on_success"]
+            fake_tool = MagicMock()
+            fake_tool.name = "apply_fix"
+            return fake_tool
+
+        def fake_build_tool(*args, **kwargs):
+            callbacks["build"] = kwargs["on_result"]
+            fake_tool = MagicMock()
+            fake_tool.name = "run_build"
+            return fake_tool
+
+        def fake_tests_tool(*args, **kwargs):
+            callbacks["tests"] = kwargs["on_result"]
+            fake_tool = MagicMock()
+            fake_tool.name = "run_tests"
+            return fake_tool
+
+        edits = [
+            {
+                "file": "Foo.java",
+                "start_line": 1,
+                "end_line": 1,
+                "new_content": "applied\n",
+                "reason": "r",
+            }
+        ]
+
+        def fake_create_react_agent(llm, tools, **kwargs):
+            submit_tool = next(
+                t for t in tools if t.name == "submit_fix_proposal"
+            )
+            mock_agent = MagicMock()
+
+            def invoke_side_effect(inputs, **kw):
+                fix_id = callbacks["expected_fix_id"]
+                callbacks["apply"](fix_id, edits)
+                callbacks["build"](fix_id, True)
+                callbacks["tests"](fix_id, True)
+                submit_tool.invoke(
+                    {
+                        "edits": edits,
+                        "summary": "verified",
+                        "status": "verified",
+                    }
+                )
+
+            mock_agent.invoke.side_effect = invoke_side_effect
+            return mock_agent
+
+        with (
+            patch("src.agent.fix_agent.ChatOpenAI"),
+            patch(
+                "src.agent.fix_agent.make_apply_fix_tool",
+                side_effect=fake_apply_tool,
+            ),
+            patch(
+                "src.agent.fix_agent.make_run_build_tool",
+                side_effect=fake_build_tool,
+            ),
+            patch(
+                "src.agent.fix_agent.make_run_tests_tool",
+                side_effect=fake_tests_tool,
+            ),
+            patch(
+                "src.agent.fix_agent.create_react_agent",
+                side_effect=fake_create_react_agent,
+            ),
+        ):
+            proposal = agent.run(_make_report())
+
+        assert proposal.status == "verified"
+        assert proposal.edits[0].new_content == "applied\n"
+
+    def test_failed_apply_clears_previous_verification(self, tmp_path):
+        config = _make_config(tmp_path)
+        ws_root = tmp_path / "ws"
+        agent = FixAgent(config=config, workspace_root=str(ws_root))
+
+        callbacks: dict = {}
+
+        def fake_apply_tool(*args, **kwargs):
+            callbacks["expected_fix_id"] = kwargs["expected_fix_id"]
+            callbacks["apply_success"] = kwargs["on_success"]
+            callbacks["apply_failure"] = kwargs["on_failure"]
+            fake_tool = MagicMock()
+            fake_tool.name = "apply_fix"
+            return fake_tool
+
+        def fake_build_tool(*args, **kwargs):
+            callbacks["build"] = kwargs["on_result"]
+            fake_tool = MagicMock()
+            fake_tool.name = "run_build"
+            return fake_tool
+
+        def fake_tests_tool(*args, **kwargs):
+            callbacks["tests"] = kwargs["on_result"]
+            fake_tool = MagicMock()
+            fake_tool.name = "run_tests"
+            return fake_tool
+
+        edits = [
+            {
+                "file": "Foo.java",
+                "start_line": 1,
+                "end_line": 1,
+                "new_content": "applied\n",
+                "reason": "r",
+            }
+        ]
+
+        def fake_create_react_agent(llm, tools, **kwargs):
+            submit_tool = next(
+                t for t in tools if t.name == "submit_fix_proposal"
+            )
+            mock_agent = MagicMock()
+
+            def invoke_side_effect(inputs, **kw):
+                fix_id = callbacks["expected_fix_id"]
+                callbacks["apply_success"](fix_id, edits)
+                callbacks["apply_failure"](fix_id)
+                callbacks["build"](fix_id, True)
+                callbacks["tests"](fix_id, True)
+                submit_tool.invoke(
+                    {
+                        "edits": edits,
+                        "summary": "stale verified claim",
+                        "status": "verified",
+                    }
+                )
+
+            mock_agent.invoke.side_effect = invoke_side_effect
+            return mock_agent
+
+        with (
+            patch("src.agent.fix_agent.ChatOpenAI"),
+            patch(
+                "src.agent.fix_agent.make_apply_fix_tool",
+                side_effect=fake_apply_tool,
+            ),
+            patch(
+                "src.agent.fix_agent.make_run_build_tool",
+                side_effect=fake_build_tool,
+            ),
+            patch(
+                "src.agent.fix_agent.make_run_tests_tool",
+                side_effect=fake_tests_tool,
+            ),
+            patch(
+                "src.agent.fix_agent.create_react_agent",
+                side_effect=fake_create_react_agent,
+            ),
+        ):
+            proposal = agent.run(_make_report())
+
+        assert proposal.status == "draft"
+        assert "Downgraded to draft" in proposal.summary

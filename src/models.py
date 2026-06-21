@@ -1,7 +1,7 @@
 """Data models shared across the diagnosis and fix pipelines."""
 
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Any, Literal
 
 
 @dataclass
@@ -43,7 +43,7 @@ class BacktraceStep:
     decision: Literal["in_code", "out_of_code"]
     finding: str
     evidence: list[EvidenceItem] = field(default_factory=list)
-    tool_calls: list[dict] = field(default_factory=list)
+    tool_calls: list[dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass

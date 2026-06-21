@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 import pytest
 
+import src.tools.apply_fix as apply_fix_module
 from src.tools.apply_fix import make_apply_fix_tool
 from src.tools.run_build import make_run_build_tool
 from src.tools.run_tests import make_run_tests_tool
@@ -205,6 +206,40 @@ class TestApplyFix:
         assert "[apply_fix] Error" in result
         assert "svn status failed" in result
         assert "not a working copy" in result
+        assert not (ws_root / "fix" / self.FIX_ID).exists()
+
+    def test_svn_status_timeout_returns_error_without_workspace(
+        self, tmp_path, svn_status
+    ):
+        target = tmp_path / "project"
+        ws_root = tmp_path / "workspace"
+        _write(str(target / "A.java"), "x\n")
+        svn_status.side_effect = subprocess.TimeoutExpired(
+            cmd="svn status",
+            timeout=30,
+            output="x" * 3000,
+            stderr="error detail",
+        )
+
+        tool = self._tool(str(ws_root), str(target))
+        result = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "y\n",
+                        "reason": "r",
+                    }
+                ],
+            }
+        )
+
+        assert "[apply_fix] Error" in result
+        assert "timed out after 30 seconds" in result
+        assert "truncated" in result
         assert not (ws_root / "fix" / self.FIX_ID).exists()
 
     def test_svn_status_stderr_output_rejected(self, tmp_path, svn_status):
@@ -781,6 +816,48 @@ class TestApplyFix:
         assert "[apply_fix] Error" in result
         assert "exceeds" in result
 
+    def test_corrupt_registry_returns_error(self, tmp_path):
+        target = tmp_path / "project"
+        ws_root = tmp_path / "workspace"
+        _write(str(target / "A.java"), "original\n")
+
+        tool = self._tool(str(ws_root), str(target))
+        tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "round1\n",
+                        "reason": "r1",
+                    }
+                ],
+            }
+        )
+
+        registry = ws_root / "fix" / self.FIX_ID / ".fix_modified_files"
+        registry.write_text("{not valid json", encoding="utf-8")
+
+        result = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "round2\n",
+                        "reason": "r2",
+                    }
+                ],
+            }
+        )
+
+        assert "[apply_fix] Error" in result
+        assert "corrupt or unreadable" in result
+
     def test_overlapping_edits_rejected(self, tmp_path):
         target = tmp_path / "project"
         ws_root = tmp_path / "workspace"
@@ -950,6 +1027,71 @@ class TestApplyFix:
         )
         assert "[apply_fix] Applied" in result2
         assert _read(str(ws_a)) == "CORRECT\na2\n"
+
+    def test_write_failure_rolls_back_written_files(self, tmp_path):
+        target = tmp_path / "project"
+        ws_root = tmp_path / "workspace"
+        _write(str(target / "A.java"), "a1\na2\n")
+        _write(str(target / "B.java"), "b1\nb2\n")
+        tool = self._tool(str(ws_root), str(target))
+
+        original_write = apply_fix_module._atomic_write_lines
+        write_count = [0]
+
+        def flaky_write(path, lines):
+            write_count[0] += 1
+            if write_count[0] == 2:
+                raise OSError("disk full")
+            original_write(path, lines)
+
+        with patch(
+            "src.tools.apply_fix._atomic_write_lines",
+            side_effect=flaky_write,
+        ):
+            result = tool.invoke(
+                {
+                    "fix_id": self.FIX_ID,
+                    "edits": [
+                        {
+                            "file": "A.java",
+                            "start_line": 1,
+                            "end_line": 1,
+                            "new_content": "A_REPLACED\n",
+                            "reason": "a",
+                        },
+                        {
+                            "file": "B.java",
+                            "start_line": 1,
+                            "end_line": 1,
+                            "new_content": "B_REPLACED\n",
+                            "reason": "b",
+                        },
+                    ],
+                }
+            )
+
+        assert "[apply_fix] Error" in result
+        assert "Rolled back" in result
+        ws_path = ws_root / "fix" / self.FIX_ID
+        assert _read(str(ws_path / "A.java")) == "a1\na2\n"
+        assert _read(str(ws_path / "B.java")) == "b1\nb2\n"
+
+        result2 = tool.invoke(
+            {
+                "fix_id": self.FIX_ID,
+                "edits": [
+                    {
+                        "file": "A.java",
+                        "start_line": 1,
+                        "end_line": 1,
+                        "new_content": "CORRECT\n",
+                        "reason": "r",
+                    }
+                ],
+            }
+        )
+        assert "[apply_fix] Applied" in result2
+        assert _read(str(ws_path / "A.java")) == "CORRECT\na2\n"
 
     def test_multi_file_batch_edit(self, tmp_path):
         target = tmp_path / "project"

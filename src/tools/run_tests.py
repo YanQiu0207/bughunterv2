@@ -6,7 +6,10 @@ from typing import Any
 
 from langchain_core.tools import tool
 
-from src.tools._command_runner import run_command_in_workspace, validate_fix_id
+from src.tools._command_runner import (
+    run_command_result_in_workspace,
+    validate_fix_id,
+)
 
 _TIMEOUT_SECONDS = 300
 
@@ -16,7 +19,7 @@ def make_run_tests_tool(
     test_command: str,
     expected_fix_id: str | None = None,
     on_result: Callable[[str, bool], None] | None = None,
-) -> Any:  # type: ignore[return]
+) -> Any:
     """Return a run_tests tool bound to workspace_root and test_command.
 
     Args:
@@ -51,7 +54,7 @@ def make_run_tests_tool(
                 "Call apply_fix first."
             )
 
-        result = run_command_in_workspace(
+        result = run_command_result_in_workspace(
             tool_tag="run_tests",
             command=test_command,
             workspace_path=workspace_path,
@@ -60,7 +63,7 @@ def make_run_tests_tool(
             failure_label="Tests failed",
         )
         if on_result is not None:
-            on_result(fix_id, result.startswith("[run_tests] Tests passed."))
-        return result
+            on_result(fix_id, result.succeeded)
+        return result.message
 
     return run_tests

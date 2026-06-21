@@ -1,5 +1,6 @@
 """FixAgent: LangGraph ReAct agent for Java bug fix generation and verification."""
 
+import hashlib
 import json
 import logging
 import os
@@ -22,10 +23,48 @@ from src.tools.run_tests import make_run_tests_tool
 logger = logging.getLogger(__name__)
 
 
+def _normalize_edits(edits: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Return a stable representation of edits for verification matching."""
+    normalized = []
+    for edit in edits:
+        if not isinstance(edit, dict):
+            continue
+        normalized.append(
+            {
+                "file": str(edit.get("file", "")),
+                "start_line": int(edit.get("start_line", 0)),
+                "end_line": int(edit.get("end_line", 0)),
+                "new_content": str(edit.get("new_content", "")),
+                "reason": str(edit.get("reason", "")),
+            }
+        )
+    return sorted(
+        normalized,
+        key=lambda edit: (
+            edit["file"],
+            edit["start_line"],
+            edit["end_line"],
+            edit["new_content"],
+            edit["reason"],
+        ),
+    )
+
+
+def _hash_edits(edits: list[dict[str, Any]]) -> str:
+    """Return a stable hash for normalized edits."""
+    payload = json.dumps(
+        _normalize_edits(edits),
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
 def make_submit_fix_proposal_tool(
     result_holder: dict[str, Any],
-    verification_state: dict[str, bool] | None = None,
-) -> Any:  # type: ignore[return]
+    verification_state: dict[str, str | None] | None = None,
+) -> Any:
     """Return a submit_fix_proposal tool that stores its result in result_holder.
 
     First-call-wins semantics: duplicate submissions are silently ignored.
@@ -65,22 +104,23 @@ def make_submit_fix_proposal_tool(
         final_status = status
         final_summary = summary
         if status == "verified" and verification_state is not None:
+            submitted_hash = _hash_edits(edits)
             is_verified = (
-                verification_state.get("applied", False)
-                and verification_state.get("build_ok", False)
-                and verification_state.get("tests_ok", False)
+                verification_state.get("applied_hash") == submitted_hash
+                and verification_state.get("build_hash") == submitted_hash
+                and verification_state.get("tests_hash") == submitted_hash
             )
             if not is_verified:
                 final_status = "draft"
                 final_summary = (
                     f"{summary}\n\n"
                     "Downgraded to draft: build and test success were not "
-                    "confirmed by tool results for this fix_id."
+                    "confirmed for the submitted edits."
                 )
 
         result_holder.update(
             {
-                "edits": edits,
+                "edits": _normalize_edits(edits),
                 "summary": final_summary,
                 "status": final_status,
             }
@@ -123,27 +163,43 @@ class FixAgent:
         diagnosis_id = report.diagnosis_id
 
         result_holder: dict[str, Any] = {}
-        verification_state = {
-            "applied": False,
-            "build_ok": False,
-            "tests_ok": False,
+        verification_state: dict[str, str | None] = {
+            "applied_hash": None,
+            "build_hash": None,
+            "tests_hash": None,
         }
 
-        def record_apply(fix_id: str) -> None:
+        def clear_verification(fix_id: str) -> None:
             if fix_id == proposal_id:
-                verification_state["applied"] = True
-                verification_state["build_ok"] = False
-                verification_state["tests_ok"] = False
+                verification_state["applied_hash"] = None
+                verification_state["build_hash"] = None
+                verification_state["tests_hash"] = None
+
+        def record_apply(fix_id: str, edits: list[dict[str, Any]]) -> None:
+            if fix_id == proposal_id:
+                verification_state["applied_hash"] = _hash_edits(edits)
+                verification_state["build_hash"] = None
+                verification_state["tests_hash"] = None
 
         def record_build(fix_id: str, succeeded: bool) -> None:
             if fix_id == proposal_id:
-                verification_state["build_ok"] = succeeded
+                verification_state["build_hash"] = (
+                    verification_state["applied_hash"] if succeeded else None
+                )
                 if not succeeded:
-                    verification_state["tests_ok"] = False
+                    verification_state["tests_hash"] = None
 
         def record_tests(fix_id: str, succeeded: bool) -> None:
             if fix_id == proposal_id:
-                verification_state["tests_ok"] = succeeded
+                verified_hash = verification_state["applied_hash"]
+                if (
+                    succeeded
+                    and verified_hash is not None
+                    and verification_state["build_hash"] == verified_hash
+                ):
+                    verification_state["tests_hash"] = verified_hash
+                else:
+                    verification_state["tests_hash"] = None
 
         tools = [
             make_apply_fix_tool(
@@ -151,6 +207,7 @@ class FixAgent:
                 self._config.svn_cache_dir,
                 expected_fix_id=proposal_id,
                 on_success=record_apply,
+                on_failure=clear_verification,
             ),
             make_run_build_tool(
                 self._workspace_root,
@@ -167,10 +224,10 @@ class FixAgent:
             make_submit_fix_proposal_tool(result_holder, verification_state),
         ]
 
-        llm = ChatOpenAI(
+        llm = ChatOpenAI(  # type: ignore[call-arg]
             model=self._config.llm_model,
             base_url=self._config.llm_base_url,
-            api_key=self._config.llm_api_key,
+            api_key=self._config.llm_api_key,  # type: ignore[arg-type]
             max_tokens=4096,
         )
 
